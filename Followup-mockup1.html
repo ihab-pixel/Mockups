@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Travel Collection CRM — Follow-up View (v15)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;color:#202124;background:#f6f8fc;padding:16px}
+.crm{background:#fff;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden}
+.topbar{display:flex;align-items:center;border-bottom:1px solid #e0e0e0;padding:0 4px}
+.tb-tab{padding:10px 14px;font-size:13px;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tb-tab.active{color:#1a73e8;border-bottom:2px solid #1a73e8;font-weight:500}
+.toolbar{display:flex;align-items:center;gap:10px;padding:7px 10px;border-bottom:1px solid #e0e0e0;flex-wrap:wrap}
+.spacer{flex:1}
+.tb-btn{padding:5px 12px;border:1px solid #dadce0;border-radius:4px;font-size:12px;cursor:pointer;background:#fff;color:#3c4043}
+.tb-btn:hover{background:#f1f3f4}
+.chk-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#3c4043;cursor:pointer;user-select:none}
+.chk-wrap input{width:14px;height:14px;cursor:pointer;accent-color:#c62828}
+.search-box{padding:5px 10px;border:1px solid #dadce0;border-radius:4px;font-size:12px;width:150px;background:#f1f3f4;color:#202124}
+.pipeline{display:flex;padding:7px 10px;border-bottom:1px solid #e0e0e0;overflow-x:auto;gap:0}
+.pip-stage{display:flex;align-items:center;padding:5px 12px 5px 16px;font-size:11px;font-weight:500;color:#fff;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%);white-space:nowrap;min-width:128px}
+.pip-stage:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);padding-left:10px}
+.ps1{background:#e8a000}.ps2{background:#1a73e8}.ps3{background:#7b1fa2}.ps4{background:#1565c0}.ps5{background:#2e7d32}
+.pip-wr{font-size:10px;background:rgba(255,255,255,0.25);padding:1px 5px;border-radius:8px;margin-left:4px}
+.pip-comp{font-size:10px;padding:1px 5px;border-radius:8px;margin-left:3px;background:rgba(255,255,255,0.2)}
+.pip-comp.warn{background:rgba(220,53,53,0.4)}
+.table-wrap{overflow-x:auto;max-height:480px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:960px}
+th{font-size:11px;font-weight:500;color:#5f6368;text-align:left;padding:6px 8px;border-bottom:1px solid #e0e0e0;white-space:nowrap;position:sticky;top:0;background:#fff;z-index:2}
+th.nsc{color:#1565c0;font-weight:600}
+td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;overflow:visible;vertical-align:middle}
+tr:hover td{background:#f8f9fa}
+tr.ov td{background:#fff8f8}
+tr.ov:hover td{background:#fef0f0}
+.grp-hdr td{padding:6px 8px;font-weight:500;font-size:12px;color:#fff}
+.g1{background:#e8a000}.g2{background:#1a73e8}
+.nc{color:#9e9e9e;font-size:11px;text-align:right;width:28px}
+.tl{color:#1a73e8;cursor:pointer;font-size:12px}
+.tl:hover{text-decoration:underline}
+.ic{display:inline-flex;align-items:center;gap:5px;cursor:pointer;padding:2px 6px;border-radius:4px;border:1px solid transparent}
+.ic:hover{border-color:#dadce0;background:#fff}
+.ic .id{font-size:11px;font-weight:500;color:#202124}
+.ic .ia{font-size:10px;color:#9e9e9e}
+.ic .il{font-size:10px;color:#1a73e8;display:none}
+.ic:hover .il{display:inline}
+.ns-wrap{display:inline-flex;align-items:center;gap:5px}
+.dl-pill{display:inline-flex;align-items:center;padding:3px 8px;border-radius:8px;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;border:1px solid}
+.dl-pill:hover{filter:brightness(.92)}
+.dl-red{background:#fce8e6;color:#c62828;border-color:#f5c6c6}
+.dl-amber{background:#fef7e0;color:#e37400;border-color:#fde68a}
+.dl-green{background:#e6f4ea;color:#137333;border-color:#ceead6}
+.act-btn{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:8px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid;white-space:nowrap}
+.act-btn:hover{filter:brightness(.92)}
+.act-fu{background:#e8f0fe;color:#1a73e8;border-color:#c5d8fd}
+.act-close{background:#fce8e6;color:#c62828;border-color:#f5c6c6}
+.act-reengage{background:#fef7e0;color:#e37400;border-color:#fde68a}
+.act-escalate{background:#faf5ff;color:#7c3aed;border-color:#e9d5ff}
+.np{font-size:11px;color:#5f6368;cursor:pointer;padding:2px 6px;border-radius:4px;border:1px solid transparent;max-width:120px;overflow:hidden;text-overflow:ellipsis;display:inline-block;white-space:nowrap}
+.np:hover{border-color:#dadce0;background:#fff}
+.np.e{color:#bdbdbd;font-style:italic}
+.sb{display:inline-block;padding:1px 5px;border-radius:3px;font-size:10px;font-weight:500}
+.sb-b{background:#e3f2fd;color:#1565c0}.sb-z{background:#f3e5f5;color:#6a1b9a}.sb-d{background:#e8f5e9;color:#2e7d32}.sb-k{background:#fff8e1;color:#e65100}
+.ls-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid;white-space:nowrap}
+.ls-pill:hover{filter:brightness(.93)}
+.ls-pill .arr{font-size:9px;opacity:.5;margin-left:1px}
+.ls-nl{background:#fef3e2;color:#b45309;border-color:#fde68a}
+.ls-fc{background:#e0f2fe;color:#0369a1;border-color:#bae6fd}
+.ls-ps{background:#f0fdf4;color:#15803d;border-color:#bbf7d0}
+.ls-ng{background:#faf5ff;color:#7c3aed;border-color:#e9d5ff}
+.ls-nc{background:#ecfdf5;color:#166534;border-color:#6ee7b7}
+.sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;display:inline-block}
+.ar{display:none}.ar.open{display:table-row}
+.ac{padding:0;border-bottom:1px solid #e0e0e0}
+.pnl{background:#f8f9fa;padding:12px 16px}
+.pnl.org{border-top:2px solid #e37400}
+.pnl.blu{border-top:2px solid #1a73e8}
+.pnl.grn{border-top:2px solid #137333}
+.pnl.pur{border-top:2px solid #7c3aed}
+.pnl.red{border-top:2px solid #c62828}
+.tabs{display:flex;gap:4px;margin-bottom:10px}
+.tab{padding:4px 13px;border-radius:14px;font-size:12px;cursor:pointer;border:1px solid #dadce0;background:#fff;color:#5f6368}
+.tab:hover{background:#f1f3f4}
+.tab.on{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.tc{background:#fff;border:1px solid #e0e0e0;border-radius:6px;padding:12px 14px}
+.fr{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.fl{font-size:11px;color:#5f6368;width:108px;flex-shrink:0}
+.fl.req::after{content:' *';color:#c62828}
+.fi{padding:5px 8px;border:1px solid #dadce0;border-radius:4px;font-size:12px;background:#fff;color:#202124}
+.fi.req-field{border-color:#f5c6c6;background:#fff8f8}
+.fs2{padding:5px 8px;border:1px solid #dadce0;border-radius:4px;font-size:12px;background:#fff;color:#202124}
+.fn{width:100%;padding:6px 8px;border:1px solid #dadce0;border-radius:4px;font-size:12px;resize:vertical;min-height:50px;font-family:inherit;background:#fff;color:#202124}
+.hs{font-size:10px;color:#1a73e8;background:#e8f0fe;padding:2px 6px;border-radius:3px;white-space:nowrap}
+.ws{font-size:10px;color:#e37400;display:none;margin-top:2px}
+.pf{display:flex;gap:6px;justify-content:flex-end;margin-top:10px;align-items:center}
+.ab{padding:5px 14px;border-radius:4px;border:1px solid #dadce0;font-size:12px;cursor:pointer;background:#fff;color:#3c4043}
+.ab:hover{background:#f1f3f4}
+.ap{background:#1a73e8;color:#fff;border-color:#1a73e8}.ap:hover{background:#1557b0}
+.ad{border-color:#c62828;color:#c62828}.ad:hover{background:#fce8e6}
+.aw{border-color:#e37400;color:#e37400}.aw:hover{background:#fef7e0}
+.av{border-color:#7c3aed;color:#7c3aed}.av:hover{background:#faf5ff}
+.status-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cond-fields{margin-top:10px;padding:10px;background:#f8f9fa;border-radius:5px;border:1px solid #e0e0e0}
+.cond-fields h5{font-size:11px;font-weight:500;color:#5f6368;margin-bottom:8px}
+.confirm-bar{display:none;font-size:11px;color:#e37400;background:#fef7e0;border:1px solid #fde68a;border-radius:4px;padding:5px 10px;margin-right:auto}
+.confirm-bar.show{display:block}
+.thread-list{display:flex;flex-direction:column;gap:6px}
+.thread-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border:1px solid #e0e0e0;border-radius:6px;cursor:pointer;background:#fff;transition:all .1s}
+.thread-item:hover{border-color:#1a73e8;background:#e8f0fe}
+.thread-item.sel{border-color:#1a73e8;background:#e8f0fe}
+.thread-avatar{width:30px;height:30px;border-radius:50%;background:#1a73e8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.thread-meta{flex:1;min-width:0}
+.thread-subj{font-size:12px;font-weight:500;color:#202124;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.thread-snippet{font-size:11px;color:#5f6368;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.thread-date{font-size:10px;color:#9e9e9e;white-space:nowrap;margin-left:8px}
+.thread-count{font-size:10px;color:#1a73e8;background:#e8f0fe;padding:1px 5px;border-radius:8px;margin-top:2px;display:inline-block}
+.email-chain{border:1px solid #e0e0e0;border-radius:6px;overflow:hidden;margin-bottom:8px}
+.chain-header{background:#f8f9fa;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e0e0e0}
+.chain-title{font-size:12px;font-weight:500;color:#202124}
+.chain-back{font-size:11px;color:#1a73e8;cursor:pointer;background:none;border:none;padding:0}
+.chain-back:hover{text-decoration:underline}
+.msg-list{max-height:200px;overflow-y:auto;background:#fff}
+.msg{padding:9px 12px;border-bottom:1px solid #f1f3f4}
+.msg:last-child{border-bottom:none}
+.msg-header{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.msg-avatar{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;flex-shrink:0}
+.msg-av-advisor{background:#1a73e8;color:#fff}
+.msg-av-client{background:#e37400;color:#fff}
+.msg-sender{font-size:11px;font-weight:500;color:#202124}
+.msg-date{font-size:10px;color:#9e9e9e;margin-left:auto}
+.msg-body{font-size:11px;color:#5f6368;line-height:1.6;padding-left:30px}
+.compose-box{border-top:1px solid #e0e0e0}
+.ct2{display:flex;align-items:center;gap:6px;padding:4px 10px;border-bottom:1px solid #e0e0e0;background:#f8f9fa}
+.ct2 label{font-size:11px;color:#5f6368}
+.ct2 select{font-size:11px;padding:2px 6px;border:1px solid #dadce0;border-radius:3px;background:#fff}
+.sp2{font-size:11px;font-weight:500;color:#5f6368}
+.cb2 textarea{width:100%;min-height:70px;border:none;outline:none;font-size:12px;font-family:inherit;color:#202124;resize:vertical;padding:7px 10px;line-height:1.6}
+.no-thread-note{font-size:12px;color:#5f6368;background:#f8f9fa;border:1px solid #e0e0e0;border-radius:5px;padding:10px 12px;line-height:1.5}
+.ntip{display:none;position:fixed;z-index:300;background:#3c4043;color:#fff;font-size:12px;padding:8px 12px;border-radius:6px;max-width:260px;white-space:normal;line-height:1.6;word-break:break-word;pointer-events:none}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.nm{background:#fff;border-radius:8px;box-shadow:0 8px 28px rgba(0,0,0,0.2);width:430px;max-width:95vw;overflow:hidden}
+.mh2{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #e0e0e0}
+.mh2 h3{font-size:14px;font-weight:500;margin:0}
+.ms2{font-size:11px;color:#5f6368;margin-top:2px}
+.mx{background:none;border:none;font-size:16px;color:#5f6368;cursor:pointer;padding:2px 5px;border-radius:3px}
+.mx:hover{background:#f1f3f4}
+.mb2{padding:14px 16px}
+.mb2 textarea{width:100%;min-height:120px;font-size:13px;padding:8px 10px;border:1px solid #dadce0;border-radius:5px;resize:vertical;font-family:inherit;outline:none;color:#202124;line-height:1.6}
+.mb2 textarea:focus{border-color:#1a73e8}
+.mf2{display:flex;justify-content:flex-end;gap:8px;padding:8px 16px 12px;border-top:1px solid #e0e0e0}
+.toast{position:fixed;bottom:16px;right:16px;background:#323232;color:#fff;padding:10px 16px;border-radius:6px;font-size:13px;z-index:999;display:none}
+</style>
+</head>
+<body>
+
+<div class="crm">
+  <div class="topbar">
+    <div class="tb-tab">Home</div>
+    <div class="tb-tab active">Inquiry (1461)</div>
+    <div class="tb-tab">To Reactivate (87)</div>
+    <div class="tb-tab">Upcoming (273)</div>
+    <div class="tb-tab">On the Ground (41)</div>
+  </div>
+  <div class="toolbar">
+    <label class="chk-wrap"><input type="checkbox" id="ovChk" onchange="toggleOv()"/> Action needed</label>
+    <div class="spacer"></div>
+    <button class="tb-btn">New</button>
+    <button class="tb-btn">Refresh</button>
+    <input class="search-box" placeholder="Search in this list…"/>
+  </div>
+  <div class="pipeline">
+    <div class="pip-stage ps1"><span style="font-weight:600;margin-right:4px">250</span>New Lead<span class="pip-wr">$163.2K W.R</span><span class="pip-comp warn">68%</span></div>
+    <div class="pip-stage ps2"><span style="font-weight:600;margin-right:4px">200</span>First Contact<span class="pip-wr">$748K W.R</span><span class="pip-comp warn">71%</span></div>
+    <div class="pip-stage ps3"><span style="font-weight:600;margin-right:4px">622</span>Proposal Sent<span class="pip-wr">$6.4M W.R</span><span class="pip-comp">89%</span></div>
+    <div class="pip-stage ps4"><span style="font-weight:600;margin-right:4px">357</span>Negotiating<span class="pip-wr">$6M W.R</span><span class="pip-comp">94%</span></div>
+    <div class="pip-stage ps5"><span style="font-weight:600;margin-right:4px">32</span>Nearing Close<span class="pip-wr">$443.7K W.R</span><span class="pip-comp">97%</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28px">#</th>
+          <th style="width:16px"></th>
+          <th style="min-width:148px">Trip name</th>
+          <th style="min-width:128px">Last customer interaction</th>
+          <th class="nsc" style="min-width:155px">Next step</th>
+          <th style="min-width:128px">Follow-up notes</th>
+          <th style="min-width:115px">Lead stage</th>
+          <th style="min-width:55px">Travelers</th>
+          <th style="min-width:85px">Trip start</th>
+          <th style="min-width:72px">Source</th>
+          <th style="min-width:100px">Agency</th>
+          <th style="min-width:95px">Sales owner</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="ntip" id="ntip"></div>
+<div class="modal-bg" id="noteModal">
+  <div class="nm">
+    <div class="mh2"><div><h3>Follow-up notes</h3><div class="ms2" id="mSub"></div></div><button class="mx" onclick="closeNote()">✕</button></div>
+    <div class="mb2"><textarea id="mTA" placeholder="Notes on follow-up status, client preferences, next steps…"></textarea></div>
+    <div class="mf2"><button class="ab" onclick="closeNote()">Cancel</button><button class="ab ap" onclick="saveNote()">Save note</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const T=new Date('2025-12-13');
+function ago(n){const d=new Date(T);d.setDate(d.getDate()-n);return d;}
+function fmtD(d){if(!d)return '—';return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'});}
+function fmtDT(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
+function ds(d){if(!d)return 999;return Math.round((T-d)/864e5);}
+function fn(n){return n.split(' ')[0];}
+const CAD={b2b:[2,4,7,14],zic:[2,3,5,7,10,14],dir:[2,4,7,14],kim:[2,4,7,14]};
+const SRC={b2b:'B2B',zic:'Zicasso',dir:'Direct',kim:'Kimkim'};
+const SC={b2b:'sb-b',zic:'sb-z',dir:'sb-d',kim:'sb-k'};
+const STAGES=[{k:'nl',l:'New Lead',dot:'#e8a000',cls:'ls-nl'},{k:'fc',l:'First Contact',dot:'#1a73e8',cls:'ls-fc'},{k:'ps',l:'Proposal Sent',dot:'#7b1fa2',cls:'ls-ps'},{k:'ng',l:'Negotiating',dot:'#1565c0',cls:'ls-ng'},{k:'nc',l:'Nearing Close',dot:'#2e7d32',cls:'ls-nc'}];
+const TSTATUSES=['Inquiry','Confirmed','Lost','Cancelled','Postponed'];
+const LOSS_REASONS=['Price too high','Chose competitor','Budget cancelled','No response','Dates not available','Other'];
+const INT_CHANNELS=['Phone call','WhatsApp','Video call','In-person meeting','Email (not sent from CRM)','Kimkim','Other'];
+function sm(k){return STAGES.find(s=>s.k===k)||STAGES[0];}
+function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function nfu(l){const c=CAD[l.src]||CAD.b2b;const b=l.li||T;const d=new Date(b);d.setDate(d.getDate()+c[Math.min(l.step,c.length-1)]);return d;}
+function getDeadline(l){const n=nfu(l);const diff=Math.round((n-T)/864e5);if(diff<0)return{label:Math.abs(diff)+'d ago',cls:'dl-red'};if(diff===0)return{label:'Today',cls:'dl-amber'};if(diff<=2)return{label:'In '+diff+'d',cls:'dl-amber'};return{label:'In '+diff+'d',cls:'dl-green'};}
+function getAction(l){const c=CAD[l.src]||CAD.b2b;const allDone=l.step>=c.length;if(l.tp)return{label:'Close as Lost',cls:'act-close',icon:'✕',mode:'rec'};if(allDone&&l.we)return{label:'Escalate',cls:'act-escalate',icon:'⚑',mode:'rec'};if(allDone&&!l.we)return{label:'Re-engage',cls:'act-reengage',icon:'↺',mode:'rec'};return{label:'Follow up',cls:'act-fu',icon:'✉',mode:'fu'};}
+function needsAction(l){const dl=getDeadline(l);return dl.cls==='dl-red'||dl.cls==='dl-amber';}
+
+const groups=[
+  {id:'nl',label:'New Lead',cls:'g1',count:250,leads:[
+    {id:1,name:'Carter family',email:'carter@fora.com',li:ago(5),src:'b2b',step:1,tv:4,sd:'15/05/2026',ag:'Fora',ow:'Karen Gee',we:true,note:'Very engaged early on. Needs custom honeymoon add-on.',tp:false,stage:'nl',ts:'Inquiry',
+      threads:[
+        {id:'t1',subject:'Morocco honeymoon enquiry',contact:'Hannah Carter',contactEmail:'hcarter@gmail.com',msgs:[
+          {from:'advisor',name:'Karen Gee',date:ago(12),body:'Hi Hannah, thank you for reaching out about your honeymoon trip to Morocco! I\'d love to help you plan something unforgettable. Could you share your preferred travel dates and budget?'},
+          {from:'client',name:'Hannah Carter',date:ago(10),body:'Hi Karen! We\'re thinking late May, around 10 days. Budget is flexible but ideally under $8,000 for two. We love boutique riads and would like a mix of culture and relaxation.'},
+          {from:'advisor',name:'Karen Gee',date:ago(8),body:'Perfect — late May is a beautiful time! I\'ll put together a tailored itinerary with some of our favourite riads in Marrakech and Fès. Give me a couple of days.'},
+          {from:'advisor',name:'Karen Gee',date:ago(5),body:'Hi Hannah, I\'ve attached the itinerary for your review. Looking forward to hearing your thoughts!'},
+        ]},
+        {id:'t2',subject:'Re: Morocco honeymoon — questions',contact:'Hannah Carter',contactEmail:'hcarter@gmail.com',msgs:[
+          {from:'client',name:'Hannah Carter',date:ago(7),body:'Hi Karen, one more question — do you arrange airport transfers and do they speak English at the riads you recommend?'},
+          {from:'advisor',name:'Karen Gee',date:ago(6),body:'Yes absolutely — all our partner riads have English-speaking staff and we include private transfers throughout. Happy to add a private guide for the medina tours too!'},
+        ]}
+      ]
+    },
+    {id:2,name:'Steven Goodrich',email:'steven@zicasso.com',li:ago(8),src:'zic',step:2,tv:2,sd:'27/07/2026',ag:'Zicasso',ow:'Karen Gee',we:false,note:'Travelling for work until Jan.',tp:false,stage:'nl',ts:'Inquiry',threads:[]},
+    {id:3,name:'Conroy family',email:'—',li:ago(12),src:'kim',step:1,tv:5,sd:'',ag:'First in Service',ow:'Zainab TALMZI',we:false,note:'',tp:false,stage:'fc',ts:'Inquiry',threads:[]},
+    {id:4,name:'Adrien de Saint Jacob',email:'adrien@direct.com',li:ago(2),src:'dir',step:0,tv:35,sd:'07/06/2026',ag:'',ow:'Fadila AIT TALBI',we:false,note:'',tp:false,stage:'nl',ts:'Inquiry',
+      threads:[
+        {id:'t3',subject:'Group tour Morocco 2026',contact:'Adrien de Saint Jacob',contactEmail:'adrien@direct.com',msgs:[
+          {from:'client',name:'Adrien de Saint Jacob',date:ago(4),body:'Bonjour, we are a group of 35 looking for a 4-day experience in Morocco for our annual company retreat. Can you help?'},
+          {from:'advisor',name:'Fadila AIT TALBI',date:ago(2),body:'Bonjour Adrien! Absolutely, we specialise in group retreats. I will prepare a few options for you shortly.'},
+        ]}
+      ]
+    },
+    {id:5,name:"Christie Wingo's client",email:'christie@dt.com',li:ago(40),src:'b2b',step:4,tv:3,sd:'23/09/2026',ag:'Direct Travel',ow:'Reem KARMOUTAH',we:false,note:'No reply after multiple attempts.',tp:false,stage:'ps',ts:'Inquiry',threads:[]},
+  ]},
+  {id:'fc',label:'First Contact',cls:'g2',count:200,leads:[
+    {id:6,name:'Robert Rosen',email:'robert@zicasso.com',li:ago(20),src:'zic',step:6,tv:4,sd:'24/04/2026',ag:'Zicasso',ow:'Hiroshi Tsuji',we:true,note:'Went silent after pricing.',tp:false,stage:'fc',ts:'Inquiry',
+      threads:[
+        {id:'t4',subject:'Imperial cities tour April 2026',contact:'Robert Rosen',contactEmail:'robert@rosen.com',msgs:[
+          {from:'client',name:'Robert Rosen',date:ago(25),body:'Hello, I was referred by Zicasso. Looking for a 10-day tour of the imperial cities for April for a family of 4.'},
+          {from:'advisor',name:'Hiroshi Tsuji',date:ago(23),body:'Hi Robert! Great timing — April is stunning in Morocco. Let me put together a detailed proposal for your family.'},
+          {from:'advisor',name:'Hiroshi Tsuji',date:ago(20),body:'Hi Robert, please find attached our Imperial Cities proposal. It covers Fès, Marrakech, Meknès and Rabat with 5-star accommodation throughout. Looking forward to your feedback.'},
+        ]}
+      ]
+    },
+    {id:7,name:'Spencer Whalen party',email:'spencer@example.com',li:ago(1),src:'dir',step:1,tv:8,sd:'30/04/2026',ag:'',ow:'Amal Amezargou',we:false,note:'',tp:false,stage:'fc',ts:'Inquiry',
+      threads:[
+        {id:'t5',subject:'Adventure tour Morocco April',contact:'Spencer Whalen',contactEmail:'spencer@example.com',msgs:[
+          {from:'client',name:'Spencer Whalen',date:ago(3),body:'Hi there! We\'re a group of 8 friends looking for an adventure-focused Morocco trip in late April. Desert camping, hiking, the works.'},
+          {from:'advisor',name:'Amal Amezargou',date:ago(1),body:'Hi Spencer! That sounds amazing — we have a great desert + Toubkal trek combination that works perfectly for adventurous groups. Putting together options now!'},
+        ]}
+      ]
+    },
+  ]}
+];
+
+let showOv=false,oRow=null,oMode=null,oTab=null,aNoteId=null,pStage=null,pTs=null,selThread=null;
+const tip=document.getElementById('ntip');
+function gl(id){return groups.flatMap(g=>g.leads).find(x=>x.id===id);}
+function nsCellHtml(l){const dl=getDeadline(l);const ac=getAction(l);return `<span class="ns-wrap"><span class="dl-pill ${dl.cls}" onclick="op(${l.id},'deadline',event)">${dl.label}</span><span class="act-btn ${ac.cls}" onclick="op(${l.id},'${ac.mode}',event)">${ac.icon} ${ac.label}</span></span>`;}
+function threadListHtml(l){if(!l.threads||!l.threads.length)return '';return l.threads.map(t=>{const last=t.msgs[t.msgs.length-1];const isSel=selThread===t.id;return `<div class="thread-item ${isSel?'sel':''}" onclick="pickThread(${l.id},'${t.id}')"><div class="thread-avatar" style="background:${last.from==='client'?'#e37400':'#1a73e8'}">${initials(last.name)}</div><div class="thread-meta"><div class="thread-subj">${t.subject}</div><div class="thread-snippet">${last.name}: ${last.body.slice(0,60)}…</div><span class="thread-count">${t.msgs.length} messages</span></div><div class="thread-date">${fmtD(last.date)}</div></div>`;}).join('');}
+function msgChainHtml(thread,l){const msgs=thread.msgs.map(m=>`<div class="msg"><div class="msg-header"><div class="msg-avatar ${m.from==='advisor'?'msg-av-advisor':'msg-av-client'}">${initials(m.name)}</div><span class="msg-sender">${m.name}</span><span class="msg-date">${fmtDT(m.date)}</span></div><div class="msg-body">${m.body}</div></div>`).join('');const c=CAD[l.src]||CAD.b2b;const sn=Math.min(l.step+1,c.length);const maxTpl=Math.min(c.length,5);const tplOpts=Array.from({length:maxTpl},(_,i)=>`<option value="${i+1}">Follow-up #${i+1}</option>`).join('')+'<option value="0">Custom</option>';return `<div class="email-chain"><div class="chain-header"><span class="chain-title">${thread.subject}</span><button class="chain-back" onclick="selThread=null;render()">← Back to threads</button></div><div class="msg-list">${msgs}</div><div class="compose-box"><div class="ct2" style="border-top:1px solid #e0e0e0"><label>Template</label><select id="cT" onchange="ut2(${l.id})">${tplOpts}</select><span class="sp2" style="margin-left:auto">Follow-up #${sn} of ${c.length}</span></div><div class="cb2"><textarea id="cB">${replyBody(l,sn)}</textarea></div><div style="display:flex;justify-content:flex-end;gap:6px;padding:8px 10px;border-top:1px solid #f1f3f4"><button class="ab" onclick="cp()">Discard</button><button class="ab ap" onclick="se(${l.id})">Send & log</button></div></div></div>`;}
+function replyBody(l,sn){return `Hi ${fn(l.name)},\n\nFollowing up on our conversation${sn>1?' — just wanted to check in and see if you had any questions':'. I wanted to make sure you had everything you need to move forward'}.\n\nLooking forward to hearing from you!\n\nBest,`;}
+
+function panelHtml(l){
+  const c=CAD[l.src]||CAD.b2b;const nf=nfu(l);const sn=Math.min(l.step+1,c.length);
+  const hasThreads=l.threads&&l.threads.length>0;const multiThreads=l.threads&&l.threads.length>1;
+  if(oMode==='rec'){const k=l.tp?'close':(l.step>=c.length?(l.we?'escalate':'reengage'):'none');const RP={escalate:{ti:'⚑ Escalate to manager',r:'Client was engaged but has gone quiet after all follow-ups.',color:'pur',acts:[{l:'Send escalation note',t:'escalate',s:'av'},{l:'Follow up in 30d',t:'fu30',s:''},{l:'Dismiss',t:'dismiss',s:''}]},reengage:{ti:'↺ Re-engage later',r:'No response throughout the full cadence.',color:'red',acts:[{l:'Re-engage in 3 months',t:'reengage',s:'aw'},{l:'Close as Lost',t:'close',s:'ad'},{l:'Dismiss',t:'dismiss',s:''}]},close:{ti:'✕ Close lead',r:'The trip start date has passed.',color:'red',acts:[{l:'Mark as Lost',t:'close',s:'ad'},{l:'Dismiss',t:'dismiss',s:''}]}};if(k==='none')return '';const r=RP[k];return `<div class="pnl ${r.color}"><div class="tc"><h4 style="margin-bottom:6px">${r.ti}</h4><p style="font-size:11px;color:#5f6368;line-height:1.5;margin-bottom:10px">${r.r}</p>${k==='escalate'?`<div class="fr" style="align-items:flex-start"><span class="fl" style="margin-top:4px">Note to manager</span><textarea class="fn" id="escNote" placeholder="What should the manager know?"></textarea></div>`:''}<div style="display:flex;gap:6px;flex-wrap:wrap">${r.acts.map(a=>`<button class="ab ${a.s}" onclick="out(${l.id},'${a.t}')">${a.l}</button>`).join('')}</div></div></div>`;}
+  if(oMode==='deadline'){const dd=nf?nf.toISOString().slice(0,10):'';return `<div class="pnl blu"><div class="tc"><h4 style="margin-bottom:8px">Adjust next follow-up date</h4><div class="fr"><span class="fl">Next follow-up</span><input type="date" class="fi" id="aD" value="${dd}" onchange="cw(${l.id})"/><span class="hs">Default: ${fmtD(nf)}</span></div><div class="ws" id="aW">More than 7 days from default — manager notified</div><div class="fr" style="align-items:flex-start;margin-top:4px"><span class="fl" style="margin-top:4px">Note</span><textarea class="fn" id="aN" placeholder="Why adjusting?">${l.note||''}</textarea></div><div class="pf"><button class="ab" onclick="cp()">Cancel</button><button class="ab ap" onclick="sa(${l.id})">Save</button></div></div></div>`;}
+  if(oMode==='interact'){const opts=INT_CHANNELS.map(ch=>`<option>${ch}</option>`).join('');return `<div class="pnl org"><div class="tc"><h4 style="margin-bottom:6px">Log customer interaction</h4><p style="font-size:11px;color:#5f6368;margin-bottom:10px;line-height:1.5">Updates last customer interaction date and recalculates next follow-up from that date.</p><div class="fr"><span class="fl">Channel</span><select class="fs2" id="iCh">${opts}</select></div><div class="fr"><span class="fl">Interaction date</span><input type="date" class="fi" id="iDt" value="${T.toISOString().slice(0,10)}"/></div><div class="fr" style="align-items:flex-start"><span class="fl" style="margin-top:4px">Notes</span><textarea class="fn" id="iNt" placeholder="What did the customer say?"></textarea></div><div class="pf"><button class="ab" onclick="cp()">Cancel</button><button class="ab ap" onclick="si(${l.id})">Save interaction</button></div></div></div>`;}
+  if(oMode==='fu'){
+    const tabs=[...(hasThreads?[{k:'email',lb:'Follow up'}]:[]),{k:'logfu',lb:'Log follow-up'}];
+    if(!oTab||(!hasThreads&&oTab==='email'))oTab='logfu';
+    const th=tabs.map(t=>`<div class="tab ${oTab===t.k?'on':''}" onclick="st2(${l.id},'${t.k}')">${t.lb}</div>`).join('');
+    let body='';
+    if(oTab==='email'){if(!hasThreads){body=`<div class="no-thread-note">No email thread attached to this trip. Follow up from Gmail directly, or log an external follow-up using the "Log follow-up" tab.</div>`;}else if(multiThreads&&!selThread){body=`<p style="font-size:11px;color:#5f6368;margin-bottom:10px;line-height:1.5">Multiple threads found — choose which one to reply to.</p><div class="thread-list">${threadListHtml(l)}</div>`;}else{const thread=selThread?l.threads.find(t=>t.id===selThread):l.threads[0];if(thread)body=msgChainHtml(thread,l);}}
+    else if(oTab==='logfu'){const opts=INT_CHANNELS.filter(ch=>ch!=='Email (not sent from CRM)').map(ch=>`<option>${ch}</option>`).join('');body=`<p style="font-size:11px;color:#5f6368;margin-bottom:10px;line-height:1.5">Records a follow-up you made externally. Does not reset the customer interaction date.</p><div class="fr"><span class="fl">Channel</span><select class="fs2" id="lC">${opts}</select></div><div class="fr"><span class="fl">Date</span><input type="date" class="fi" id="lD" value="${T.toISOString().slice(0,10)}"/></div>${l.src==='kim'?`<div class="fr"><span class="fl">Customer responded?</span><select class="fs2" id="lR"><option value="no">No</option><option value="yes">Yes</option></select></div>`:''}<div class="pf"><button class="ab" onclick="cp()">Cancel</button><button class="ab ap" onclick="slf(${l.id})">Log follow-up</button></div>`;}
+    return `<div class="pnl blu"><div class="tabs">${th}</div><div class="tc">${body}</div></div>`;
+  }
+  if(oMode==='status'){const curStage=pStage||l.stage;const curTs=pTs||l.ts;const changed=curStage!==l.stage;return `<div class="pnl grn"><div class="tc"><div class="status-grid"><div><div class="fr"><span class="fl">Lead stage</span><select class="fs2" id="stgSel" onchange="selStageDD(${l.id})" style="flex:1">${STAGES.map(s=>`<option value="${s.k}" ${curStage===s.k?'selected':''}>${s.l}</option>`).join('')}</select></div><div class="fr"><span class="fl">Trip status</span><select class="fs2" id="tsSel" onchange="selTsDD(${l.id})" style="flex:1">${TSTATUSES.map(s=>`<option value="${s}" ${curTs===s?'selected':''}>${s}</option>`).join('')}</select></div></div><div id="condFields">${condFieldsHtml(l.id,curTs)}</div></div><div class="pf"><span class="confirm-bar ${changed?'show':''}">Lead will move to "${sm(curStage).l}" on save</span><button class="ab" onclick="cp()">Cancel</button><button class="ab ap" onclick="saveStatus(${l.id})">Save</button></div></div></div>`;}
+  return '';
+}
+
+function condFieldsHtml(id,ts){if(ts==='Confirmed')return `<div class="cond-fields"><h5>Required when confirming</h5><div class="fr"><span class="fl req">Sale price</span><input class="fi req-field" id="xSalePrice" type="number" placeholder="0.00" style="width:130px"/></div><div class="fr"><span class="fl req">Sale date</span><input class="fi req-field" id="xSaleDate" type="date"/></div><div class="fr"><span class="fl">Estimated price</span><input class="fi" id="xEstPrice" type="number" placeholder="0.00" style="width:130px"/></div></div>`;if(ts==='Lost'||ts==='Cancelled')return `<div class="cond-fields"><h5>Required when closing</h5><div class="fr"><span class="fl req">Loss reason</span><select class="fs2 req-field" id="xLossReason" style="flex:1"><option value="">Select…</option>${LOSS_REASONS.map(r=>`<option>${r}</option>`).join('')}</select></div></div>`;if(ts==='Postponed')return `<div class="cond-fields"><h5>Required when postponing</h5><div class="fr"><span class="fl req">New start date</span><input class="fi req-field" id="xNewStart" type="date"/></div><div class="fr"><span class="fl req">New end date</span><input class="fi req-field" id="xNewEnd" type="date"/></div></div>`;return '';}
+
+function pickThread(lid,tid){selThread=tid;render();}
+function render(){const tb=document.getElementById('tbody');let h='';let n=1;groups.forEach(g=>{let leads=g.leads;if(showOv)leads=leads.filter(needsAction);if(!leads.length&&showOv)return;h+=`<tr class="grp-hdr"><td colspan="12" class="${g.cls}">▾ ${g.label} (${g.count} items) <span style="font-size:11px;opacity:.85;margin-left:8px">Compliance: <strong>${g.id==='nl'?'68%':'71%'}</strong></span></td></tr>`;leads.forEach(l=>{const ov=needsAction(l);const prev=l.note?l.note.slice(0,26)+(l.note.length>26?'…':''):'Add note…';const stg=sm(l.stage);h+=`<tr id="r${l.id}" class="${ov?'ov':''}"><td class="nc">${n++}</td><td><span style="color:#9e9e9e;font-size:12px">▾</span></td><td><span class="tl">${l.name}</span></td><td><span class="ic" onclick="op(${l.id},'interact',event)"><span class="id">${fmtD(l.li)}</span><span class="ia">${ds(l.li)}d ago</span><span class="il">+ log</span></span></td><td>${nsCellHtml(l)}</td><td style="overflow:visible"><span class="np ${!l.note?'e':''}" onclick="onm(${l.id})" ${l.note?`onmouseenter="sht(event,${l.id})" onmouseleave="ht()"`:''}>
+          ${prev}</span></td><td><span class="ls-pill ${stg.cls}" onclick="op(${l.id},'status',event)"><span class="sdot" style="background:${stg.dot}"></span>${stg.l}<span class="arr">▾</span></span></td><td style="color:#5f6368">${l.tv||''}</td><td style="color:#5f6368">${l.sd||''}</td><td><span class="sb ${SC[l.src]}">${SRC[l.src]}</span></td><td style="color:#5f6368;max-width:95px;overflow:hidden;text-overflow:ellipsis">${l.ag||''}</td><td style="color:#5f6368">${l.ow||''}</td></tr><tr class="ar ${oRow===l.id?'open':''}" id="ar${l.id}"><td colspan="12" class="ac">${oRow===l.id?panelHtml(l):''}</td></tr>`;});});tb.innerHTML=h;}
+function op(id,mode,e){e.stopPropagation();if(oRow===id&&oMode===mode){cp();return;}pStage=null;pTs=null;selThread=null;oRow=id;oMode=mode;if(mode==='fu'){const l=gl(id);oTab=l.threads&&l.threads.length?'email':'logfu';}if(mode==='status'){const l=gl(id);pStage=l.stage;pTs=l.ts;}render();}
+function st2(id,k){oTab=k;selThread=null;render();}
+function cp(){oRow=null;oMode=null;oTab=null;pStage=null;pTs=null;selThread=null;render();}
+function selStageDD(id){pStage=document.getElementById('stgSel').value;}
+function selTsDD(id){pTs=document.getElementById('tsSel').value;const cf=document.getElementById('condFields');if(cf)cf.innerHTML=condFieldsHtml(id,pTs);}
+function saveStatus(id){const l=gl(id);if(pStage)l.stage=pStage;if(pTs)l.ts=pTs;pStage=null;pTs=null;cp();render();toast('Status saved');}
+function si(id){const l=gl(id);const d=document.getElementById('iDt').value;const nt=document.getElementById('iNt').value;l.li=new Date(d);l.we=true;l.step=0;if(nt)l.note=nt;cp();render();toast('Interaction logged · next follow-up recalculated');}
+function slf(id){const l=gl(id);const r=document.getElementById('lR');if(r&&r.value==='yes'){l.li=new Date(T);l.step=0;l.we=true;}else{l.step=Math.min(l.step+1,(CAD[l.src]||CAD.b2b).length);}cp();render();toast('Follow-up logged');}
+function se(id){const l=gl(id);l.step=Math.min(l.step+1,(CAD[l.src]||CAD.b2b).length);l.li=new Date(T);cp();render();toast('Email sent · follow-up logged');}
+function sa(id){const l=gl(id);const nt=document.getElementById('aN').value;if(nt)l.note=nt;cp();render();toast('Date saved');}
+function cw(id){const l=gl(id);const nf=nfu(l);if(!nf)return;const ch=new Date(document.getElementById('aD').value);const df=Math.abs(Math.round((ch-nf)/864e5));document.getElementById('aW').style.display=df>7?'block':'none';}
+function ut2(id){const l=gl(id);const v=document.getElementById('cT').value;const ta=document.getElementById('cB');if(ta)ta.value=v==='0'?'':replyBody(l,parseInt(v));}
+function out(id,t){const m={escalate:'Escalated to manager',fu30:'Follow-up in 30d',reengage:'Re-engage later',close:'Lead closed',dismiss:'Dismissed'};cp();toast(m[t]);render();}
+function toggleOv(){showOv=document.getElementById('ovChk').checked;render();}
+function sht(e,id){const l=gl(id);if(!l||!l.note)return;tip.textContent=l.note;tip.style.display='block';pt(e);}
+function pt(e){tip.style.left=Math.min(e.clientX+14,window.innerWidth-280)+'px';tip.style.top=(e.clientY+14)+'px';}
+function ht(){tip.style.display='none';}
+document.addEventListener('mousemove',e=>{if(tip.style.display==='block')pt(e);});
+function onm(id){ht();aNoteId=id;const l=gl(id);document.getElementById('mSub').textContent=l.name;document.getElementById('mTA').value=l.note||'';document.getElementById('noteModal').classList.add('open');setTimeout(()=>document.getElementById('mTA').focus(),50);}
+function closeNote(){document.getElementById('noteModal').classList.remove('open');aNoteId=null;}
+function saveNote(){const l=gl(aNoteId);if(l)l.note=document.getElementById('mTA').value;closeNote();render();toast('Note saved');}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2600);}
+document.getElementById('noteModal').addEventListener('click',function(e){if(e.target===this)closeNote();});
+render();
+</script>
+</body>
+</html>
