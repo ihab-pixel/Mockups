@@ -1,0 +1,359 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:13px;color:#202124;background:#f6f8fc}
+.crm{background:#fff;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden}
+.topbar{display:flex;align-items:center;border-bottom:1px solid #e0e0e0;padding:0 4px}
+.tb-tab{padding:10px 14px;font-size:13px;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tb-tab.active{color:#1a73e8;border-bottom:2px solid #1a73e8;font-weight:500}
+.toolbar{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid #e0e0e0;flex-wrap:wrap}
+.spacer{flex:1}
+.tb-btn{padding:5px 12px;border:1px solid #dadce0;border-radius:4px;font-size:12px;cursor:pointer;background:#fff;color:#3c4043}
+.tb-btn:hover{background:#f1f3f4}
+.grp-sel{font-size:12px;padding:4px 8px;border:1px solid #dadce0;border-radius:4px;background:#fff}
+.tb-label{font-size:11px;color:#5f6368}
+.chk-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#3c4043;cursor:pointer;user-select:none}
+.chk-wrap input{width:14px;height:14px;cursor:pointer;accent-color:#c62828}
+.sub-sel{font-size:12px;padding:4px 8px;border:1px solid #dadce0;border-radius:4px;background:#fff}
+.search-box{padding:5px 10px;border:1px solid #dadce0;border-radius:4px;font-size:12px;width:160px;background:#f1f3f4}
+.pipeline{display:flex;padding:7px 10px;border-bottom:1px solid #e0e0e0;overflow-x:auto;gap:0}
+.pip-stage{display:flex;align-items:center;padding:5px 12px 5px 16px;font-size:11px;font-weight:500;color:#fff;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%);white-space:nowrap;min-width:130px}
+.pip-stage:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);padding-left:10px}
+.pip-wr{font-size:10px;background:rgba(255,255,255,0.25);padding:1px 5px;border-radius:8px;margin-left:4px}
+.pip-late{font-size:10px;padding:1px 5px;border-radius:8px;margin-left:3px;background:rgba(220,53,53,0.38)}
+.table-wrap{overflow-x:auto;max-height:500px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:960px}
+th{font-size:11px;font-weight:500;color:#5f6368;text-align:left;padding:6px 8px;border-bottom:1px solid #e0e0e0;white-space:nowrap;position:sticky;top:0;background:#fff;z-index:2}
+th.fuc{color:#c62828;font-weight:600}
+td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;overflow:visible;vertical-align:middle}
+tr.data-row:hover td{background:#f8f9fa}
+tr.late-row td{background:#fff8f8}
+tr.late-row:hover td{background:#fef0f0}
+tr.lost-row td{background:#f8f8f8;opacity:.65}
+.grp-hdr td{padding:6px 8px;font-weight:500;font-size:12px;color:#fff}
+.nc{color:#9e9e9e;font-size:11px;text-align:right;width:28px}
+.tl{color:#1a73e8;cursor:pointer;font-size:12px}
+.tl:hover{text-decoration:underline}
+.tl.lost{color:#9e9e9e;text-decoration:line-through}
+.lost-tag{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:10px;font-size:10px;font-weight:500;background:#f3f3f3;color:#9e9e9e;border:1px solid #e0e0e0;margin-left:5px}
+.expand-btn{width:20px;height:20px;border-radius:3px;border:1px solid #e0e0e0;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#9e9e9e;font-size:11px}
+.email-cell{display:inline-flex;align-items:center;gap:5px;cursor:pointer}
+.email-ico{width:18px;height:14px;flex-shrink:0}
+.email-date{font-size:11px;color:#5f6368}
+.email-cell:hover .email-date{color:#1a73e8;text-decoration:underline}
+.email-cell-none{font-size:11px;color:#bdbdbd}
+.fu-cell{display:inline-flex;align-items:center;gap:6px}
+.fu-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid;cursor:pointer}
+.fu-badge:hover{filter:brightness(.93)}
+.fu-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.db-red{background:#fce8e6;color:#c62828;border-color:#f5c6c6}
+.db-red .fu-dot{background:#c62828}
+.db-amber{background:#fef7e0;color:#e37400;border-color:#fde68a}
+.db-amber .fu-dot{background:#e37400}
+.db-green{background:#e6f4ea;color:#137333;border-color:#ceead6}
+.db-green .fu-dot{background:#137333}
+.fu-none{font-size:11px;color:#bdbdbd;cursor:pointer;padding:2px 4px;border-radius:3px}
+.fu-none:hover{background:#f1f3f4;color:#5f6368}
+
+/* Simple × — hidden by default, shown via JS on row hover */
+.lost-x{
+  background:none;border:none;padding:0 3px;
+  font-size:15px;line-height:1;font-weight:400;
+  color:#c62828;cursor:pointer;
+  visibility:hidden;
+  display:inline-block;vertical-align:middle;
+  margin-left:2px;
+}
+.lost-x:hover{color:#a82020}
+
+.memo-preview-cell{font-size:11px;color:#5f6368;cursor:pointer;padding:2px 5px;border-radius:4px;border:1px solid transparent;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
+.memo-preview-cell:hover{border-color:#dadce0;background:#fff}
+.memo-preview-cell.empty{color:#bdbdbd;font-style:italic}
+.memo-popup{display:none;position:fixed;z-index:100;background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.18);width:340px;overflow:hidden}
+.memo-popup.open{display:block}
+.mp-header{display:flex;align-items:center;justify-content:space-between;padding:9px 12px 8px;border-bottom:1px solid #f0f0f0;background:#fafafa}
+.mp-title{font-size:11px;font-weight:500;color:#5f6368}
+.mp-close{background:none;border:none;color:#9e9e9e;cursor:pointer;font-size:15px;line-height:1;padding:1px 4px;border-radius:3px}
+.mp-close:hover{background:#f1f3f4}
+.mp-body{padding:12px}
+.mp-preview{font-size:12px;color:#202124;line-height:1.7;white-space:pre-wrap;word-break:break-word;cursor:text;min-height:50px}
+.mp-preview a{color:#1a73e8;text-decoration:underline}
+.mp-preview a:hover{color:#0c447c}
+.mp-hint{font-size:10px;color:#bdbdbd;margin-top:8px;display:flex;align-items:center;gap:4px}
+.mp-textarea{width:100%;min-height:90px;font-size:12px;font-family:inherit;padding:6px 8px;border:1px solid #1a73e8;border-radius:5px;outline:none;resize:vertical;color:#202124;line-height:1.7;box-shadow:0 0 0 2px rgba(26,115,232,0.1);display:none}
+.mp-footer{display:none;justify-content:flex-end;gap:6px;padding:8px 12px;border-top:1px solid #f0f0f0;background:#fafafa}
+.mp-footer.show{display:flex}
+.mp-save{padding:4px 12px;border-radius:4px;border:none;background:#1a73e8;color:#fff;font-size:12px;cursor:pointer}
+.mp-save:hover{background:#1557b0}
+.mp-cancel{padding:4px 10px;border-radius:4px;border:1px solid #dadce0;background:#fff;font-size:12px;cursor:pointer;color:#5f6368}
+.dp-wrap{display:none;position:fixed;z-index:100;background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.16);padding:14px;width:230px}
+.dp-wrap.open{display:block}
+.dp-lbl{font-size:11px;color:#5f6368;margin-bottom:6px;font-weight:500}
+.dp-inp{width:100%;padding:5px 8px;border:1px solid #dadce0;border-radius:5px;font-size:12px;margin-bottom:8px;background:#fff;color:#202124}
+.dp-inp:focus{border-color:#1a73e8;outline:none}
+.dp-shorts{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.dp-s{padding:3px 9px;border-radius:12px;font-size:11px;border:1px solid #dadce0;cursor:pointer;background:#fff;color:#3c4043}
+.dp-s:hover{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8}
+.dp-warn{font-size:10px;color:#c62828;display:none;margin-bottom:5px}
+.dp-foot{display:flex;justify-content:flex-end;gap:5px}
+.dp-save{padding:5px 12px;border-radius:5px;border:none;background:#1a73e8;color:#fff;font-size:12px;cursor:pointer}
+.dp-save:hover{background:#1557b0}
+.dp-cancel{padding:5px 10px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:12px;cursor:pointer;color:#5f6368}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;align-items:center;justify-content:center}
+.overlay.open{display:flex}
+.confirm-box{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.2);width:380px;max-width:95vw;overflow:hidden}
+.cb-header{padding:16px 20px 14px;border-bottom:1px solid #f0f0f0}
+.cb-header h3{font-size:14px;font-weight:500;margin:0 0 3px}
+.cb-header p{font-size:12px;color:#5f6368;margin:0;line-height:1.5}
+.cb-fields{padding:14px 20px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #f0f0f0}
+.lf{display:flex;flex-direction:column;gap:3px}
+.lf label{font-size:10px;font-weight:500;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em}
+.lf select,.lf input,.lf textarea{font-size:12px;padding:5px 8px;border:1px solid #dadce0;border-radius:5px;background:#fff;color:#202124;font-family:inherit}
+.lf textarea{resize:vertical;min-height:44px}
+.cb-footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px}
+.btn-cancel{padding:7px 14px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:13px;cursor:pointer;color:#3c4043}
+.btn-cancel:hover{background:#f1f3f4}
+.btn-lost{padding:7px 16px;border-radius:5px;border:none;background:#c62828;color:#fff;font-size:13px;cursor:pointer;font-weight:500}
+.btn-lost:hover{background:#a82020}
+.modal{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.2);width:440px;max-width:95vw;overflow:hidden}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 18px 11px;border-bottom:1px solid #e0e0e0}
+.modal-hdr h3{font-size:14px;font-weight:500;margin:0}
+.modal-hdr .sub{font-size:11px;color:#5f6368;margin-top:2px}
+.modal-close{background:none;border:none;font-size:18px;color:#5f6368;cursor:pointer;padding:2px 6px;border-radius:4px;line-height:1}
+.modal-close:hover{background:#f1f3f4}
+.modal-body{padding:16px 18px}
+.thread-list{display:flex;flex-direction:column;gap:6px}
+.thread-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:6px;cursor:pointer;background:#fff}
+.thread-item:hover{border-color:#1a73e8;background:#e8f0fe}
+.th-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0}
+.th-meta{flex:1;min-width:0}
+.th-subj{font-size:12px;font-weight:500;color:#202124;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.th-snip{font-size:11px;color:#5f6368;margin-top:1px}
+.th-date{font-size:10px;color:#9e9e9e;margin-left:8px;white-space:nowrap}
+.th-cnt{font-size:10px;color:#1a73e8;background:#e8f0fe;padding:1px 5px;border-radius:8px;margin-top:2px;display:inline-block}
+.toast{position:fixed;bottom:16px;right:16px;background:#323232;color:#fff;padding:10px 16px;border-radius:6px;font-size:13px;z-index:999;display:none}
+</style>
+
+<div class="crm">
+  <div class="topbar">
+    <div class="tb-tab">Home</div>
+    <div class="tb-tab active">Inquiry (1400)</div>
+    <div class="tb-tab">To Reactivate (87)</div>
+    <div class="tb-tab">Upcoming (280)</div>
+    <div class="tb-tab">On the Ground (44)</div>
+  </div>
+  <div class="toolbar">
+    <span class="tb-label">Group By</span>
+    <select class="grp-sel"><option>Lead Stage</option></select>
+    <div class="spacer"></div>
+    <label class="chk-wrap"><input type="checkbox" id="lateChk" onchange="toggleLate()"/> Late follow-ups</label>
+    <button class="tb-btn">New</button>
+    <button class="tb-btn">Refresh</button>
+    <select class="sub-sel"><option>All</option><option>Morocco</option><option>UK</option><option>Japan</option></select>
+    <input class="search-box" placeholder="Search in this list…"/>
+  </div>
+  <div class="pipeline" id="pipeline"></div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28px">#</th>
+          <th style="width:22px"></th>
+          <th style="min-width:155px">Trip Name</th>
+          <th style="min-width:110px">Last Email</th>
+          <th class="fuc" style="min-width:145px">Next Follow-up</th>
+          <th style="min-width:190px">Advisor Memo</th>
+          <th style="min-width:60px">Travelers</th>
+          <th style="min-width:90px">Trip Start Date</th>
+          <th style="min-width:90px">Created Date</th>
+          <th style="min-width:45px">Nights</th>
+          <th style="min-width:85px">Client Source</th>
+          <th style="min-width:110px">Agency</th>
+          <th style="min-width:100px">Sales Owner</th>
+          <th style="min-width:75px">Subsidiary</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="memo-popup" id="memoPopup" onclick="event.stopPropagation()">
+  <div class="mp-header"><span class="mp-title" id="mpTitle">Advisor memo</span><button class="mp-close" onclick="closeMemoPopup()">✕</button></div>
+  <div class="mp-body">
+    <div id="mpPreviewPane">
+      <div class="mp-preview" id="mpPreview" onclick="switchToEdit()"></div>
+      <div class="mp-hint" id="mpHint">✎ Click to edit</div>
+    </div>
+    <textarea class="mp-textarea" id="mpTextarea" onkeydown="memoKey(event)"></textarea>
+  </div>
+  <div class="mp-footer" id="mpFooter">
+    <button class="mp-cancel" onclick="cancelMemoEdit()">Cancel</button>
+    <button class="mp-save" onclick="saveMemoEdit()">Save</button>
+  </div>
+</div>
+
+<div class="dp-wrap" id="dpWrap" onclick="event.stopPropagation()">
+  <div class="dp-lbl">Set next follow-up</div>
+  <input type="date" class="dp-inp" id="dpInp" onchange="checkDPWarn()"/>
+  <div class="dp-warn" id="dpWarn">Max 30 days from today</div>
+  <div class="dp-shorts">
+    <span class="dp-s" onclick="setS(1)">+1d</span><span class="dp-s" onclick="setS(2)">+2d</span>
+    <span class="dp-s" onclick="setS(7)">+1w</span><span class="dp-s" onclick="setS(14)">+2w</span>
+    <span class="dp-s" onclick="setS(30)">+30d</span>
+  </div>
+  <div class="dp-foot">
+    <button class="dp-cancel" onclick="closeDPWrap()">Cancel</button>
+    <button class="dp-save" onclick="saveDPWrap()">Save</button>
+  </div>
+</div>
+
+<div class="overlay" id="lostOverlay">
+  <div class="confirm-box">
+    <div class="cb-header"><h3>Mark as Lost</h3><p id="lostLeadName"></p></div>
+    <div class="cb-fields">
+      <div class="lf"><label>Lost reason</label><select id="lostReason"><option value="">Select…</option><option>Price too high</option><option>Chose competitor</option><option>Budget cancelled</option><option>No response</option><option>Dates not available</option><option>Other</option></select></div>
+      <div class="lf"><label>Lost notes</label><textarea id="lostNotes" placeholder="Any context…"></textarea></div>
+      <div class="lf"><label>Reactivation needed</label><select id="reactNeeded" onchange="toggleReact()"><option value="no">No</option><option value="yes">Yes</option></select></div>
+      <div class="lf" id="reactDateRow" style="display:none"><label>Reactivation date</label><input type="date" id="reactDate"/></div>
+      <div class="lf" id="reactNotesRow" style="display:none"><label>Reactivation notes</label><textarea id="reactNotes" placeholder="What to try…"></textarea></div>
+    </div>
+    <div class="cb-footer">
+      <button class="btn-cancel" onclick="closeLostOverlay()">Cancel</button>
+      <button class="btn-lost" onclick="confirmLost()">Mark as Lost</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="threadOverlay">
+  <div class="modal">
+    <div class="modal-hdr"><div><h3>Open email thread</h3><div class="sub" id="threadSub"></div></div><button class="modal-close" onclick="closeThread()">✕</button></div>
+    <div class="modal-body"><div class="thread-list" id="threadList"></div></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const T=new Date('2025-12-13');
+function addD(d,n){const r=new Date(d);r.setDate(r.getDate()+n);return r;}
+function ago(n){return addD(T,-n);}
+function isoD(d){return d.toISOString().slice(0,10);}
+function fmtShort(d){if(!d)return'—';return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});}
+function fmtDT(d){return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})+', '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}
+function initials(n){return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+const SRC_LABEL={b2b:'B2B',zic:'Zicasso',dir:'Direct',kim:'Kimkim',b2c:'B2C'};
+const STAGES=[{k:'nl',l:'New Lead',color:'#e8a000',early:true},{k:'fc',l:'First Contact',color:'#1a73e8',early:true},{k:'ps',l:'Proposal Sent',color:'#7b1fa2',early:false}];
+function stg(k){return STAGES.find(s=>s.k===k)||STAGES[0];}
+function escH(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderLinks(t){return escH(t).replace(/https?:\/\/[^\s&<>]+/g,u=>`<a href="${u.replace(/&amp;/g,'&')}" target="_blank" onclick="event.stopPropagation()">${u}</a>`);}
+
+const groups=[
+  {k:'nl',count:160,leads:[
+    {id:1,name:'Isabella and Jarod',src:'b2b',stage:'nl',lastEmail:ago(5),nextFU:addD(T,-1),memo:'Honeymoon trip — boutique riads + desert.\nhttps://drive.google.com/itinerary-isabella\nAwaiting feedback on v1.',tv:20,sd:'29/04/2026',cd:'04/07/2025',nights:3,agency:'Fora',owner:'Karen Gee',sub:'UK',lost:false,threads:[{id:'t1',subj:'Morocco honeymoon enquiry',color:'#1a73e8',msgs:[{name:'Karen Gee',date:ago(8),snip:'Thank you!'},{name:'Isabella',date:ago(6),snip:'Late April, ~$9k.'},{name:'Karen Gee',date:ago(5),snip:'Itinerary v1 attached!'}]},{id:'t2',subj:'Re: Riad shortlist',color:'#e37400',msgs:[{name:'Isabella',date:ago(7),snip:'Riads under $300/night?'},{name:'Karen Gee',date:ago(6),snip:'Top 5 picks.'}]}]},
+    {id:2,name:'Carmen Matiella ...',src:'b2b',stage:'nl',lastEmail:ago(9),nextFU:addD(T,-2),memo:'Waiting on client dates.',tv:2,sd:'31/07/2025',cd:'02/09/2025',nights:'',agency:'Fora',owner:'Reem KARMOUT...',sub:'Morocco',lost:false,threads:[{id:'t3',subj:'Morocco trip enquiry',color:'#1a73e8',msgs:[{name:'Carmen',date:ago(10),snip:'Planning a trip.'},{name:'Reem K.',date:ago(9),snip:'What dates?'}]}]},
+    {id:3,name:"Sabrina's lead",src:'b2b',stage:'nl',lastEmail:ago(30),nextFU:addD(T,-12),memo:'',tv:'',sd:'12/08/2025',cd:'06/09/2025',nights:'',agency:'Special Luxury Tra...',owner:'Reem KARMOUT...',sub:'Morocco',lost:false,threads:[]},
+    {id:4,name:"Christie Wingo's c...",src:'b2b',stage:'nl',lastEmail:ago(11),nextFU:addD(T,1),memo:'Engaged early — went quiet after pricing.\nhttps://notion.so/christie-notes',tv:3,sd:'23/09/2026',cd:'11/09/2025',nights:10,agency:'Direct Travel',owner:'Reem KARMOUT...',sub:'Morocco',lost:false,threads:[{id:'t4',subj:'Morocco private tour Sept 2026',color:'#1a73e8',msgs:[{name:'Christie',date:ago(15),snip:'10-night tour for 3.'},{name:'Reem K.',date:ago(11),snip:'Proposal attached!'}]}]},
+    {id:5,name:'Adrien de Saint Ja...',src:'dir',stage:'nl',lastEmail:ago(2),nextFU:null,memo:'Group of 35. Company retreat.',tv:35,sd:'07/06/2026',cd:'15/09/2025',nights:4,agency:'',owner:'Fadila AIT TALBI',sub:'Morocco',lost:false,threads:[{id:'t5',subj:'Group retreat Morocco 2026',color:'#2e7d32',msgs:[{name:'Adrien',date:ago(4),snip:'35 people, 4 days.'},{name:'Fadila A.',date:ago(2),snip:'Preparing options.'}]}]},
+    {id:6,name:'Steven Goodrich',src:'b2c',stage:'nl',lastEmail:ago(8),nextFU:addD(T,3),memo:'Away for work until Jan. Follow up Jan 6.',tv:2,sd:'27/07/2026',cd:'24/09/2025',nights:10,agency:'Zicasso',owner:'Karen Gee',sub:'UK',lost:false,threads:[{id:'t6',subj:'Imperial cities July 2026',color:'#7b1fa2',msgs:[{name:'Steven',date:ago(10),snip:'Imperial cities tour.'},{name:'Karen Gee',date:ago(8),snip:'10-night outline.'}]}]},
+  ]},
+  {k:'fc',count:241,leads:[
+    {id:7,name:"Katherine's Group...",src:'b2b',stage:'fc',lastEmail:ago(3),nextFU:addD(T,4),memo:'Affinity group. Very responsive.\nhttps://docs.google.com/katherine-budget',tv:10,sd:'22/07/2026',cd:'13/10/2025',nights:5,agency:'Saddletree Partners',owner:'Kavya Singh',sub:'UK',lost:false,threads:[{id:'t7',subj:'Morocco group tour 2026',color:'#1a73e8',msgs:[{name:'Katherine',date:ago(5),snip:'Group of 10.'},{name:'Kavya S.',date:ago(3),snip:'Proposal attached.'}]}]},
+    {id:8,name:'Ximena Aguilar',src:'b2b',stage:'fc',lastEmail:ago(6),nextFU:addD(T,-3),memo:'',tv:12,sd:'24/04/2026',cd:'13/10/2025',nights:8,agency:'NUBA',owner:'Loubna BOUANANI',sub:'Morocco',lost:false,threads:[{id:'t8',subj:'Family trip Morocco April',color:'#e37400',msgs:[{name:'Ximena',date:ago(8),snip:'Family trip for 12.'},{name:'Loubna B.',date:ago(6),snip:'Proposal ready.'}]}]},
+  ]},
+];
+
+let showLate=false,activeMemoId=null,memoInEdit=false,activeDPId=null,lostPendingId=null;
+function gl(id){return groups.flatMap(g=>g.leads).find(x=>x.id===id);}
+function isLate(l){return !l.lost&&l.nextFU&&l.nextFU<T;}
+function dateCls(l){if(!l.nextFU)return null;const diff=Math.round((l.nextFU-T)/864e5);if(diff<0)return'db-red';if(diff<=2)return'db-amber';return'db-green';}
+function dateLabel(l){if(!l.nextFU)return null;const diff=Math.round((l.nextFU-T)/864e5);if(diff<0)return Math.abs(diff)+'d ago';if(diff===0)return'Today';if(diff===1)return'Tomorrow';return fmtShort(l.nextFU);}
+
+function renderPipeline(){
+  const el=document.getElementById('pipeline');
+  el.innerHTML=groups.map(g=>{const s=stg(g.k);const late=g.leads.filter(isLate).length;return`<div class="pip-stage" style="background:${s.color}"><span style="font-weight:600;margin-right:4px">${g.count}</span>${s.l}<span class="pip-wr">$${g.k==='nl'?'101.4K':'823.5K'} W.R</span>${late?`<span class="pip-late">${late} late</span>`:''}</div>`;}).join('');
+}
+
+function fuCellHtml(l){
+  if(l.lost)return`<span style="font-size:11px;color:#bdbdbd">—</span>`;
+  const dc=dateCls(l);const dl=dateLabel(l);
+  const xBtn=`<button class="lost-x" data-id="${l.id}" onclick="openLostOverlay(${l.id},event)" title="Close as lost">×</button>`;
+  if(!l.nextFU||!dl)return`<div class="fu-cell"><span class="fu-none" onclick="openDP(${l.id},event)">+ Set date</span>${xBtn}</div>`;
+  return`<div class="fu-cell"><span class="fu-badge ${dc}" onclick="openDP(${l.id},event)"><span class="fu-dot"></span>${dl}</span>${xBtn}</div>`;
+}
+
+function memoCellHtml(l){
+  const m=l.memo||'';
+  const preview=m?m.split('\n')[0].slice(0,40)+(m.length>40||m.includes('\n')?'…':''):'';
+  return`<span class="memo-preview-cell ${!m?'empty':''}" onclick="openMemoPopup(${l.id},event)">${m?preview:'Add memo…'}</span>`;
+}
+
+function render(){
+  renderPipeline();
+  const tb=document.getElementById('tbody');let h='';let n=1;
+  groups.forEach(g=>{
+    let leads=g.leads;if(showLate)leads=leads.filter(isLate);if(!leads.length&&showLate)return;
+    const s=stg(g.k);const lateCount=leads.filter(isLate).length;
+    h+=`<tr class="grp-hdr"><td colspan="14" style="background:${s.color};padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ ${s.l} (${g.count} items)${lateCount?` <span style="font-size:10px;background:rgba(220,53,53,0.4);padding:1px 6px;border-radius:8px;margin-left:6px">${lateCount} late</span>`:''}</td></tr>`;
+    leads.forEach(l=>{
+      const late=isLate(l);
+      const emailHtml=l.threads&&l.threads.length
+        ?`<span class="email-cell" onclick="openThread(${l.id},event)"><svg class="email-ico" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="${l.threads[l.threads.length-1].color}" opacity=".12"/><path d="M0 2l9 6 9-6" stroke="${l.threads[l.threads.length-1].color}" stroke-width="1.2" fill="none"/><rect x="0" y="0" width="18" height="14" rx="2" stroke="${l.threads[l.threads.length-1].color}" stroke-width="1" fill="none"/></svg><span class="email-date">${fmtDT(l.lastEmail)}</span>${l.threads.length>1?`<span style="font-size:9px;color:#9e9e9e;margin-left:2px">(${l.threads.length})</span>`:''}</span>`
+        :`<span class="email-cell-none">—</span>`;
+      h+=`<tr class="data-row ${late?'late-row':''} ${l.lost?'lost-row':''}" data-id="${l.id}">
+        <td class="nc">${n++}</td>
+        <td style="width:22px;padding:5px 4px"><div class="expand-btn">▾</div></td>
+        <td><span class="tl ${l.lost?'lost':''}">${l.name}</span>${l.lost?'<span class="lost-tag">Lost</span>':''}</td>
+        <td>${emailHtml}</td>
+        <td>${fuCellHtml(l)}</td>
+        <td style="overflow:visible;max-width:200px">${memoCellHtml(l)}</td>
+        <td style="color:#5f6368">${l.tv||''}</td>
+        <td style="color:#5f6368">${l.sd||''}</td>
+        <td style="color:#5f6368">${l.cd||''}</td>
+        <td style="color:#5f6368">${l.nights||''}</td>
+        <td style="color:#5f6368">${SRC_LABEL[l.src]||''}</td>
+        <td style="color:#5f6368;max-width:110px;overflow:hidden;text-overflow:ellipsis">${l.agency||''}</td>
+        <td style="color:#5f6368">${l.owner||''}</td>
+        <td style="color:#5f6368">${l.sub||''}</td>
+      </tr>`;
+    });
+  });
+  tb.innerHTML=h;
+  bindRowHover();
+}
+
+// Bind hover per row via JS — reliable across all browsers/iframes
+function bindRowHover(){
+  document.querySelectorAll('tr.data-row').forEach(tr=>{
+    const btn=tr.querySelector('.lost-x');
+    if(!btn)return;
+    tr.addEventListener('mouseenter',()=>{btn.style.visibility='visible';});
+    tr.addEventListener('mouseleave',()=>{btn.style.visibility='hidden';});
+  });
+}
+
+function openMemoPopup(id,e){e.stopPropagation();activeMemoId=id;memoInEdit=false;const l=gl(id);document.getElementById('mpTitle').textContent=l.name;showMemoPreview(l.memo||'');const popup=document.getElementById('memoPopup');popup.classList.add('open');const rect=e.currentTarget.getBoundingClientRect();const pw=340;let left=rect.left;let top=rect.bottom+6;if(left+pw>window.innerWidth-8)left=window.innerWidth-pw-8;if(top+240>window.innerHeight-8)top=rect.top-240-6;popup.style.left=Math.max(8,left)+'px';popup.style.top=Math.max(8,top)+'px';}
+function showMemoPreview(text){const prev=document.getElementById('mpPreview');document.getElementById('mpPreviewPane').style.display='block';document.getElementById('mpTextarea').style.display='none';document.getElementById('mpFooter').classList.remove('show');prev.innerHTML=text.trim()?`<div style="white-space:pre-wrap;word-break:break-word">${renderLinks(text)}</div>`:'<span style="color:#bdbdbd;font-style:italic">No memo yet.</span>';document.getElementById('mpHint').style.display='flex';}
+function switchToEdit(){if(memoInEdit)return;memoInEdit=true;const l=gl(activeMemoId);const ta=document.getElementById('mpTextarea');document.getElementById('mpPreviewPane').style.display='none';ta.style.display='block';ta.value=l.memo||'';document.getElementById('mpFooter').classList.add('show');setTimeout(()=>{ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);},30);}
+function cancelMemoEdit(){memoInEdit=false;const l=gl(activeMemoId);showMemoPreview(l.memo||'');}
+function saveMemoEdit(){const l=gl(activeMemoId);if(!l)return;l.memo=document.getElementById('mpTextarea').value;memoInEdit=false;closeMemoPopup();render();toast('Memo saved');}
+function closeMemoPopup(){document.getElementById('memoPopup').classList.remove('open');activeMemoId=null;memoInEdit=false;}
+function memoKey(e){if(e.key==='Escape')cancelMemoEdit();if((e.metaKey||e.ctrlKey)&&e.key==='Enter')saveMemoEdit();}
+function openDP(id,e){e.stopPropagation();if(activeDPId===id){closeDPWrap();return;}activeDPId=id;const l=gl(id);const inp=document.getElementById('dpInp');inp.value=l.nextFU?isoD(l.nextFU):isoD(addD(T,2));inp.min=isoD(T);inp.max=isoD(addD(T,30));document.getElementById('dpWarn').style.display='none';const wrap=document.getElementById('dpWrap');wrap.classList.add('open');const rect=e.currentTarget.getBoundingClientRect();let left=rect.left;let top=rect.bottom+6;if(left+240>window.innerWidth-8)left=window.innerWidth-248;if(top+200>window.innerHeight-8)top=rect.top-200-6;wrap.style.left=Math.max(8,left)+'px';wrap.style.top=Math.max(8,top)+'px';}
+function closeDPWrap(){document.getElementById('dpWrap').classList.remove('open');activeDPId=null;}
+function setS(n){const i=document.getElementById('dpInp');if(i){i.value=isoD(addD(T,n));checkDPWarn();}}
+function checkDPWarn(){const i=document.getElementById('dpInp');const w=document.getElementById('dpWarn');if(i&&w)w.style.display=new Date(i.value)>addD(T,30)?'block':'none';}
+function saveDPWrap(){const l=gl(activeDPId);if(!l)return;const v=document.getElementById('dpInp').value;if(!v)return;const c=new Date(v);if(c>addD(T,30)){checkDPWarn();return;}l.nextFU=c;closeDPWrap();render();toast('Follow-up date saved');}
+function openLostOverlay(id,e){e.stopPropagation();lostPendingId=id;const l=gl(id);document.getElementById('lostLeadName').textContent='"'+l.name+'" will be marked as lost and removed from your active pipeline.';document.getElementById('lostReason').value='';document.getElementById('lostNotes').value='';document.getElementById('reactNeeded').value='no';document.getElementById('reactDateRow').style.display='none';document.getElementById('reactNotesRow').style.display='none';document.getElementById('lostOverlay').classList.add('open');}
+function closeLostOverlay(){document.getElementById('lostOverlay').classList.remove('open');lostPendingId=null;}
+function toggleReact(){const v=document.getElementById('reactNeeded').value;document.getElementById('reactDateRow').style.display=v==='yes'?'flex':'none';document.getElementById('reactNotesRow').style.display=v==='yes'?'flex':'none';}
+function confirmLost(){const l=gl(lostPendingId);if(l)l.lost=true;closeLostOverlay();render();toast('Lead marked as lost');}
+function openThread(id,e){e.stopPropagation();const l=gl(id);if(!l.threads||!l.threads.length)return;if(l.threads.length===1){toast('Opening "'+l.threads[0].subj+'" in Gmail…');return;}document.getElementById('threadSub').textContent=l.name;document.getElementById('threadList').innerHTML=l.threads.map(t=>{const last=t.msgs[t.msgs.length-1];return`<div class="thread-item" onclick="pickThread('${t.id}','${l.id}')"><div class="th-av" style="background:${t.color}">${initials(last.name)}</div><div class="th-meta"><div class="th-subj">${t.subj}</div><div class="th-snip">${last.name}: ${last.snip}</div><span class="th-cnt">${t.msgs.length} messages</span></div><div class="th-date">${fmtShort(last.date)}</div></div>`;}).join('');document.getElementById('threadOverlay').classList.add('open');}
+function pickThread(tid,lid){const l=gl(parseInt(lid));const t=l.threads.find(x=>x.id===tid);closeThread();toast('Opening "'+t.subj+'" in Gmail…');}
+function closeThread(){document.getElementById('threadOverlay').classList.remove('open');}
+function toggleLate(){showLate=document.getElementById('lateChk').checked;render();}
+document.addEventListener('click',e=>{if(!e.target.closest('#memoPopup')&&!e.target.closest('.memo-preview-cell'))closeMemoPopup();if(!e.target.closest('#dpWrap')&&!e.target.closest('.fu-badge')&&!e.target.closest('.fu-none'))closeDPWrap();});
+['lostOverlay','threadOverlay'].forEach(id=>document.getElementById(id).addEventListener('click',function(e){if(e.target===this){if(id==='lostOverlay')closeLostOverlay();else closeThread();}}));
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',2600);}
+render();
+</script>
