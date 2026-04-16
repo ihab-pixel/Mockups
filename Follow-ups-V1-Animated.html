@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Travel Collection CRM — Feature Demo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:32px 16px 48px}
+
+/* ── Header ── */
+.demo-header{width:100%;max-width:1100px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.demo-title{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#5f6680}
+.demo-logo{font-size:13px;font-weight:600;color:#1a73e8;letter-spacing:.04em}
+
+/* ── Scene label ── */
+.scene-bar{width:100%;max-width:1100px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.scene-dots{display:flex;gap:6px}
+.sdot{width:8px;height:8px;border-radius:50%;background:#2a2d3a;transition:background .3s}
+.sdot.on{background:#1a73e8}
+.sdot.done{background:#2e5fa3}
+.scene-caption{flex:1;font-size:13px;color:#9ba3c0;font-weight:400;opacity:0;transform:translateY(4px);transition:opacity .35s,transform .35s}
+.scene-caption.visible{opacity:1;transform:translateY(0)}
+.scene-num{font-family:'DM Mono',monospace;font-size:11px;color:#3a3f52;letter-spacing:.06em}
+
+/* ── Stage ── */
+.stage{position:relative;width:100%;max-width:1100px;border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05)}
+
+/* ── CRM chrome ── */
+.crm{background:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:13px;color:#202124}
+.topbar{display:flex;align-items:center;border-bottom:1px solid #e0e0e0;padding:0 4px;background:#fff}
+.tb-tab{padding:10px 14px;font-size:13px;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tb-tab.active{color:#1a73e8;border-bottom-color:#1a73e8;font-weight:500}
+.toolbar{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid #e0e0e0;background:#fff}
+.spacer{flex:1}
+.tb-btn{padding:5px 12px;border:1px solid #dadce0;border-radius:4px;font-size:12px;background:#fff;color:#3c4043}
+.grp-sel,.sub-sel{font-size:12px;padding:4px 8px;border:1px solid #dadce0;border-radius:4px;background:#fff}
+.tb-label{font-size:11px;color:#5f6368}
+.chk-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#3c4043;user-select:none}
+.chk-box{width:14px;height:14px;border:2px solid #aaa;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.chk-box.checked{background:#c62828;border-color:#c62828}
+.chk-box.checked::after{content:'✓';font-size:9px;color:#fff;font-weight:700}
+.search-box{padding:5px 10px;border:1px solid #dadce0;border-radius:4px;font-size:12px;width:150px;background:#f1f3f4}
+.pipeline{display:flex;padding:6px 10px;border-bottom:1px solid #e0e0e0;background:#fff}
+.pip-stage{display:flex;align-items:center;padding:5px 12px 5px 14px;font-size:11px;font-weight:500;color:#fff;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%);white-space:nowrap;min-width:120px}
+.pip-stage:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);padding-left:10px}
+.pip-wr{font-size:10px;background:rgba(255,255,255,.25);padding:1px 5px;border-radius:8px;margin-left:4px}
+.pip-late{font-size:10px;padding:1px 5px;border-radius:8px;margin-left:3px;background:rgba(220,53,53,.4)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-size:11px;font-weight:500;color:#5f6368;text-align:left;padding:6px 8px;border-bottom:1px solid #e0e0e0;white-space:nowrap;background:#fff}
+th.fuc{color:#c62828;font-weight:600}
+td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-align:middle}
+.grp-hdr td{padding:6px 8px;font-size:12px;font-weight:500;color:#fff}
+.nc{color:#9e9e9e;font-size:11px;text-align:right;width:28px}
+.tl{color:#1a73e8;font-size:12px}
+.tl.lost{color:#9e9e9e;text-decoration:line-through}
+.lost-tag{padding:1px 6px;border-radius:10px;font-size:10px;font-weight:500;background:#f3f3f3;color:#9e9e9e;border:1px solid #e0e0e0;margin-left:5px}
+.email-cell{display:inline-flex;align-items:center;gap:5px}
+.email-date{font-size:11px;color:#5f6368}
+.fu-cell{display:inline-flex;align-items:center;gap:5px}
+.fu-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid;white-space:nowrap}
+.fu-dot{width:6px;height:6px;border-radius:50%}
+.db-red{background:#fce8e6;color:#c62828;border-color:#f5c6c6}.db-red .fu-dot{background:#c62828}
+.db-amber{background:#fef7e0;color:#e37400;border-color:#fde68a}.db-amber .fu-dot{background:#e37400}
+.db-green{background:#e6f4ea;color:#137333;border-color:#ceead6}.db-green .fu-dot{background:#137333}
+.fu-none{font-size:11px;color:#bdbdbd;padding:2px 4px;border-radius:3px}
+.lost-x{font-size:14px;color:#c62828;padding:0 3px;visibility:hidden}
+.memo-cell{font-size:11px;color:#5f6368;padding:2px 5px;border-radius:4px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
+.memo-cell.empty{color:#bdbdbd;font-style:italic}
+.expand-btn{width:20px;height:20px;border-radius:3px;border:1px solid #e0e0e0;background:#fff;display:inline-flex;align-items:center;justify-content:center;color:#9e9e9e;font-size:11px}
+.row-hl td{background:#eef4ff!important}
+.row-hl-red td{background:#fff0f0!important}
+.row-lost td{background:#f8f8f8;opacity:.6}
+
+/* ── Floating panels (date picker, memo, thread picker, lost modal) ── */
+.float-panel{position:absolute;z-index:60;opacity:0;pointer-events:none;transition:opacity .28s,transform .28s}
+.float-panel.visible{opacity:1;pointer-events:auto}
+
+.dp-panel{background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:14px;width:220px}
+.dp-lbl{font-size:11px;color:#5f6368;margin-bottom:6px;font-weight:500}
+.dp-inp{width:100%;padding:5px 8px;border:1px solid #1a73e8;border-radius:5px;font-size:12px;margin-bottom:8px;background:#fff;color:#202124;box-shadow:0 0 0 2px rgba(26,115,232,.1);outline:none}
+.dp-shorts{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.dp-s{padding:3px 9px;border-radius:12px;font-size:11px;border:1px solid #dadce0;background:#fff;color:#3c4043;cursor:pointer;transition:all .15s}
+.dp-s.hl{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8}
+.dp-foot{display:flex;justify-content:flex-end;gap:5px}
+.dp-save{padding:5px 12px;border-radius:5px;border:none;background:#1a73e8;color:#fff;font-size:12px}
+.dp-cancel{padding:5px 10px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:12px;color:#5f6368}
+
+.memo-panel{background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);width:320px;overflow:hidden}
+.mp-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0f0f0;background:#fafafa}
+.mp-hdr-title{font-size:11px;font-weight:500;color:#5f6368}
+.mp-close-btn{color:#9e9e9e;font-size:15px;line-height:1}
+.mp-body{padding:12px}
+.mp-preview-text{font-size:12px;color:#202124;line-height:1.7;white-space:pre-wrap;word-break:break-word;cursor:text;min-height:44px}
+.mp-link{color:#1a73e8;text-decoration:underline}
+.mp-hint{font-size:10px;color:#bdbdbd;margin-top:8px}
+.mp-textarea{width:100%;min-height:80px;font-size:12px;font-family:inherit;padding:6px 8px;border:1px solid #1a73e8;border-radius:5px;outline:none;resize:none;color:#202124;line-height:1.7;box-shadow:0 0 0 2px rgba(26,115,232,.1)}
+.mp-footer{display:flex;justify-content:flex-end;gap:6px;padding:8px 12px;border-top:1px solid #f0f0f0;background:#fafafa}
+.mp-btn-save{padding:4px 12px;border-radius:4px;border:none;background:#1a73e8;color:#fff;font-size:12px}
+.mp-btn-cancel{padding:4px 10px;border-radius:4px;border:1px solid #dadce0;background:#fff;font-size:12px;color:#5f6368}
+
+.thread-panel{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.22);width:400px;overflow:hidden;border:1px solid #e0e0e0}
+.thread-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 11px;border-bottom:1px solid #e0e0e0}
+.thread-hdr h3{font-size:14px;font-weight:500;color:#202124}
+.thread-sub{font-size:11px;color:#5f6368;margin-top:2px}
+.thread-close{color:#5f6368;font-size:18px;line-height:1}
+.thread-list{padding:14px;display:flex;flex-direction:column;gap:8px}
+.thread-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:6px;cursor:pointer;transition:all .15s}
+.thread-item.hl{border-color:#1a73e8;background:#e8f0fe}
+.th-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0}
+.th-meta{flex:1;min-width:0}
+.th-subj{font-size:12px;font-weight:500;color:#202124;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.th-snip{font-size:11px;color:#5f6368;margin-top:1px}
+.th-date{font-size:10px;color:#9e9e9e;white-space:nowrap;margin-left:8px}
+.th-cnt{font-size:10px;color:#1a73e8;background:#e8f0fe;padding:1px 5px;border-radius:8px;margin-top:2px;display:inline-block}
+
+.lost-overlay{position:absolute;inset:0;background:rgba(0,0,0,.38);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;justify-content:center}
+.lost-overlay.visible{opacity:1;pointer-events:auto}
+.lost-box{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.25);width:360px;overflow:hidden}
+.lost-hdr{padding:16px 20px 14px;border-bottom:1px solid #f0f0f0}
+.lost-hdr h3{font-size:14px;font-weight:500;margin:0 0 3px;color:#202124}
+.lost-hdr p{font-size:12px;color:#5f6368;line-height:1.5}
+.lost-fields{padding:14px 20px;display:flex;flex-direction:column;gap:9px;border-bottom:1px solid #f0f0f0}
+.lf{display:flex;flex-direction:column;gap:3px}
+.lf label{font-size:10px;font-weight:500;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em}
+.lf select,.lf textarea{font-size:12px;padding:5px 8px;border:1px solid #dadce0;border-radius:5px;background:#fff;color:#202124;font-family:inherit}
+.lf textarea{resize:none;min-height:36px}
+.lost-foot{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px}
+.btn-cancel-l{padding:7px 14px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:13px;color:#3c4043}
+.btn-lost-l{padding:7px 16px;border-radius:5px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:500}
+.btn-lost-l.pressed{background:#a82020}
+
+/* ── Fake cursor ── */
+.cursor{position:absolute;z-index:200;pointer-events:none;transition:left .55s cubic-bezier(.4,0,.2,1),top .55s cubic-bezier(.4,0,.2,1);will-change:left,top}
+.cursor svg{filter:drop-shadow(1px 2px 3px rgba(0,0,0,.35))}
+.cursor-ring{position:absolute;width:28px;height:28px;border-radius:50%;border:2px solid rgba(26,115,232,.7);left:-10px;top:-10px;transform:scale(0);transition:transform .18s;pointer-events:none}
+.cursor-ring.click{transform:scale(1)}
+
+/* ── Caption overlay ── */
+.caption-box{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(15,17,23,.88);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 18px;font-size:13px;color:#e8eaf0;white-space:nowrap;backdrop-filter:blur(8px);z-index:150;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.caption-box.visible{opacity:1}
+.caption-icon{margin-right:6px;font-size:14px}
+
+/* ── Highlight ring on elements ── */
+.hl-ring{position:absolute;border-radius:8px;border:2px solid #1a73e8;box-shadow:0 0 0 3px rgba(26,115,232,.2);z-index:55;pointer-events:none;opacity:0;transition:opacity .25s}
+.hl-ring.visible{opacity:1}
+
+/* ── Progress & controls ── */
+.controls{width:100%;max-width:1100px;margin-top:20px;display:flex;align-items:center;justify-content:center;gap:16px}
+.ctrl-btn{padding:8px 20px;border-radius:20px;border:1px solid #2a2d3a;background:#1a1d26;color:#9ba3c0;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.ctrl-btn:hover{background:#23283a;color:#e8eaf0;border-color:#3a3f52}
+.ctrl-btn.primary{background:#1a73e8;border-color:#1a73e8;color:#fff}
+.ctrl-btn.primary:hover{background:#1557b0}
+.progress-track{flex:1;max-width:300px;height:3px;background:#2a2d3a;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:#1a73e8;border-radius:3px;transition:width .4s}
+</style>
+</head>
+<body>
+
+<div class="demo-header">
+  <div class="demo-logo">Travel Collection CRM</div>
+  <div class="demo-title">Follow-up Feature · Simplified V1</div>
+</div>
+
+<div class="scene-bar">
+  <div class="scene-dots" id="sceneDots"></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="scene-num" id="sceneNum">01 / 07</div>
+</div>
+<div class="scene-caption" id="sceneCaption"></div>
+
+<div class="stage" id="stage">
+  <!-- CRM UI -->
+  <div class="crm">
+    <div class="topbar">
+      <div class="tb-tab">Home</div>
+      <div class="tb-tab active">Inquiry (1400)</div>
+      <div class="tb-tab">To Reactivate (87)</div>
+      <div class="tb-tab">Upcoming (280)</div>
+    </div>
+    <div class="toolbar">
+      <span class="tb-label">Group By</span>
+      <select class="grp-sel"><option>Lead Stage</option></select>
+      <div class="spacer"></div>
+      <div class="chk-wrap">
+        <div class="chk-box" id="chkBox"></div>
+        <span>Late follow-ups</span>
+      </div>
+      <button class="tb-btn">New</button>
+      <button class="tb-btn">Refresh</button>
+      <input class="search-box" placeholder="Search in this list…"/>
+    </div>
+    <div class="pipeline">
+      <div class="pip-stage" style="background:#e8a000"><span style="font-weight:600;margin-right:3px">160</span>New Lead<span class="pip-wr">$101.4K W.R</span><span class="pip-late">3 late</span></div>
+      <div class="pip-stage" style="background:#1a73e8"><span style="font-weight:600;margin-right:3px">241</span>First Contact<span class="pip-wr">$823.5K W.R</span><span class="pip-late">1 late</span></div>
+      <div class="pip-stage" style="background:#7b1fa2"><span style="font-weight:600;margin-right:3px">605</span>Proposal Sent<span class="pip-wr">$6.3M W.R</span></div>
+      <div class="pip-stage" style="background:#1565c0"><span style="font-weight:600;margin-right:3px">353</span>Negotiating<span class="pip-wr">$6M W.R</span></div>
+      <div class="pip-stage" style="background:#2e7d32"><span style="font-weight:600;margin-right:3px">41</span>Nearing Close<span class="pip-wr">$620.8K W.R</span></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table id="mainTable">
+        <thead>
+          <tr>
+            <th style="width:28px">#</th>
+            <th style="width:22px"></th>
+            <th style="min-width:155px">Trip Name</th>
+            <th style="min-width:110px">Last Email</th>
+            <th class="fuc" style="min-width:148px">Next Follow-up</th>
+            <th style="min-width:185px">Advisor Memo</th>
+            <th style="min-width:60px">Travelers</th>
+            <th style="min-width:90px">Trip Start</th>
+            <th style="min-width:95px">Sales Owner</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Floating: Date picker -->
+  <div class="float-panel dp-panel" id="dpPanel" style="top:228px;left:370px">
+    <div class="dp-lbl">Set next follow-up</div>
+    <input class="dp-inp" type="text" id="dpInput" value="2025-12-14" readonly/>
+    <div class="dp-shorts">
+      <span class="dp-s" id="dp1d">+1d</span>
+      <span class="dp-s" id="dp2d">+2d</span>
+      <span class="dp-s" id="dp1w">+1w</span>
+      <span class="dp-s" id="dp2w">+2w</span>
+      <span class="dp-s" id="dp30d">+30d</span>
+    </div>
+    <div class="dp-foot">
+      <button class="dp-cancel">Cancel</button>
+      <button class="dp-save">Save</button>
+    </div>
+  </div>
+
+  <!-- Floating: Memo panel -->
+  <div class="float-panel memo-panel" id="memoPanel" style="top:230px;left:480px">
+    <div class="mp-hdr">
+      <span class="mp-hdr-title" id="memoPanelTitle">Isabella and Jarod</span>
+      <span class="mp-close-btn">✕</span>
+    </div>
+    <div class="mp-body" id="memoBody">
+      <div id="memoPreviewPane">
+        <div class="mp-preview-text">Honeymoon trip — boutique riads + desert.<br><span class="mp-link">zicasso.com/trips/isabella-2026</span><br>Awaiting feedback on v1.</div>
+        <div class="mp-hint">✎ Click to edit</div>
+      </div>
+      <textarea class="mp-textarea" id="memoTextarea" style="display:none">Honeymoon trip — boutique riads + desert.
+https://zicasso.com/trips/isabella-2026
+Awaiting feedback on v1.</textarea>
+    </div>
+    <div class="mp-footer" id="memoFooter" style="display:none">
+      <button class="mp-btn-cancel">Cancel</button>
+      <button class="mp-btn-save">Save</button>
+    </div>
+  </div>
+
+  <!-- Floating: Thread picker -->
+  <div class="float-panel thread-panel" id="threadPanel" style="top:90px;left:300px">
+    <div class="thread-hdr">
+      <div><h3>Open email thread</h3><div class="thread-sub">Isabella and Jarod · 2 threads</div></div>
+      <span class="thread-close">✕</span>
+    </div>
+    <div class="thread-list">
+      <div class="thread-item" id="thread1">
+        <div class="th-av" style="background:#1a73e8">KG</div>
+        <div class="th-meta">
+          <div class="th-subj">Morocco honeymoon enquiry</div>
+          <div class="th-snip">Karen Gee: Itinerary v1 attached!</div>
+          <span class="th-cnt">3 messages</span>
+        </div>
+        <div class="th-date">08 Dec</div>
+      </div>
+      <div class="thread-item" id="thread2">
+        <div class="th-av" style="background:#e37400">IJ</div>
+        <div class="th-meta">
+          <div class="th-subj">Re: Riad shortlist</div>
+          <div class="th-snip">Isabella: Riads under $300/night?</div>
+          <span class="th-cnt">2 messages</span>
+        </div>
+        <div class="th-date">06 Dec</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lost overlay -->
+  <div class="lost-overlay" id="lostOverlay">
+    <div class="lost-box">
+      <div class="lost-hdr"><h3>Mark as Lost</h3><p id="lostLeadName">"Sabrina's lead" will be marked as lost.</p></div>
+      <div class="lost-fields">
+        <div class="lf"><label>Lost reason</label><select id="lostReasonSel"><option value="">Select…</option><option selected>No response</option></select></div>
+        <div class="lf"><label>Lost notes</label><textarea id="lostNotesTa">No response after multiple follow-ups.</textarea></div>
+        <div class="lf"><label>Reactivation needed</label><select><option>No</option></select></div>
+      </div>
+      <div class="lost-foot">
+        <button class="btn-cancel-l">Cancel</button>
+        <button class="btn-lost-l" id="lostConfirmBtn">Mark as Lost</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Highlight ring -->
+  <div class="hl-ring" id="hlRing"></div>
+
+  <!-- Caption -->
+  <div class="caption-box" id="captionBox"></div>
+
+  <!-- Fake cursor -->
+  <div class="cursor" id="cursor" style="left:80px;top:60px">
+    <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
+      <path d="M2 2L2 18L6.5 13.5L9.5 20L11.5 19L8.5 12.5L14 12.5L2 2Z" fill="white" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+    </svg>
+    <div class="cursor-ring" id="cursorRing"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="prevBtn" onclick="prevScene()">← Prev</button>
+  <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+  <button class="ctrl-btn" id="nextBtn" onclick="nextScene()">Next →</button>
+</div>
+
+<script>
+// ── Data ──
+const rows = [
+  {id:1,name:'Isabella and Jarod',email:'08 Dec, 01:00',emailColor:'#1a73e8',threads:2,fu:'1d ago',fuCls:'db-red',memo:'Honeymoon trip — boutique riads…',memoCls:'',tv:20,sd:'29/04/2026',owner:'Karen Gee',lost:false},
+  {id:2,name:'Carmen Matiella ...',email:'04 Dec, 01:00',emailColor:'#1a73e8',threads:1,fu:'2d ago',fuCls:'db-red',memo:'Waiting on client dates.',memoCls:'',tv:2,sd:'31/07/2025',owner:'Reem KARMOUT...',lost:false},
+  {id:3,name:"Sabrina's lead",email:'—',emailColor:null,threads:0,fu:'12d ago',fuCls:'db-red',memo:'',memoCls:'empty',tv:'',sd:'12/08/2025',owner:'Reem KARMOUT...',lost:false},
+  {id:4,name:"Christie Wingo's c...",email:'02 Dec, 01:00',emailColor:'#1a73e8',threads:1,fu:'Tomorrow',fuCls:'db-amber',memo:'Engaged early — went quiet…',memoCls:'',tv:3,sd:'23/09/2026',owner:'Reem KARMOUT...',lost:false},
+  {id:5,name:'Adrien de Saint Ja...',email:'11 Dec, 01:00',emailColor:'#2e7d32',threads:1,fu:null,fuCls:'',memo:'Group of 35. Company retreat.',memoCls:'',tv:35,sd:'07/06/2026',owner:'Fadila AIT TALBI',lost:false},
+  {id:6,name:'Steven Goodrich',email:'05 Dec, 01:00',emailColor:'#7b1fa2',threads:1,fu:'16 Dec',fuCls:'db-green',memo:'Away for work until Jan.',memoCls:'',tv:2,sd:'27/07/2026',owner:'Karen Gee',lost:false},
+];
+const fcRows = [
+  {id:7,name:"Katherine's Group...",email:'10 Dec, 01:00',emailColor:'#1a73e8',threads:1,fu:'17 Dec',fuCls:'db-green',memo:'Affinity group. Responsive.',memoCls:'',tv:10,sd:'22/07/2026',owner:'Kavya Singh',lost:false},
+  {id:8,name:'Ximena Aguilar',email:'07 Dec, 01:00',emailColor:'#e37400',threads:1,fu:'3d ago',fuCls:'db-red',memo:'',memoCls:'empty',tv:12,sd:'24/04/2026',owner:'Loubna BOUANANI',lost:false},
+];
+
+function emailHtml(r){
+  if(!r.emailColor)return'<span style="font-size:11px;color:#bdbdbd">—</span>';
+  return`<span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="${r.emailColor}" opacity=".12"/><path d="M0 2l9 6 9-6" stroke="${r.emailColor}" stroke-width="1.2" fill="none"/><rect x="0" y="0" width="18" height="14" rx="2" stroke="${r.emailColor}" stroke-width="1" fill="none"/></svg><span class="email-date">${r.email}</span>${r.threads>1?`<span style="font-size:9px;color:#9e9e9e;margin-left:2px">(${r.threads})</span>`:''}</span>`;
+}
+function fuHtml(r){
+  const xBtn=`<span class="lost-x" id="lx${r.id}">×</span>`;
+  if(!r.fu)return`<div class="fu-cell"><span class="fu-none">+ Set date</span>${xBtn}</div>`;
+  return`<div class="fu-cell"><span class="fu-badge ${r.fuCls}" id="fubadge${r.id}"><span class="fu-dot"></span>${r.fu}</span>${xBtn}</div>`;
+}
+
+function buildTable(filterLate=false, sabrinaLost=false){
+  const tbody=document.getElementById('tableBody');
+  let html='';
+  let n=1;
+  const nlRows = filterLate ? rows.filter(r=>r.fuCls==='db-red') : rows;
+  const fcFiltered = filterLate ? fcRows.filter(r=>r.fuCls==='db-red') : fcRows;
+
+  if(nlRows.length){
+    html+=`<tr class="grp-hdr"><td colspan="9" style="background:#e8a000;padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ New Lead (160 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">3 late</span></td></tr>`;
+    nlRows.forEach(r=>{
+      const isLost = sabrinaLost && r.id===3;
+      html+=`<tr id="row${r.id}" class="${isLost?'row-lost':r.fuCls==='db-red'?'row-hl-red':''}">
+        <td class="nc">${n++}</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl ${isLost?'lost':''}">${r.name}</span>${isLost?'<span class="lost-tag">Lost</span>':''}</td>
+        <td>${emailHtml(r)}</td>
+        <td id="fucell${r.id}">${isLost?'<span style="font-size:11px;color:#bdbdbd">—</span>':fuHtml(r)}</td>
+        <td><span class="memo-cell ${r.memoCls}" id="memocell${r.id}">${r.memo||'Add memo…'}</span></td>
+        <td style="color:#5f6368">${r.tv}</td>
+        <td style="color:#5f6368">${r.sd}</td>
+        <td style="color:#5f6368">${r.owner}</td>
+      </tr>`;
+    });
+  }
+
+  if(!filterLate&&fcFiltered.length){
+    html+=`<tr class="grp-hdr"><td colspan="9" style="background:#1a73e8;padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ First Contact (241 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">1 late</span></td></tr>`;
+    fcFiltered.forEach(r=>{
+      html+=`<tr id="row${r.id}">
+        <td class="nc">${n++}</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl">${r.name}</span></td>
+        <td>${emailHtml(r)}</td>
+        <td id="fucell${r.id}">${fuHtml(r)}</td>
+        <td><span class="memo-cell ${r.memoCls}" id="memocell${r.id}">${r.memo||'Add memo…'}</span></td>
+        <td style="color:#5f6368">${r.tv}</td>
+        <td style="color:#5f6368">${r.sd}</td>
+        <td style="color:#5f6368">${r.owner}</td>
+      </tr>`;
+    });
+  }
+
+  tbody.innerHTML=html;
+}
+
+buildTable();
+
+// ── State ──
+let currentScene = 0;
+let playing = true;
+let sceneTimer = null;
+let stepTimer = null;
+
+const SCENES = [
+  {
+    label: '📋  Your lead pipeline — color-coded urgency at a glance',
+    duration: 3200,
+    setup: ()=>{
+      buildTable();
+      hideAll();
+      moveCursor(80,60);
+    },
+    steps:[]
+  },
+  {
+    label: '🔴  "Late follow-ups" filter — focus on what needs action now',
+    duration: 4000,
+    setup: ()=>{ buildTable(); hideAll(); },
+    steps:[
+      {t:600, fn:()=>{ moveCursor(getEl('chkBox').x+7, getEl('chkBox').y+7); highlight('chkBox'); }},
+      {t:1400, fn:()=>{ click(); document.getElementById('chkBox').classList.add('checked'); setTimeout(()=>buildTable(true),120); }},
+      {t:2200, fn:()=>{ moveCursor(600,300); clearHighlight(); showCaption('Only 3 leads shown — all overdue'); }},
+    ]
+  },
+  {
+    label: '📅  Rescheduling a follow-up — date picker with quick shortcuts',
+    duration: 5500,
+    setup: ()=>{ buildTable(false); hideAll(); },
+    steps:[
+      {t:500, fn:()=>{
+        const el=document.getElementById('fubadge1');
+        if(!el)return;
+        const r=el.getBoundingClientRect();
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        highlightEl(el, sr);
+      }},
+      {t:1300, fn:()=>{ click(); showFloating('dpPanel', 370, getRowY(1)); }},
+      {t:2200, fn:()=>{
+        const el=document.getElementById('dp1w');
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=el.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        el.classList.add('hl');
+      }},
+      {t:3000, fn:()=>{ click(); document.getElementById('dpInput').value='2025-12-20'; showCaption('+1 week selected'); }},
+      {t:4000, fn:()=>{
+        const save=document.querySelector('.dp-save');
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=save.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+      }},
+      {t:4700, fn:()=>{ click(); hidePanel('dpPanel'); showCaption('Date saved — badge updates green'); updateFUBadge(1,'20 Dec','db-green'); clearHighlight(); }},
+    ]
+  },
+  {
+    label: '📝  Advisor memo — preview with clickable links, click to edit',
+    duration: 5800,
+    setup: ()=>{ buildTable(false); hideAll(); resetMemo(); },
+    steps:[
+      {t:600, fn:()=>{
+        const el=document.getElementById('memocell1');
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=el.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        highlightEl(el, sr);
+      }},
+      {t:1300, fn:()=>{ click(); showFloating('memoPanel', 460, getRowY(1)-20); showCaption('Opens in preview — links are clickable'); }},
+      {t:2800, fn:()=>{
+        const link=document.querySelector('.mp-link');
+        if(!link)return;
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=link.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        clearHighlight();
+        showCaption('Click a link → opens in Gmail/Zicasso');
+      }},
+      {t:4000, fn:()=>{
+        const preview=document.getElementById('memoPreviewPane');
+        const textarea=document.getElementById('memoTextarea');
+        const footer=document.getElementById('memoFooter');
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const panelEl=document.getElementById('memoPanel');
+        const r=panelEl.getBoundingClientRect();
+        moveCursor(r.left-sr.left+80, r.top-sr.top+70);
+        showCaption('Click anywhere else → switches to edit mode');
+      }},
+      {t:4800, fn:()=>{
+        click();
+        document.getElementById('memoPreviewPane').style.display='none';
+        document.getElementById('memoTextarea').style.display='block';
+        document.getElementById('memoFooter').style.display='flex';
+      }},
+    ]
+  },
+  {
+    label: '📧  Multiple email threads — pick which one to open in Gmail',
+    duration: 4800,
+    setup: ()=>{ buildTable(false); hideAll(); resetMemo(); },
+    steps:[
+      {t:600, fn:()=>{
+        const emailCell=document.querySelector('#row1 .email-cell');
+        if(!emailCell)return;
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=emailCell.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        highlightEl(emailCell, sr);
+        showCaption('Isabella has 2 threads — click to choose');
+      }},
+      {t:1500, fn:()=>{ click(); showFloating('threadPanel', 240, 90); clearHighlight(); }},
+      {t:2500, fn:()=>{
+        const t1=document.getElementById('thread1');
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=t1.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        t1.classList.add('hl');
+        showCaption('Select the thread to open in Gmail');
+      }},
+      {t:3500, fn:()=>{ click(); hidePanel('threadPanel'); showCaption('Thread opens in Gmail'); }},
+    ]
+  },
+  {
+    label: '❌  Close as Lost — reason, notes, optional reactivation',
+    duration: 6200,
+    setup: ()=>{ buildTable(false); hideAll(); resetMemo(); showLostX(3); },
+    steps:[
+      {t:500, fn:()=>{
+        const lx=document.getElementById('lx3');
+        if(!lx)return;
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=lx.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        showCaption('Hover shows the × — click to close as lost');
+      }},
+      {t:1400, fn:()=>{ click(); document.getElementById('lostOverlay').classList.add('visible'); }},
+      {t:2300, fn:()=>{
+        const sel=document.getElementById('lostReasonSel');
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=sel.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        showCaption('Select the lost reason');
+      }},
+      {t:3200, fn:()=>{
+        const btn=document.getElementById('lostConfirmBtn');
+        const sr=document.getElementById('stage').getBoundingClientRect();
+        const r=btn.getBoundingClientRect();
+        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        showCaption('Confirm — lead disappears from pipeline');
+      }},
+      {t:4200, fn:()=>{
+        click();
+        document.getElementById('lostConfirmBtn').classList.add('pressed');
+        setTimeout(()=>{
+          document.getElementById('lostOverlay').classList.remove('visible');
+          buildTable(false, true);
+          showLostX(3);
+        }, 350);
+        showCaption('Lead marked as lost ✓');
+      }},
+    ]
+  },
+  {
+    label: '✅  That\'s the full flow — fast, clean, no friction',
+    duration: 3500,
+    setup: ()=>{ buildTable(false, true); hideAll(); moveCursor(550, 200); },
+    steps:[]
+  },
+];
+
+// ── Helpers ──
+function getEl(id){ const el=document.getElementById(id); const sr=document.getElementById('stage').getBoundingClientRect(); const r=el.getBoundingClientRect(); return {x:r.left-sr.left+r.width/2, y:r.top-sr.top+r.height/2, el}; }
+function getRowY(id){ const el=document.getElementById('row'+id); if(!el)return 200; const sr=document.getElementById('stage').getBoundingClientRect(); const r=el.getBoundingClientRect(); return r.top-sr.top+r.height/2; }
+
+function moveCursor(x,y){
+  const cur=document.getElementById('cursor');
+  cur.style.left=x+'px';
+  cur.style.top=y+'px';
+}
+function click(){
+  const ring=document.getElementById('cursorRing');
+  ring.classList.add('click');
+  setTimeout(()=>ring.classList.remove('click'),400);
+}
+function showFloating(id, x, y){
+  const el=document.getElementById(id);
+  el.style.left=x+'px';
+  el.style.top=y+'px';
+  el.classList.add('visible');
+}
+function hidePanel(id){ document.getElementById(id).classList.remove('visible'); }
+function hideAll(){
+  ['dpPanel','memoPanel','threadPanel'].forEach(id=>hidePanel(id));
+  document.getElementById('lostOverlay').classList.remove('visible');
+  clearHighlight();
+  hideCaption();
+}
+function showCaption(txt){
+  const el=document.getElementById('captionBox');
+  el.textContent=txt;
+  el.classList.add('visible');
+}
+function hideCaption(){ document.getElementById('captionBox').classList.remove('visible'); }
+function highlight(id){
+  const el=document.getElementById(id);
+  const sr=document.getElementById('stage').getBoundingClientRect();
+  const r=el.getBoundingClientRect();
+  const ring=document.getElementById('hlRing');
+  ring.style.left=(r.left-sr.left-4)+'px';
+  ring.style.top=(r.top-sr.top-4)+'px';
+  ring.style.width=(r.width+8)+'px';
+  ring.style.height=(r.height+8)+'px';
+  ring.classList.add('visible');
+}
+function highlightEl(el, sr){
+  const r=el.getBoundingClientRect();
+  const ring=document.getElementById('hlRing');
+  ring.style.left=(r.left-sr.left-4)+'px';
+  ring.style.top=(r.top-sr.top-4)+'px';
+  ring.style.width=(r.width+8)+'px';
+  ring.style.height=(r.height+8)+'px';
+  ring.classList.add('visible');
+}
+function clearHighlight(){ document.getElementById('hlRing').classList.remove('visible'); }
+function showLostX(id){ const el=document.getElementById('lx'+id); if(el)el.style.visibility='visible'; }
+function updateFUBadge(id, label, cls){
+  const cell=document.getElementById('fucell'+id);
+  if(cell) cell.innerHTML=`<div class="fu-cell"><span class="fu-badge ${cls}" id="fubadge${id}"><span class="fu-dot"></span>${label}</span><span class="lost-x" id="lx${id}">×</span></div>`;
+}
+function resetMemo(){
+  document.getElementById('memoPreviewPane').style.display='block';
+  document.getElementById('memoTextarea').style.display='none';
+  document.getElementById('memoFooter').style.display='none';
+}
+
+// ── Scene engine ──
+function buildDots(){
+  const c=document.getElementById('sceneDots');
+  c.innerHTML=SCENES.map((_,i)=>`<div class="sdot" id="sdot${i}"></div>`).join('');
+}
+buildDots();
+
+function updateUI(){
+  const s=SCENES[currentScene];
+  SCENES.forEach((_,i)=>{
+    const d=document.getElementById('sdot'+i);
+    d.className='sdot'+(i===currentScene?' on':i<currentScene?' done':'');
+  });
+  document.getElementById('sceneNum').textContent=String(currentScene+1).padStart(2,'0')+' / '+String(SCENES.length).padStart(2,'0');
+  document.getElementById('progressFill').style.width=((currentScene+1)/SCENES.length*100)+'%';
+  const cap=document.getElementById('sceneCaption');
+  cap.textContent=s.label;
+  cap.classList.add('visible');
+}
+
+function runScene(idx){
+  currentScene=idx;
+  updateUI();
+  const s=SCENES[idx];
+  s.setup();
+
+  // Clear old step timers
+  clearTimeout(stepTimer);
+
+  s.steps.forEach(step=>{
+    setTimeout(step.fn, step.t);
+  });
+
+  if(playing){
+    sceneTimer=setTimeout(()=>{
+      if(currentScene<SCENES.length-1) runScene(currentScene+1);
+      else { playing=false; document.getElementById('playBtn').textContent='↺ Replay'; }
+    }, s.duration);
+  }
+}
+
+function togglePlay(){
+  const btn=document.getElementById('playBtn');
+  if(document.getElementById('playBtn').textContent==='↺ Replay'){
+    playing=true;
+    runScene(0);
+    btn.textContent='⏸ Pause';
+    return;
+  }
+  playing=!playing;
+  if(playing){
+    btn.textContent='⏸ Pause';
+    const remaining=SCENES[currentScene].duration;
+    sceneTimer=setTimeout(()=>{
+      if(currentScene<SCENES.length-1) runScene(currentScene+1);
+    }, remaining/2);
+  } else {
+    btn.textContent='▶ Play';
+    clearTimeout(sceneTimer);
+  }
+}
+function prevScene(){ clearTimeout(sceneTimer); if(currentScene>0) runScene(currentScene-1); }
+function nextScene(){ clearTimeout(sceneTimer); if(currentScene<SCENES.length-1) runScene(currentScene+1); }
+
+// Start
+setTimeout(()=>runScene(0), 400);
+</script>
+</body>
+</html>
