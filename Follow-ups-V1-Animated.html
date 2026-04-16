@@ -1,168 +1,200 @@
 <!DOCTYPE html>
-<!-- saved from url=(0060)file:///Users/ihabelalami/Downloads/crm_animated_demo_2.html -->
+<!-- saved from url=(0060)file:///Users/ihabelalami/Downloads/crm_animated_demo_7.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Travel Collection CRM — Feature Demo</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
-
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',system-ui,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:32px 16px 48px}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 16px 48px}
 
-/* ── Header ── */
-.demo-header{width:100%;max-width:1400px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.demo-title{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#5f6680}
+.demo-header{width:100%;max-width:1100px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .demo-logo{font-size:13px;font-weight:600;color:#1a73e8;letter-spacing:.04em}
+.demo-title{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#5f6680}
 
-/* ── Scene label ── */
-.scene-bar{width:100%;max-width:1400px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
-.scene-dots{display:flex;gap:6px}
-.sdot{width:8px;height:8px;border-radius:50%;background:#2a2d3a;transition:background .3s}
+.scene-caption{width:100%;max-width:1100px;font-size:21px;font-weight:600;letter-spacing:-.01em;color:#e8eaf0;text-align:center;min-height:34px;margin-bottom:10px;opacity:0;transform:translateY(5px);transition:opacity .4s,transform .4s}
+.scene-caption.vis{opacity:1;transform:translateY(0)}
+
+.scene-bar{width:100%;max-width:1100px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sdot{width:8px;height:8px;border-radius:50%;background:#2a2d3a;transition:background .3s;flex-shrink:0}
 .sdot.on{background:#1a73e8}
 .sdot.done{background:#2e5fa3}
-.scene-caption{width:100%;max-width:1400px;font-size:22px;color:#e8eaf0;font-weight:600;letter-spacing:-.01em;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;text-align:center;margin-bottom:6px;min-height:32px}
-.scene-caption.visible{opacity:1;transform:translateY(0)}
-.scene-num{font-family:'DM Mono',monospace;font-size:11px;color:#3a3f52;letter-spacing:.06em}
+.prog-track{flex:1;height:3px;background:#2a2d3a;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:#1a73e8;border-radius:3px;transition:width .4s}
+.scene-num{font-family:'DM Mono',monospace;font-size:11px;color:#3a3f52;letter-spacing:.06em;white-space:nowrap}
 
-/* ── Stage ── */
-.stage{position:relative;width:100%;max-width:1400px;zoom:1.35;border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05)}
+/* Stage */
+.stage{position:relative;width:100%;max-width:1100px;border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05);zoom:1.35}
 
-/* ── CRM chrome ── */
-.crm{background:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:13px;color:#202124}
+/* CRM */
+.crm{font-family:'DM Sans',system-ui,sans-serif;font-size:13px;color:#202124;background:#fff}
 .topbar{display:flex;align-items:center;border-bottom:1px solid #e0e0e0;padding:0 4px;background:#fff}
-.tb-tab{padding:10px 14px;font-size:13px;color:#5f6368;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tb-tab{padding:10px 14px;font-size:13px;color:#5f6368;border-bottom:2px solid transparent;white-space:nowrap}
 .tb-tab.active{color:#1a73e8;border-bottom-color:#1a73e8;font-weight:500}
 .toolbar{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid #e0e0e0;background:#fff}
 .spacer{flex:1}
 .tb-btn{padding:5px 12px;border:1px solid #dadce0;border-radius:4px;font-size:12px;background:#fff;color:#3c4043}
 .grp-sel,.sub-sel{font-size:12px;padding:4px 8px;border:1px solid #dadce0;border-radius:4px;background:#fff}
-.tb-label{font-size:11px;color:#5f6368}
-.chk-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#3c4043;user-select:none}
+.tb-lbl{font-size:11px;color:#5f6368}
+.chk-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#3c4043}
 .chk-box{width:14px;height:14px;border:2px solid #aaa;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.chk-box.checked{background:#c62828;border-color:#c62828}
-.chk-box.checked::after{content:'✓';font-size:9px;color:#fff;font-weight:700}
-.search-box{padding:5px 10px;border:1px solid #dadce0;border-radius:4px;font-size:12px;width:150px;background:#f1f3f4}
-.pipeline{display:flex;padding:6px 10px;border-bottom:1px solid #e0e0e0;background:#fff}
-.pip-stage{display:flex;align-items:center;padding:5px 12px 5px 14px;font-size:11px;font-weight:500;color:#fff;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%);white-space:nowrap;min-width:120px}
-.pip-stage:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);padding-left:10px}
+.chk-box.on{background:#c62828;border-color:#c62828}
+.chk-box.on::after{content:'✓';font-size:9px;color:#fff;font-weight:700}
+.search-box{padding:5px 10px;border:1px solid #dadce0;border-radius:4px;font-size:12px;width:140px;background:#f1f3f4}
+.pipeline{display:flex;padding:6px 10px;border-bottom:1px solid #e0e0e0;gap:0;background:#fff}
+.pip{display:flex;align-items:center;padding:5px 12px 5px 14px;font-size:11px;font-weight:500;color:#fff;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%);white-space:nowrap;min-width:110px}
+.pip:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);padding-left:8px}
 .pip-wr{font-size:10px;background:rgba(255,255,255,.25);padding:1px 5px;border-radius:8px;margin-left:4px}
 .pip-late{font-size:10px;padding:1px 5px;border-radius:8px;margin-left:3px;background:rgba(220,53,53,.4)}
 table{width:100%;border-collapse:collapse;font-size:12px}
 th{font-size:11px;font-weight:500;color:#5f6368;text-align:left;padding:6px 8px;border-bottom:1px solid #e0e0e0;white-space:nowrap;background:#fff}
-th.fuc{color:#c62828;font-weight:600}
+th.rc{color:#c62828;font-weight:600}
 td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-align:middle}
-.grp-hdr td{padding:6px 8px;font-size:12px;font-weight:500;color:#fff}
-.nc{color:#9e9e9e;font-size:11px;text-align:right;width:28px}
+.ghdr td{padding:6px 8px;font-size:12px;font-weight:500;color:#fff}
+.nc{color:#9e9e9e;font-size:11px;text-align:right}
 .tl{color:#1a73e8;font-size:12px}
 .tl.lost{color:#9e9e9e;text-decoration:line-through}
-.lost-tag{padding:1px 6px;border-radius:10px;font-size:10px;font-weight:500;background:#f3f3f3;color:#9e9e9e;border:1px solid #e0e0e0;margin-left:5px}
-.email-cell{display:inline-flex;align-items:center;gap:5px}
-.email-date{font-size:11px;color:#5f6368}
-.fu-cell{display:inline-flex;align-items:center;gap:5px}
-.fu-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid;white-space:nowrap}
-.fu-dot{width:6px;height:6px;border-radius:50%}
-.db-red{background:#fce8e6;color:#c62828;border-color:#f5c6c6}.db-red .fu-dot{background:#c62828}
-.db-amber{background:#fef7e0;color:#e37400;border-color:#fde68a}.db-amber .fu-dot{background:#e37400}
-.db-green{background:#e6f4ea;color:#137333;border-color:#ceead6}.db-green .fu-dot{background:#137333}
-.fu-none{font-size:11px;color:#bdbdbd;padding:2px 4px;border-radius:3px}
-.lost-x{font-size:14px;color:#c62828;padding:0 3px;visibility:hidden}
-.memo-cell{font-size:11px;color:#5f6368;padding:2px 5px;border-radius:4px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
-.memo-cell.empty{color:#bdbdbd;font-style:italic}
-.expand-btn{width:20px;height:20px;border-radius:3px;border:1px solid #e0e0e0;background:#fff;display:inline-flex;align-items:center;justify-content:center;color:#9e9e9e;font-size:11px}
-.row-hl td{background:#eef4ff!important}
-.row-hl-red td{background:#fff0f0!important}
-.row-lost td{background:#f8f8f8;opacity:.6}
+.ltag{padding:1px 6px;border-radius:10px;font-size:10px;font-weight:500;background:#f3f3f3;color:#9e9e9e;border:1px solid #e0e0e0;margin-left:5px}
+.ec{display:inline-flex;align-items:center;gap:5px}
+.ed{font-size:11px;color:#5f6368}
+.fuc{display:inline-flex;align-items:center;gap:5px}
+.fub{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid;white-space:nowrap}
+.fd{width:6px;height:6px;border-radius:50%}
+.dr{background:#fce8e6;color:#c62828;border-color:#f5c6c6}.dr .fd{background:#c62828}
+.da{background:#fef7e0;color:#e37400;border-color:#fde68a}.da .fd{background:#e37400}
+.dg{background:#e6f4ea;color:#137333;border-color:#ceead6}.dg .fd{background:#137333}
+.fn{font-size:11px;color:#bdbdbd;padding:2px 4px;border-radius:3px}
+.lx{font-size:14px;color:#c62828;padding:0 3px;visibility:hidden}
+.mc{font-size:11px;color:#5f6368;padding:2px 5px;border-radius:4px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
+.mc.mt{color:#bdbdbd;font-style:italic}
+.xb{width:20px;height:20px;border-radius:3px;border:1px solid #e0e0e0;background:#fff;display:inline-flex;align-items:center;justify-content:center;color:#9e9e9e;font-size:11px}
+.rhl td{background:#eef4ff!important}
+.rrl td{background:#fff0f0!important}
+.rlost td{background:#f8f8f8;opacity:.6}
 
-/* ── Floating panels (date picker, memo, thread picker, lost modal) ── */
-.float-panel{position:absolute;z-index:60;opacity:0;pointer-events:none;transition:opacity .28s,transform .28s}
-.float-panel.visible{opacity:1;pointer-events:auto}
+/* Floating panels */
+.fp{position:absolute;z-index:60;opacity:0;pointer-events:none;transition:opacity .28s,transform .28s;transform:translateY(4px)}
+.fp.vis{opacity:1;pointer-events:auto;transform:translateY(0)}
 
-.dp-panel{background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:14px;width:220px}
-.dp-lbl{font-size:11px;color:#5f6368;margin-bottom:6px;font-weight:500}
-.dp-inp{width:100%;padding:5px 8px;border:1px solid #1a73e8;border-radius:5px;font-size:12px;margin-bottom:8px;background:#fff;color:#202124;box-shadow:0 0 0 2px rgba(26,115,232,.1);outline:none}
-.dp-shorts{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
-.dp-s{padding:3px 9px;border-radius:12px;font-size:11px;border:1px solid #dadce0;background:#fff;color:#3c4043;cursor:pointer;transition:all .15s}
-.dp-s.hl{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8}
-.dp-foot{display:flex;justify-content:flex-end;gap:5px}
-.dp-save{padding:5px 12px;border-radius:5px;border:none;background:#1a73e8;color:#fff;font-size:12px}
-.dp-cancel{padding:5px 10px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:12px;color:#5f6368}
+/* Date picker */
+.dp{background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:14px;width:220px}
+.dpl{font-size:11px;color:#5f6368;margin-bottom:6px;font-weight:500}
+.dpi{width:100%;padding:5px 8px;border:1px solid #1a73e8;border-radius:5px;font-size:12px;margin-bottom:8px;background:#fff;color:#202124;box-shadow:0 0 0 2px rgba(26,115,232,.1);outline:none}
+.dps{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.dpb{padding:3px 9px;border-radius:12px;font-size:11px;border:1px solid #dadce0;background:#fff;color:#3c4043;transition:all .15s}
+.dpb.hl{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8}
+.dpf{display:flex;justify-content:flex-end;gap:5px}
+.dpsv{padding:5px 12px;border-radius:5px;border:none;background:#1a73e8;color:#fff;font-size:12px}
+.dpca{padding:5px 10px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:12px;color:#5f6368}
 
-.memo-panel{background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);width:320px;overflow:hidden}
-.mp-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0f0f0;background:#fafafa}
-.mp-hdr-title{font-size:11px;font-weight:500;color:#5f6368}
-.mp-close-btn{color:#9e9e9e;font-size:15px;line-height:1}
-.mp-body{padding:12px}
-.mp-preview-text{font-size:12px;color:#202124;line-height:1.7;white-space:pre-wrap;word-break:break-word;cursor:text;min-height:44px}
-.mp-link{color:#1a73e8;text-decoration:underline}
-.mp-hint{font-size:10px;color:#bdbdbd;margin-top:8px}
-.mp-textarea{width:100%;min-height:80px;font-size:12px;font-family:inherit;padding:6px 8px;border:1px solid #1a73e8;border-radius:5px;outline:none;resize:none;color:#202124;line-height:1.7;box-shadow:0 0 0 2px rgba(26,115,232,.1)}
-.mp-footer{display:flex;justify-content:flex-end;gap:6px;padding:8px 12px;border-top:1px solid #f0f0f0;background:#fafafa}
-.mp-btn-save{padding:4px 12px;border-radius:4px;border:none;background:#1a73e8;color:#fff;font-size:12px}
-.mp-btn-cancel{padding:4px 10px;border-radius:4px;border:1px solid #dadce0;background:#fff;font-size:12px;color:#5f6368}
+/* Memo panel */
+.mp{background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);width:300px;overflow:hidden}
+.mph{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0f0f0;background:#fafafa}
+.mpht{font-size:11px;font-weight:500;color:#5f6368}
+.mpx{color:#9e9e9e;font-size:15px}
+.mpb{padding:12px}
+.mppv{font-size:12px;color:#202124;line-height:1.7;white-space:pre-wrap;word-break:break-word;cursor:text;min-height:44px}
+.mpl{color:#1a73e8;text-decoration:underline}
+.mph2{font-size:10px;color:#bdbdbd;margin-top:8px}
+.mpta{width:100%;min-height:80px;font-size:12px;font-family:inherit;padding:6px 8px;border:1px solid #1a73e8;border-radius:5px;outline:none;resize:none;color:#202124;line-height:1.7;box-shadow:0 0 0 2px rgba(26,115,232,.1)}
+.mpf{display:flex;justify-content:flex-end;gap:6px;padding:8px 12px;border-top:1px solid #f0f0f0;background:#fafafa}
+.mpsv{padding:4px 12px;border-radius:4px;border:none;background:#1a73e8;color:#fff;font-size:12px}
+.mpca{padding:4px 10px;border-radius:4px;border:1px solid #dadce0;background:#fff;font-size:12px;color:#5f6368}
 
-.thread-panel{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.22);width:400px;overflow:hidden;border:1px solid #e0e0e0}
-.thread-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 11px;border-bottom:1px solid #e0e0e0}
-.thread-hdr h3{font-size:14px;font-weight:500;color:#202124}
-.thread-sub{font-size:11px;color:#5f6368;margin-top:2px}
-.thread-close{color:#5f6368;font-size:18px;line-height:1}
-.thread-list{padding:14px;display:flex;flex-direction:column;gap:8px}
-.thread-item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:6px;cursor:pointer;transition:all .15s}
-.thread-item.hl{border-color:#1a73e8;background:#e8f0fe}
-.th-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0}
-.th-meta{flex:1;min-width:0}
-.th-subj{font-size:12px;font-weight:500;color:#202124;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.th-snip{font-size:11px;color:#5f6368;margin-top:1px}
-.th-date{font-size:10px;color:#9e9e9e;white-space:nowrap;margin-left:8px}
-.th-cnt{font-size:10px;color:#1a73e8;background:#e8f0fe;padding:1px 5px;border-radius:8px;margin-top:2px;display:inline-block}
+/* Thread panel */
+.tp{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.22);width:380px;overflow:hidden;border:1px solid #e0e0e0}
+.tph{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 11px;border-bottom:1px solid #e0e0e0}
+.tph h3{font-size:14px;font-weight:500;color:#202124}
+.tps{font-size:11px;color:#5f6368;margin-top:2px}
+.tpx{color:#5f6368;font-size:18px}
+.tpl{padding:14px;display:flex;flex-direction:column;gap:8px}
+.tpi{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:6px;transition:all .15s}
+.tpi.hl{border-color:#1a73e8;background:#e8f0fe}
+.tav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0}
+.tmeta{flex:1;min-width:0}
+.tsubj{font-size:12px;font-weight:500;color:#202124;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tsnip{font-size:11px;color:#5f6368;margin-top:1px}
+.tdate{font-size:10px;color:#9e9e9e;white-space:nowrap;margin-left:8px}
+.tcnt{font-size:10px;color:#1a73e8;background:#e8f0fe;padding:1px 5px;border-radius:8px;margin-top:2px;display:inline-block}
 
-.lost-overlay{position:absolute;inset:0;background:rgba(0,0,0,.38);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;justify-content:center}
-.lost-overlay.visible{opacity:1;pointer-events:auto}
-.lost-box{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.25);width:360px;overflow:hidden}
-.lost-hdr{padding:16px 20px 14px;border-bottom:1px solid #f0f0f0}
-.lost-hdr h3{font-size:14px;font-weight:500;margin:0 0 3px;color:#202124}
-.lost-hdr p{font-size:12px;color:#5f6368;line-height:1.5}
-.lost-fields{padding:14px 20px;display:flex;flex-direction:column;gap:9px;border-bottom:1px solid #f0f0f0}
-.lf{display:flex;flex-direction:column;gap:3px}
-.lf label{font-size:10px;font-weight:500;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em}
-.lf select,.lf textarea{font-size:12px;padding:5px 8px;border:1px solid #dadce0;border-radius:5px;background:#fff;color:#202124;font-family:inherit}
-.lf textarea{resize:none;min-height:36px}
-.lost-foot{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px}
-.btn-cancel-l{padding:7px 14px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:13px;color:#3c4043}
-.btn-lost-l{padding:7px 16px;border-radius:5px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:500}
-.btn-lost-l.pressed{background:#a82020}
+/* Email toast (incoming) */
+.et{position:absolute;top:52px;right:16px;background:#fff;border:1px solid #e0e0e0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:11px 14px;display:flex;align-items:flex-start;gap:10px;width:270px;z-index:80;opacity:0;transform:translateX(40px);transition:opacity .35s,transform .35s;pointer-events:none}
+.et.vis{opacity:1;transform:translateX(0)}
+.eti{width:32px;height:32px;border-radius:8px;background:#1a73e8;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;position:relative}
+.etdot{position:absolute;top:-4px;right:-4px;width:10px;height:10px;background:#c62828;border-radius:50%;border:2px solid #fff}
+.etb{flex:1;min-width:0}
+.etf{font-size:12px;font-weight:600;color:#202124}
+.etsu{font-size:11px;color:#5f6368;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ett{font-size:10px;color:#9e9e9e;margin-top:3px}
 
+/* Weekly email overlay */
+.wo{position:absolute;inset:0;z-index:75;background:rgba(10,12,20,.72);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .35s;display:flex;align-items:center;justify-content:center}
+.wo.vis{opacity:1;pointer-events:auto}
+.wc{background:#fff;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.28);width:440px;overflow:hidden;font-family:'DM Sans',system-ui,sans-serif;transform:translateY(12px);transition:transform .35s}
+.wo.vis .wc{transform:translateY(0)}
+.wch{background:#f1f3f4;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #e0e0e0}
+.wcd{width:10px;height:10px;border-radius:50%}
+.wcsb{font-size:11px;color:#5f6368;flex:1;background:#fff;border-radius:4px;padding:3px 8px}
+.wcb{padding:18px 22px}
+.wcfr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.wcav{width:36px;height:36px;border-radius:50%;background:#1a73e8;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0}
+.wcfn{font-size:13px;font-weight:600;color:#202124}
+.wcfa{font-size:11px;color:#5f6368}
+.wcto{font-size:11px;color:#5f6368;margin-bottom:8px}
+.wcdiv{border:none;border-top:1px solid #f0f0f0;margin:8px 0}
+.wcb h4{font-size:15px;font-weight:600;color:#202124;margin-bottom:6px}
+.wcb p{font-size:12px;color:#5f6368;line-height:1.7;margin-bottom:10px}
+.wctable{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px}
+.wctable th{text-align:left;padding:4px 8px;font-size:10px;font-weight:600;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #f0f0f0}
+.wctable td{padding:5px 8px;border-bottom:1px solid #f8f9fa;color:#5f6368}
+.wctable td:first-child{color:#202124;font-weight:500}
+.wbadge{display:inline-block;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:500;background:#fce8e6;color:#c62828}
+.wcta{display:inline-block;background:#1a73e8;color:#fff;font-size:12px;font-weight:500;padding:8px 18px;border-radius:6px;text-decoration:none;cursor:pointer}
+.wcfn2{font-size:10px;color:#bdbdbd;margin-top:10px}
 
-/* ── Scene transition card ── */
-.scene-transition{position:absolute;inset:0;z-index:180;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0f1117;opacity:0;pointer-events:none;transition:opacity .35s}
-.scene-transition.visible{opacity:1;pointer-events:auto}
-.st-num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#1a73e8;font-weight:500}
-.st-title{font-size:28px;font-weight:600;color:#e8eaf0;letter-spacing:-.02em;text-align:center;padding:0 40px}
-.st-bar{width:48px;height:3px;background:#1a73e8;border-radius:3px;margin-top:4px}
+/* Lost overlay */
+.lo{position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.38);opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;justify-content:center}
+.lo.vis{opacity:1;pointer-events:auto}
+.lb{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.25);width:340px;overflow:hidden}
+.lbh{padding:16px 20px 14px;border-bottom:1px solid #f0f0f0}
+.lbh h3{font-size:14px;font-weight:500;margin:0 0 3px;color:#202124}
+.lbh p{font-size:12px;color:#5f6368;line-height:1.5}
+.lbf{padding:14px 20px;display:flex;flex-direction:column;gap:9px;border-bottom:1px solid #f0f0f0}
+.lfl{display:flex;flex-direction:column;gap:3px}
+.lfl label{font-size:10px;font-weight:500;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em}
+.lfl select,.lfl textarea{font-size:12px;padding:5px 8px;border:1px solid #dadce0;border-radius:5px;background:#fff;color:#202124;font-family:inherit}
+.lfl textarea{resize:none;min-height:36px}
+.lbfoot{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px}
+.lcnl{padding:7px 14px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:13px;color:#3c4043}
+.llost{padding:7px 16px;border-radius:5px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:500}
 
-/* ── Fake cursor ── */
-.cursor{position:absolute;z-index:200;pointer-events:none;transition:left .55s cubic-bezier(.4,0,.2,1),top .55s cubic-bezier(.4,0,.2,1);will-change:left,top}
-.cursor svg{filter:drop-shadow(1px 2px 3px rgba(0,0,0,.35))}
-.cursor-ring{position:absolute;width:28px;height:28px;border-radius:50%;border:2px solid rgba(26,115,232,.7);left:-10px;top:-10px;transform:scale(0);transition:transform .18s;pointer-events:none}
-.cursor-ring.click{transform:scale(1)}
+/* Highlight ring */
+.hlr{position:absolute;border-radius:8px;border:2px solid #1a73e8;box-shadow:0 0 0 3px rgba(26,115,232,.2);z-index:55;pointer-events:none;opacity:0;transition:opacity .25s}
+.hlr.vis{opacity:1}
 
-/* ── Caption overlay ── */
-.caption-box{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);background:rgba(10,12,20,.92);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 28px;font-size:16px;font-weight:500;color:#ffffff;white-space:nowrap;backdrop-filter:blur(12px);z-index:150;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 6px 28px rgba(0,0,0,.5);letter-spacing:.01em}
-.caption-box.visible{opacity:1}
-.caption-icon{margin-right:6px;font-size:14px}
+/* In-stage caption */
+.cap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(8,10,18,.93);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:13px 26px;font-size:15px;font-weight:500;color:#fff;white-space:nowrap;backdrop-filter:blur(12px);z-index:150;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 6px 28px rgba(0,0,0,.5)}
+.cap.vis{opacity:1}
 
-/* ── Highlight ring on elements ── */
-.hl-ring{position:absolute;border-radius:8px;border:2px solid #1a73e8;box-shadow:0 0 0 3px rgba(26,115,232,.2);z-index:55;pointer-events:none;opacity:0;transition:opacity .25s}
-.hl-ring.visible{opacity:1}
+/* Scene transition */
+.str{position:absolute;inset:0;z-index:180;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0f1117;opacity:0;pointer-events:none;transition:opacity .32s}
+.str.vis{opacity:1;pointer-events:auto}
+.strn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#1a73e8;font-weight:500}
+.strt{font-size:26px;font-weight:600;color:#e8eaf0;letter-spacing:-.02em;text-align:center;padding:0 40px}
+.strb{width:48px;height:3px;background:#1a73e8;border-radius:3px;margin-top:4px}
 
-/* ── Progress & controls ── */
-.controls{width:100%;max-width:1400px;margin-top:20px;display:flex;align-items:center;justify-content:center;gap:16px}
-.ctrl-btn{padding:8px 20px;border-radius:20px;border:1px solid #2a2d3a;background:#1a1d26;color:#9ba3c0;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
-.ctrl-btn:hover{background:#23283a;color:#e8eaf0;border-color:#3a3f52}
-.ctrl-btn.primary{background:#1a73e8;border-color:#1a73e8;color:#fff}
-.ctrl-btn.primary:hover{background:#1557b0}
-.progress-track{flex:1;max-width:300px;height:3px;background:#2a2d3a;border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;background:#1a73e8;border-radius:3px;transition:width .4s}
+/* Cursor */
+.cursor{position:absolute;z-index:200;pointer-events:none;transition:left .5s cubic-bezier(.4,0,.2,1),top .5s cubic-bezier(.4,0,.2,1)}
+.cring{position:absolute;width:26px;height:26px;border-radius:50%;border:2px solid rgba(26,115,232,.75);left:-10px;top:-10px;transform:scale(0);transition:transform .18s;pointer-events:none}
+.cring.on{transform:scale(1)}
+
+/* Controls */
+.controls{width:100%;max-width:1100px;margin-top:18px;display:flex;align-items:center;justify-content:center;gap:14px}
+.cbtn{padding:8px 20px;border-radius:20px;border:1px solid #2a2d3a;background:#1a1d26;color:#9ba3c0;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.cbtn:hover{background:#23283a;color:#e8eaf0;border-color:#3a3f52}
+.cbtn.pr{background:#1a73e8;border-color:#1a73e8;color:#fff}
+.cbtn.pr:hover{background:#1557b0}
 </style>
 </head>
 <body>
@@ -172,15 +204,15 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
   <div class="demo-title">Follow-up Feature · Simplified V1</div>
 </div>
 
+<div class="scene-caption vis" id="sc">✅  That's the full flow — structured, visible, zero friction</div>
+
 <div class="scene-bar">
-  <div class="scene-dots" id="sceneDots"><div class="sdot done" id="sdot0"></div><div class="sdot done" id="sdot1"></div><div class="sdot done" id="sdot2"></div><div class="sdot done" id="sdot3"></div><div class="sdot done" id="sdot4"></div><div class="sdot done" id="sdot5"></div><div class="sdot on" id="sdot6"></div></div>
-  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width: 100%;"></div></div>
-  <div class="scene-num" id="sceneNum">07 / 07</div>
+  <div id="dots"><div class="sdot done" id="dot0"></div><div class="sdot done" id="dot1"></div><div class="sdot done" id="dot2"></div><div class="sdot done" id="dot3"></div><div class="sdot done" id="dot4"></div><div class="sdot done" id="dot5"></div><div class="sdot done" id="dot6"></div><div class="sdot done" id="dot7"></div><div class="sdot on" id="dot8"></div></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width: 100%;"></div></div>
+  <div class="scene-num" id="snum">09 / 09</div>
 </div>
-<div class="scene-caption visible" id="sceneCaption">✅  That's the full flow — fast, clean, no friction</div>
 
 <div class="stage" id="stage">
-  <!-- CRM UI -->
   <div class="crm">
     <div class="topbar">
       <div class="tb-tab">Home</div>
@@ -189,11 +221,11 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
       <div class="tb-tab">Upcoming (280)</div>
     </div>
     <div class="toolbar">
-      <span class="tb-label">Group By</span>
+      <span class="tb-lbl">Group By</span>
       <select class="grp-sel"><option>Lead Stage</option></select>
       <div class="spacer"></div>
       <div class="chk-wrap">
-        <div class="chk-box checked" id="chkBox"></div>
+        <div class="chk-box" id="chk"></div>
         <span>Late follow-ups</span>
       </div>
       <button class="tb-btn">New</button>
@@ -201,630 +233,525 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
       <input class="search-box" placeholder="Search in this list…">
     </div>
     <div class="pipeline">
-      <div class="pip-stage" style="background:#e8a000"><span style="font-weight:600;margin-right:3px">160</span>New Lead<span class="pip-wr">$101.4K W.R</span><span class="pip-late">3 late</span></div>
-      <div class="pip-stage" style="background:#1a73e8"><span style="font-weight:600;margin-right:3px">241</span>First Contact<span class="pip-wr">$823.5K W.R</span><span class="pip-late">1 late</span></div>
-      <div class="pip-stage" style="background:#7b1fa2"><span style="font-weight:600;margin-right:3px">605</span>Proposal Sent<span class="pip-wr">$6.3M W.R</span></div>
-      <div class="pip-stage" style="background:#1565c0"><span style="font-weight:600;margin-right:3px">353</span>Negotiating<span class="pip-wr">$6M W.R</span></div>
-      <div class="pip-stage" style="background:#2e7d32"><span style="font-weight:600;margin-right:3px">41</span>Nearing Close<span class="pip-wr">$620.8K W.R</span></div>
+      <div class="pip" style="background:#e8a000"><b>160</b>&nbsp;New Lead<span class="pip-wr">$101.4K</span><span class="pip-late">3 late</span></div>
+      <div class="pip" style="background:#1a73e8"><b>241</b>&nbsp;First Contact<span class="pip-wr">$823.5K</span><span class="pip-late">1 late</span></div>
+      <div class="pip" style="background:#7b1fa2"><b>605</b>&nbsp;Proposal Sent<span class="pip-wr">$6.3M</span></div>
+      <div class="pip" style="background:#1565c0"><b>353</b>&nbsp;Negotiating<span class="pip-wr">$6M</span></div>
+      <div class="pip" style="background:#2e7d32"><b>41</b>&nbsp;Nearing Close<span class="pip-wr">$620K</span></div>
     </div>
-    <div style="overflow-x:auto">
-      <table id="mainTable">
-        <thead>
-          <tr>
-            <th style="width:28px">#</th>
-            <th style="width:22px"></th>
-            <th style="min-width:155px">Trip Name</th>
-            <th style="min-width:110px">Last Email</th>
-            <th class="fuc" style="min-width:148px">Next Follow-up</th>
-            <th style="min-width:185px">Advisor Memo</th>
-            <th style="min-width:60px">Travelers</th>
-            <th style="min-width:90px">Trip Start</th>
-            <th style="min-width:95px">Sales Owner</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody"><tr class="grp-hdr"><td colspan="9" style="background:#e8a000;padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ New Lead (160 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">3 late</span></td></tr><tr id="row1" class="row-hl-red">
-        <td class="nc">1</td>
-        <td><div class="expand-btn">▾</div></td>
+    <table>
+      <thead><tr>
+        <th style="width:26px">#</th><th style="width:20px"></th>
+        <th style="min-width:148px">Trip Name</th>
+        <th style="min-width:108px">Last Email</th>
+        <th class="rc" style="min-width:138px">Next Follow-up</th>
+        <th style="min-width:175px">Advisor Memo</th>
+        <th style="min-width:55px">Travelers</th>
+        <th style="min-width:85px">Trip Start</th>
+        <th style="min-width:90px">Sales Owner</th>
+      </tr></thead>
+      <tbody id="tb"><tr class="ghdr"><td colspan="9" style="background:#e8a000;padding:6px 8px">▾ New Lead (160 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">3 late</span></td></tr><tr id="row1" class="rrl">
+        <td class="nc">1</td><td><div class="xb">▾</div></td>
         <td><span class="tl ">Isabella and Jarod</span></td>
-        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="email-date">08 Dec, 01:00</span><span style="font-size:9px;color:#9e9e9e;margin-left:2px">(2)</span></span></td>
-        <td id="fucell1"><div class="fu-cell"><span class="fu-badge db-red" id="fubadge1"><span class="fu-dot"></span>1d ago</span><span class="lost-x" id="lx1">×</span></div></td>
-        <td><span class="memo-cell " id="memocell1">Honeymoon trip — boutique riads…</span></td>
-        <td style="color:#5f6368">20</td>
-        <td style="color:#5f6368">29/04/2026</td>
-        <td style="color:#5f6368">Karen Gee</td>
-      </tr><tr id="row2" class="row-hl-red">
-        <td class="nc">2</td>
-        <td><div class="expand-btn">▾</div></td>
+        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">08 Dec, 01:00</span><span style="font-size:9px;color:#9e9e9e;margin-left:2px">(2)</span></span></td>
+        <td id="fc1"><div class="fuc"><span class="fub dr" id="fb1"><span class="fd"></span>1d ago</span><span class="lx" id="lx1">×</span></div></td>
+        <td><span class="mc" id="mc1">Honeymoon trip — boutique riads…</span></td>
+        <td style="color:#5f6368">20</td><td style="color:#5f6368">29/04/2026</td><td style="color:#5f6368">Karen Gee</td>
+      </tr><tr id="row2" class="rrl">
+        <td class="nc">2</td><td><div class="xb">▾</div></td>
         <td><span class="tl ">Carmen Matiella ...</span></td>
-        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="email-date">04 Dec, 01:00</span></span></td>
-        <td id="fucell2"><div class="fu-cell"><span class="fu-badge db-red" id="fubadge2"><span class="fu-dot"></span>2d ago</span><span class="lost-x" id="lx2">×</span></div></td>
-        <td><span class="memo-cell " id="memocell2">Waiting on client dates.</span></td>
-        <td style="color:#5f6368">2</td>
-        <td style="color:#5f6368">31/07/2025</td>
-        <td style="color:#5f6368">Reem KARMOUT...</td>
-      </tr><tr id="row3" class="row-lost">
-        <td class="nc">3</td>
-        <td><div class="expand-btn">▾</div></td>
-        <td><span class="tl lost">Sabrina's lead</span><span class="lost-tag">Lost</span></td>
+        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">04 Dec, 01:00</span></span></td>
+        <td id="fc2"><div class="fuc"><span class="fub dr" id="fb2"><span class="fd"></span>2d ago</span><span class="lx" id="lx2">×</span></div></td>
+        <td><span class="mc" id="mc2">Waiting on client dates.</span></td>
+        <td style="color:#5f6368">2</td><td style="color:#5f6368">31/07/2025</td><td style="color:#5f6368">Reem K.</td>
+      </tr><tr id="row3" class="rlost">
+        <td class="nc">3</td><td><div class="xb">▾</div></td>
+        <td><span class="tl lost">Sabrina's lead</span><span class="ltag">Lost</span></td>
         <td><span style="font-size:11px;color:#bdbdbd">—</span></td>
-        <td id="fucell3"><span style="font-size:11px;color:#bdbdbd">—</span></td>
-        <td><span class="memo-cell empty" id="memocell3">Add memo…</span></td>
-        <td style="color:#5f6368"></td>
-        <td style="color:#5f6368">12/08/2025</td>
-        <td style="color:#5f6368">Reem KARMOUT...</td>
+        <td id="fc3"><span style="font-size:11px;color:#bdbdbd">—</span></td>
+        <td><span class="mc mt" id="mc3">Add memo…</span></td>
+        <td style="color:#5f6368"></td><td style="color:#5f6368">12/08/2025</td><td style="color:#5f6368">Reem K.</td>
       </tr><tr id="row4" class="">
-        <td class="nc">4</td>
-        <td><div class="expand-btn">▾</div></td>
+        <td class="nc">4</td><td><div class="xb">▾</div></td>
         <td><span class="tl ">Christie Wingo's c...</span></td>
-        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="email-date">02 Dec, 01:00</span></span></td>
-        <td id="fucell4"><div class="fu-cell"><span class="fu-badge db-amber" id="fubadge4"><span class="fu-dot"></span>Tomorrow</span><span class="lost-x" id="lx4">×</span></div></td>
-        <td><span class="memo-cell " id="memocell4">Engaged early — went quiet…</span></td>
-        <td style="color:#5f6368">3</td>
-        <td style="color:#5f6368">23/09/2026</td>
-        <td style="color:#5f6368">Reem KARMOUT...</td>
+        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">02 Dec, 01:00</span></span></td>
+        <td id="fc4"><div class="fuc"><span class="fub da" id="fb4"><span class="fd"></span>Tomorrow</span><span class="lx" id="lx4">×</span></div></td>
+        <td><span class="mc" id="mc4">Engaged early — went quiet…</span></td>
+        <td style="color:#5f6368">3</td><td style="color:#5f6368">23/09/2026</td><td style="color:#5f6368">Reem K.</td>
       </tr><tr id="row5" class="">
-        <td class="nc">5</td>
-        <td><div class="expand-btn">▾</div></td>
-        <td><span class="tl ">Adrien de Saint Ja...</span></td>
-        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#2e7d32" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#2e7d32" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#2e7d32" stroke-width="1" fill="none"></rect></svg><span class="email-date">11 Dec, 01:00</span></span></td>
-        <td id="fucell5"><div class="fu-cell"><span class="fu-none">+ Set date</span><span class="lost-x" id="lx5">×</span></div></td>
-        <td><span class="memo-cell " id="memocell5">Group of 35. Company retreat.</span></td>
-        <td style="color:#5f6368">35</td>
-        <td style="color:#5f6368">07/06/2026</td>
-        <td style="color:#5f6368">Fadila AIT TALBI</td>
+        <td class="nc">5</td><td><div class="xb">▾</div></td>
+        <td><span class="tl ">Adrien de Saint Ja…</span></td>
+        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#2e7d32" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#2e7d32" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#2e7d32" stroke-width="1" fill="none"></rect></svg><span class="ed">11 Dec, 01:00</span></span></td>
+        <td id="fc5"><div class="fuc"><span class="fn">+ Set date</span><span class="lx" id="lx5">×</span></div></td>
+        <td><span class="mc" id="mc5">Group of 35. Company retreat.</span></td>
+        <td style="color:#5f6368">35</td><td style="color:#5f6368">07/06/2026</td><td style="color:#5f6368">Fadila A.</td>
       </tr><tr id="row6" class="">
-        <td class="nc">6</td>
-        <td><div class="expand-btn">▾</div></td>
+        <td class="nc">6</td><td><div class="xb">▾</div></td>
         <td><span class="tl ">Steven Goodrich</span></td>
-        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#7b1fa2" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#7b1fa2" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#7b1fa2" stroke-width="1" fill="none"></rect></svg><span class="email-date">05 Dec, 01:00</span></span></td>
-        <td id="fucell6"><div class="fu-cell"><span class="fu-badge db-green" id="fubadge6"><span class="fu-dot"></span>16 Dec</span><span class="lost-x" id="lx6">×</span></div></td>
-        <td><span class="memo-cell " id="memocell6">Away for work until Jan.</span></td>
-        <td style="color:#5f6368">2</td>
-        <td style="color:#5f6368">27/07/2026</td>
-        <td style="color:#5f6368">Karen Gee</td>
-      </tr><tr class="grp-hdr"><td colspan="9" style="background:#1a73e8;padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ First Contact (241 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">1 late</span></td></tr><tr id="row7">
-        <td class="nc">7</td>
-        <td><div class="expand-btn">▾</div></td>
-        <td><span class="tl">Katherine's Group...</span></td>
-        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="email-date">10 Dec, 01:00</span></span></td>
-        <td id="fucell7"><div class="fu-cell"><span class="fu-badge db-green" id="fubadge7"><span class="fu-dot"></span>17 Dec</span><span class="lost-x" id="lx7">×</span></div></td>
-        <td><span class="memo-cell " id="memocell7">Affinity group. Responsive.</span></td>
-        <td style="color:#5f6368">10</td>
-        <td style="color:#5f6368">22/07/2026</td>
-        <td style="color:#5f6368">Kavya Singh</td>
+        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#7b1fa2" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#7b1fa2" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#7b1fa2" stroke-width="1" fill="none"></rect></svg><span class="ed">05 Dec, 01:00</span></span></td>
+        <td id="fc6"><div class="fuc"><span class="fub dg" id="fb6"><span class="fd"></span>16 Dec</span><span class="lx" id="lx6">×</span></div></td>
+        <td><span class="mc" id="mc6">Away for work until Jan.</span></td>
+        <td style="color:#5f6368">2</td><td style="color:#5f6368">27/07/2026</td><td style="color:#5f6368">Karen Gee</td>
+      </tr><tr class="ghdr"><td colspan="9" style="background:#1a73e8;padding:6px 8px">▾ First Contact (241 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">1 late</span></td></tr><tr id="row7">
+        <td class="nc">7</td><td><div class="xb">▾</div></td>
+        <td><span class="tl">Katherine's Group…</span></td>
+        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">10 Dec, 01:00</span></span></td>
+        <td id="fc7"><div class="fuc"><span class="fub dg" id="fb7"><span class="fd"></span>17 Dec</span><span class="lx" id="lx7">×</span></div></td>
+        <td><span class="mc" id="mc7">Affinity group. Responsive.</span></td>
+        <td style="color:#5f6368">10</td><td style="color:#5f6368">22/07/2026</td><td style="color:#5f6368">Kavya Singh</td>
       </tr><tr id="row8">
-        <td class="nc">8</td>
-        <td><div class="expand-btn">▾</div></td>
+        <td class="nc">8</td><td><div class="xb">▾</div></td>
         <td><span class="tl">Ximena Aguilar</span></td>
-        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#e37400" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#e37400" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#e37400" stroke-width="1" fill="none"></rect></svg><span class="email-date">07 Dec, 01:00</span></span></td>
-        <td id="fucell8"><div class="fu-cell"><span class="fu-badge db-red" id="fubadge8"><span class="fu-dot"></span>3d ago</span><span class="lost-x" id="lx8">×</span></div></td>
-        <td><span class="memo-cell empty" id="memocell8">Add memo…</span></td>
-        <td style="color:#5f6368">12</td>
-        <td style="color:#5f6368">24/04/2026</td>
-        <td style="color:#5f6368">Loubna BOUANANI</td>
+        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#e37400" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#e37400" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#e37400" stroke-width="1" fill="none"></rect></svg><span class="ed">07 Dec, 01:00</span></span></td>
+        <td id="fc8"><div class="fuc"><span class="fub dr" id="fb8"><span class="fd"></span>3d ago</span><span class="lx" id="lx8">×</span></div></td>
+        <td><span class="mc mt" id="mc8">Add memo…</span></td>
+        <td style="color:#5f6368">12</td><td style="color:#5f6368">24/04/2026</td><td style="color:#5f6368">Loubna B.</td>
       </tr></tbody>
-      </table>
+    </table>
+  </div>
+
+  <!-- Email incoming toast -->
+  <div class="et" id="etToast">
+    <div class="eti">✉️<div class="etdot"></div></div>
+    <div class="etb">
+      <div class="etf">Isabella and Jarod</div>
+      <div class="etsu">Re: Morocco honeymoon enquiry</div>
+      <div class="ett">Just now · via Gmail</div>
     </div>
   </div>
 
-  <!-- Floating: Date picker -->
-  <div class="float-panel dp-panel" id="dpPanel" style="top: 169.317px; left: 340px;">
-    <div class="dp-lbl">Set next follow-up</div>
-    <input class="dp-inp" type="text" id="dpInput" value="2025-12-14" readonly="">
-    <div class="dp-shorts">
-      <span class="dp-s" id="dp1d">+1d</span>
-      <span class="dp-s" id="dp2d">+2d</span>
-      <span class="dp-s hl" id="dp1w">+1w</span>
-      <span class="dp-s" id="dp2w">+2w</span>
-      <span class="dp-s" id="dp30d">+30d</span>
-    </div>
-    <div class="dp-foot">
-      <button class="dp-cancel">Cancel</button>
-      <button class="dp-save">Save</button>
-    </div>
-  </div>
-
-  <!-- Floating: Memo panel -->
-  <div class="float-panel memo-panel" id="memoPanel" style="top: 169.317px; left: 390px;">
-    <div class="mp-hdr">
-      <span class="mp-hdr-title" id="memoPanelTitle">Isabella and Jarod</span>
-      <span class="mp-close-btn">✕</span>
-    </div>
-    <div class="mp-body" id="memoBody">
-      <div id="memoPreviewPane" style="display: block;">
-        <div class="mp-preview-text">Honeymoon trip — boutique riads + desert.<br><span class="mp-link">zicasso.com/trips/isabella-2026</span><br>Awaiting feedback on v1.</div>
-        <div class="mp-hint">✎ Click to edit</div>
+  <!-- Weekly email overlay -->
+  <div class="wo" id="wo">
+    <div class="wc">
+      <div class="wch">
+        <div class="wcd" style="background:#ff5f57"></div>
+        <div class="wcd" style="background:#febc2e"></div>
+        <div class="wcd" style="background:#28c840"></div>
+        <div class="wcsb">📬 Weekly Follow-up Summary · Travel Collection CRM</div>
       </div>
-      <textarea class="mp-textarea" id="memoTextarea" style="display: none;">Honeymoon trip — boutique riads + desert.
+      <div class="wcb">
+        <div class="wcfr">
+          <div class="wcav">TC</div>
+          <div>
+            <div class="wcfn">Travel Collection CRM</div>
+            <div class="wcfa">noreply@travelcollection.com</div>
+          </div>
+        </div>
+        <div class="wcto">To: karen.gee@travelcollection.com</div>
+        <hr class="wcdiv">
+        <h4>👋 Hi Karen — you have 3 late follow-ups this week</h4>
+        <p>These leads haven't been followed up. Click below to action them in the CRM.</p>
+        <table class="wctable">
+          <thead><tr><th>Lead</th><th>Stage</th><th>Overdue</th></tr></thead>
+          <tbody>
+            <tr><td>Carmen Matiella ...</td><td>New Lead</td><td><span class="wbadge">2d ago</span></td></tr>
+            <tr><td>Sabrina's lead</td><td>New Lead</td><td><span class="wbadge">12d ago</span></td></tr>
+            <tr><td>Ximena Aguilar</td><td>First Contact</td><td><span class="wbadge">3d ago</span></td></tr>
+          </tbody>
+        </table>
+        <div class="wcta" id="wCta">View late follow-ups in CRM →</div>
+        <div class="wcfn2">Sent every Monday · Unsubscribe</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Date picker -->
+  <div class="fp dp" id="dpPnl" style="top: 207.458px; left: 412.222px;">
+    <div class="dpl">Set next follow-up</div>
+    <input class="dpi" id="dpi" value="14 Dec 2025" readonly="">
+    <div class="dps">
+      <span class="dpb" id="dp1d">+1d</span>
+      <span class="dpb" id="dp2d">+2d</span>
+      <span class="dpb" id="dp1w">+1w</span>
+      <span class="dpb" id="dp2w">+2w</span>
+      <span class="dpb" id="dp30">+30d</span>
+    </div>
+    <div class="dpf">
+      <button class="dpca">Cancel</button>
+      <button class="dpsv">Save</button>
+    </div>
+  </div>
+
+  <!-- Memo panel -->
+  <div class="fp mp" id="mpPnl" style="top: 202.863px; left: 668.16px;">
+    <div class="mph"><span class="mpht" id="mpTitle">Isabella and Jarod</span><span class="mpx">✕</span></div>
+    <div class="mpb">
+      <div id="mpPrev" style="display: block;">
+        <div class="mppv">Honeymoon trip — boutique riads + desert.<br><span class="mpl">zicasso.com/trips/isabella-2026</span><br>Awaiting feedback on v1.</div>
+        <div class="mph2">✎ Click to edit</div>
+      </div>
+      <textarea class="mpta" id="mpTa" style="display: none;">Honeymoon trip — boutique riads + desert.
 https://zicasso.com/trips/isabella-2026
 Awaiting feedback on v1.</textarea>
     </div>
-    <div class="mp-footer" id="memoFooter" style="display: none;">
-      <button class="mp-btn-cancel">Cancel</button>
-      <button class="mp-btn-save">Save</button>
+    <div class="mpf" id="mpFoot" style="display: none;">
+      <button class="mpca">Cancel</button>
+      <button class="mpsv">Save</button>
     </div>
   </div>
 
-  <!-- Floating: Thread picker -->
-  <div class="float-panel thread-panel" id="threadPanel" style="top: 90px; left: 240px;">
-    <div class="thread-hdr">
-      <div><h3>Open email thread</h3><div class="thread-sub">Isabella and Jarod · 2 threads</div></div>
-      <span class="thread-close">✕</span>
+  <!-- Thread picker -->
+  <div class="fp tp" id="tpPnl" style="top: 201.081px; left: 309.456px;">
+    <div class="tph">
+      <div><h3>Open email thread</h3><div class="tps">Isabella and Jarod · 2 threads</div></div>
+      <span class="tpx">✕</span>
     </div>
-    <div class="thread-list">
-      <div class="thread-item hl" id="thread1">
-        <div class="th-av" style="background:#1a73e8">KG</div>
-        <div class="th-meta">
-          <div class="th-subj">Morocco honeymoon enquiry</div>
-          <div class="th-snip">Karen Gee: Itinerary v1 attached!</div>
-          <span class="th-cnt">3 messages</span>
+    <div class="tpl">
+      <div class="tpi hl" id="th1">
+        <div class="tav" style="background:#1a73e8">KG</div>
+        <div class="tmeta">
+          <div class="tsubj">Morocco honeymoon enquiry</div>
+          <div class="tsnip">Karen Gee: Itinerary v1 attached!</div>
+          <span class="tcnt">3 messages</span>
         </div>
-        <div class="th-date">08 Dec</div>
+        <div class="tdate">08 Dec</div>
       </div>
-      <div class="thread-item" id="thread2">
-        <div class="th-av" style="background:#e37400">IJ</div>
-        <div class="th-meta">
-          <div class="th-subj">Re: Riad shortlist</div>
-          <div class="th-snip">Isabella: Riads under $300/night?</div>
-          <span class="th-cnt">2 messages</span>
+      <div class="tpi" id="th2">
+        <div class="tav" style="background:#e37400">IJ</div>
+        <div class="tmeta">
+          <div class="tsubj">Re: Riad shortlist</div>
+          <div class="tsnip">Isabella: Riads under $300/night?</div>
+          <span class="tcnt">2 messages</span>
         </div>
-        <div class="th-date">06 Dec</div>
+        <div class="tdate">06 Dec</div>
       </div>
     </div>
   </div>
 
-  <!-- Lost overlay -->
-  <div class="lost-overlay" id="lostOverlay">
-    <div class="lost-box">
-      <div class="lost-hdr"><h3>Mark as Lost</h3><p id="lostLeadName">"Sabrina's lead" will be marked as lost.</p></div>
-      <div class="lost-fields">
-        <div class="lf"><label>Lost reason</label><select id="lostReasonSel"><option value="">Select…</option><option selected="">No response</option></select></div>
-        <div class="lf"><label>Lost notes</label><textarea id="lostNotesTa">No response after multiple follow-ups.</textarea></div>
-        <div class="lf"><label>Reactivation needed</label><select><option>No</option></select></div>
+  <!-- Lost modal -->
+  <div class="lo" id="lo">
+    <div class="lb">
+      <div class="lbh"><h3>Mark as Lost</h3><p id="lname">"Sabrina's lead" will be marked as lost.</p></div>
+      <div class="lbf">
+        <div class="lfl"><label>Lost reason</label><select><option>No response</option></select></div>
+        <div class="lfl"><label>Lost notes</label><textarea>No response after multiple follow-ups.</textarea></div>
+        <div class="lfl"><label>Reactivation needed</label><select><option>No</option></select></div>
       </div>
-      <div class="lost-foot">
-        <button class="btn-cancel-l">Cancel</button>
-        <button class="btn-lost-l pressed" id="lostConfirmBtn">Mark as Lost</button>
+      <div class="lbfoot">
+        <button class="lcnl">Cancel</button>
+        <button class="llost" id="lBtn">Mark as Lost</button>
       </div>
     </div>
-  </div>
-
-  <!-- Scene transition -->
-  <div class="scene-transition" id="sceneTransition">
-    <div class="st-num" id="stNum">Scene 7 of 7</div>
-    <div class="st-title" id="stTitle">End of demo</div>
-    <div class="st-bar"></div>
   </div>
 
   <!-- Highlight ring -->
-  <div class="hl-ring" id="hlRing" style="left: 987.076px; top: 47.2847px; width: 21.9931px; height: 21.9931px;"></div>
+  <div class="hlr" id="hlr" style="left: 249.31px; top: 176.266px; width: 120.292px; height: 22.8148px;"></div>
 
-  <!-- Caption -->
-  <div class="caption-box" id="captionBox">Lead marked as lost ✓</div>
+  <!-- In-stage caption -->
+  <div class="cap" id="cap">CRM filtered — ready to action all late leads</div>
 
-  <!-- Fake cursor -->
-  <div class="cursor" id="cursor" style="left: 550px; top: 200px;">
+  <!-- Scene transition -->
+  <div class="str" id="str">
+    <div class="strn" id="strN">Scene 9 of 9</div>
+    <div class="strt" id="strT">End of demo</div>
+    <div class="strb"></div>
+  </div>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cur" style="left: 550px; top: 200px;">
     <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
       <path d="M2 2L2 18L6.5 13.5L9.5 20L11.5 19L8.5 12.5L14 12.5L2 2Z" fill="white" stroke="#333" stroke-width="1.2" stroke-linejoin="round"></path>
     </svg>
-    <div class="cursor-ring" id="cursorRing"></div>
+    <div class="cring" id="cr"></div>
   </div>
 </div>
 
 <div class="controls">
-  <button class="ctrl-btn" id="prevBtn" onclick="prevScene()">← Prev</button>
-  <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">↺ Replay</button>
-  <button class="ctrl-btn" id="nextBtn" onclick="nextScene()">Next →</button>
+  <button class="cbtn" onclick="prevS()">← Prev</button>
+  <button class="cbtn pr" id="playBtn" onclick="togglePlay()">↺ Replay</button>
+  <button class="cbtn" onclick="nextS()">Next →</button>
 </div>
 
 <script>
-// ── Data ──
-const rows = [
-  {id:1,name:'Isabella and Jarod',email:'08 Dec, 01:00',emailColor:'#1a73e8',threads:2,fu:'1d ago',fuCls:'db-red',memo:'Honeymoon trip — boutique riads…',memoCls:'',tv:20,sd:'29/04/2026',owner:'Karen Gee',lost:false},
-  {id:2,name:'Carmen Matiella ...',email:'04 Dec, 01:00',emailColor:'#1a73e8',threads:1,fu:'2d ago',fuCls:'db-red',memo:'Waiting on client dates.',memoCls:'',tv:2,sd:'31/07/2025',owner:'Reem KARMOUT...',lost:false},
-  {id:3,name:"Sabrina's lead",email:'—',emailColor:null,threads:0,fu:'12d ago',fuCls:'db-red',memo:'',memoCls:'empty',tv:'',sd:'12/08/2025',owner:'Reem KARMOUT...',lost:false},
-  {id:4,name:"Christie Wingo's c...",email:'02 Dec, 01:00',emailColor:'#1a73e8',threads:1,fu:'Tomorrow',fuCls:'db-amber',memo:'Engaged early — went quiet…',memoCls:'',tv:3,sd:'23/09/2026',owner:'Reem KARMOUT...',lost:false},
-  {id:5,name:'Adrien de Saint Ja...',email:'11 Dec, 01:00',emailColor:'#2e7d32',threads:1,fu:null,fuCls:'',memo:'Group of 35. Company retreat.',memoCls:'',tv:35,sd:'07/06/2026',owner:'Fadila AIT TALBI',lost:false},
-  {id:6,name:'Steven Goodrich',email:'05 Dec, 01:00',emailColor:'#7b1fa2',threads:1,fu:'16 Dec',fuCls:'db-green',memo:'Away for work until Jan.',memoCls:'',tv:2,sd:'27/07/2026',owner:'Karen Gee',lost:false},
+const Z = 1.35; // zoom factor — all getBCR values divided by Z for stage coords
+const stage = document.getElementById('stage');
+
+// ── Position helpers ──
+function sc(el){
+  const sr = stage.getBoundingClientRect();
+  const r  = el.getBoundingClientRect();
+  return {
+    x: (r.left - sr.left) / Z + r.width  / Z / 2,
+    y: (r.top  - sr.top)  / Z + r.height / Z / 2,
+    w: r.width  / Z,
+    h: r.height / Z
+  };
+}
+function mv(x, y){ const c=document.getElementById('cur'); c.style.left=x+'px'; c.style.top=y+'px'; }
+function click(){ const r=document.getElementById('cr'); r.classList.add('on'); setTimeout(()=>r.classList.remove('on'),380); }
+function hl(el){ const p=sc(el),r=document.getElementById('hlr'); r.style.left=(p.x-p.w/2-4)+'px'; r.style.top=(p.y-p.h/2-4)+'px'; r.style.width=(p.w+8)+'px'; r.style.height=(p.h+8)+'px'; r.classList.add('vis'); }
+function clrHl(){ document.getElementById('hlr').classList.remove('vis'); }
+function showCap(t){ const c=document.getElementById('cap'); c.textContent=t; c.classList.add('vis'); }
+function hideCap(){ document.getElementById('cap').classList.remove('vis'); }
+function showFP(id){ document.getElementById(id).classList.add('vis'); }
+function hideFP(id){ document.getElementById(id).classList.remove('vis'); }
+function hideAll(){
+  ['dpPnl','mpPnl','tpPnl'].forEach(id=>hideFP(id));
+  document.getElementById('lo').classList.remove('vis');
+  document.getElementById('wo').classList.remove('vis');
+  document.getElementById('etToast').classList.remove('vis');
+  clrHl(); hideCap();
+}
+
+// ── Table data ──
+const NL = [
+  {id:1,n:'Isabella and Jarod',  e:'08 Dec, 01:00',ec:'#1a73e8',et:2, fu:'1d ago', fc:'dr', mem:'Honeymoon trip — boutique riads…', tv:20, sd:'29/04/2026', ow:'Karen Gee'},
+  {id:2,n:'Carmen Matiella ...',  e:'04 Dec, 01:00',ec:'#1a73e8',et:1, fu:'2d ago', fc:'dr', mem:'Waiting on client dates.',        tv:2,  sd:'31/07/2025', ow:'Reem K.'},
+  {id:3,n:"Sabrina's lead",       e:null,           ec:null,    et:0, fu:'12d ago',fc:'dr', mem:'',                                 tv:'', sd:'12/08/2025', ow:'Reem K.'},
+  {id:4,n:"Christie Wingo's c...",e:'02 Dec, 01:00',ec:'#1a73e8',et:1, fu:'Tomorrow',fc:'da',mem:'Engaged early — went quiet…',    tv:3,  sd:'23/09/2026', ow:'Reem K.'},
+  {id:5,n:'Adrien de Saint Ja…', e:'11 Dec, 01:00',ec:'#2e7d32',et:1, fu:null,     fc:'',  mem:'Group of 35. Company retreat.',   tv:35, sd:'07/06/2026', ow:'Fadila A.'},
+  {id:6,n:'Steven Goodrich',      e:'05 Dec, 01:00',ec:'#7b1fa2',et:1, fu:'16 Dec', fc:'dg', mem:'Away for work until Jan.',        tv:2,  sd:'27/07/2026', ow:'Karen Gee'},
 ];
-const fcRows = [
-  {id:7,name:"Katherine's Group...",email:'10 Dec, 01:00',emailColor:'#1a73e8',threads:1,fu:'17 Dec',fuCls:'db-green',memo:'Affinity group. Responsive.',memoCls:'',tv:10,sd:'22/07/2026',owner:'Kavya Singh',lost:false},
-  {id:8,name:'Ximena Aguilar',email:'07 Dec, 01:00',emailColor:'#e37400',threads:1,fu:'3d ago',fuCls:'db-red',memo:'',memoCls:'empty',tv:12,sd:'24/04/2026',owner:'Loubna BOUANANI',lost:false},
+const FC = [
+  {id:7,n:"Katherine's Group…",  e:'10 Dec, 01:00',ec:'#1a73e8',et:1, fu:'17 Dec', fc:'dg', mem:'Affinity group. Responsive.',    tv:10, sd:'22/07/2026', ow:'Kavya Singh'},
+  {id:8,n:'Ximena Aguilar',       e:'07 Dec, 01:00',ec:'#e37400',et:1, fu:'3d ago', fc:'dr', mem:'',                                tv:12, sd:'24/04/2026', ow:'Loubna B.'},
 ];
 
-function emailHtml(r){
-  if(!r.emailColor)return'<span style="font-size:11px;color:#bdbdbd">—</span>';
-  return`<span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="${r.emailColor}" opacity=".12"/><path d="M0 2l9 6 9-6" stroke="${r.emailColor}" stroke-width="1.2" fill="none"/><rect x="0" y="0" width="18" height="14" rx="2" stroke="${r.emailColor}" stroke-width="1" fill="none"/></svg><span class="email-date">${r.email}</span>${r.threads>1?`<span style="font-size:9px;color:#9e9e9e;margin-left:2px">(${r.threads})</span>`:''}</span>`;
+function eHtml(r){
+  if(!r.ec) return '<span style="font-size:11px;color:#bdbdbd">—</span>';
+  return `<span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="${r.ec}" opacity=".12"/><path d="M0 2l9 6 9-6" stroke="${r.ec}" stroke-width="1.2" fill="none"/><rect width="18" height="14" rx="2" stroke="${r.ec}" stroke-width="1" fill="none"/></svg><span class="ed">${r.e}</span>${r.et>1?`<span style="font-size:9px;color:#9e9e9e;margin-left:2px">(${r.et})</span>`:''}</span>`;
 }
-function fuHtml(r){
-  const xBtn=`<span class="lost-x" id="lx${r.id}">×</span>`;
-  if(!r.fu)return`<div class="fu-cell"><span class="fu-none">+ Set date</span>${xBtn}</div>`;
-  return`<div class="fu-cell"><span class="fu-badge ${r.fuCls}" id="fubadge${r.id}"><span class="fu-dot"></span>${r.fu}</span>${xBtn}</div>`;
+function fuHtml(r, overrideFu, overrideFc){
+  const fu = overrideFu !== undefined ? overrideFu : r.fu;
+  const fc = overrideFc !== undefined ? overrideFc : r.fc;
+  const x = `<span class="lx" id="lx${r.id}">×</span>`;
+  if(!fu) return `<div class="fuc"><span class="fn">+ Set date</span>${x}</div>`;
+  return `<div class="fuc"><span class="fub ${fc}" id="fb${r.id}"><span class="fd"></span>${fu}</span>${x}</div>`;
+}
+function memHtml(r){
+  if(!r.mem) return `<span class="mc mt" id="mc${r.id}">Add memo…</span>`;
+  return `<span class="mc" id="mc${r.id}">${r.mem}</span>`;
 }
 
-function buildTable(filterLate=false, sabrinaLost=false){
-  const tbody=document.getElementById('tableBody');
-  let html='';
-  let n=1;
-  const nlRows = filterLate ? rows.filter(r=>r.fuCls==='db-red') : rows;
-  const fcFiltered = filterLate ? fcRows.filter(r=>r.fuCls==='db-red') : fcRows;
+function buildTable(filterLate=false, sabrinaLost=false, r1Override=null){
+  let nlRows = filterLate ? NL.filter(r=>r.fc==='dr') : NL;
+  let fcRows = filterLate ? FC.filter(r=>r.fc==='dr') : FC;
+  let html=''; let n=1;
 
   if(nlRows.length){
-    html+=`<tr class="grp-hdr"><td colspan="9" style="background:#e8a000;padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ New Lead (160 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">3 late</span></td></tr>`;
+    html+=`<tr class="ghdr"><td colspan="9" style="background:#e8a000;padding:6px 8px">▾ New Lead (160 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">3 late</span></td></tr>`;
     nlRows.forEach(r=>{
-      const isLost = sabrinaLost && r.id===3;
-      html+=`<tr id="row${r.id}" class="${isLost?'row-lost':r.fuCls==='db-red'?'row-hl-red':''}">
-        <td class="nc">${n++}</td>
-        <td><div class="expand-btn">▾</div></td>
-        <td><span class="tl ${isLost?'lost':''}">${r.name}</span>${isLost?'<span class="lost-tag">Lost</span>':''}</td>
-        <td>${emailHtml(r)}</td>
-        <td id="fucell${r.id}">${isLost?'<span style="font-size:11px;color:#bdbdbd">—</span>':fuHtml(r)}</td>
-        <td><span class="memo-cell ${r.memoCls}" id="memocell${r.id}">${r.memo||'Add memo…'}</span></td>
-        <td style="color:#5f6368">${r.tv}</td>
-        <td style="color:#5f6368">${r.sd}</td>
-        <td style="color:#5f6368">${r.owner}</td>
+      const lost = sabrinaLost && r.id===3;
+      const fuO = r1Override && r.id===1 ? r1Override.fu : undefined;
+      const fcO = r1Override && r.id===1 ? r1Override.fc : undefined;
+      html+=`<tr id="row${r.id}" class="${lost?'rlost':r.fc==='dr'?'rrl':''}">
+        <td class="nc">${n++}</td><td><div class="xb">▾</div></td>
+        <td><span class="tl ${lost?'lost':''}">${r.n}</span>${lost?'<span class="ltag">Lost</span>':''}</td>
+        <td>${eHtml(r)}</td>
+        <td id="fc${r.id}">${lost?'<span style="font-size:11px;color:#bdbdbd">—</span>':fuHtml(r,fuO,fcO)}</td>
+        <td>${memHtml(r)}</td>
+        <td style="color:#5f6368">${r.tv}</td><td style="color:#5f6368">${r.sd}</td><td style="color:#5f6368">${r.ow}</td>
       </tr>`;
     });
   }
-
-  if(!filterLate&&fcFiltered.length){
-    html+=`<tr class="grp-hdr"><td colspan="9" style="background:#1a73e8;padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ First Contact (241 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">1 late</span></td></tr>`;
-    fcFiltered.forEach(r=>{
+  if(!filterLate && fcRows.length){
+    html+=`<tr class="ghdr"><td colspan="9" style="background:#1a73e8;padding:6px 8px">▾ First Contact (241 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">1 late</span></td></tr>`;
+    fcRows.forEach(r=>{
       html+=`<tr id="row${r.id}">
-        <td class="nc">${n++}</td>
-        <td><div class="expand-btn">▾</div></td>
-        <td><span class="tl">${r.name}</span></td>
-        <td>${emailHtml(r)}</td>
-        <td id="fucell${r.id}">${fuHtml(r)}</td>
-        <td><span class="memo-cell ${r.memoCls}" id="memocell${r.id}">${r.memo||'Add memo…'}</span></td>
-        <td style="color:#5f6368">${r.tv}</td>
-        <td style="color:#5f6368">${r.sd}</td>
-        <td style="color:#5f6368">${r.owner}</td>
+        <td class="nc">${n++}</td><td><div class="xb">▾</div></td>
+        <td><span class="tl">${r.n}</span></td>
+        <td>${eHtml(r)}</td>
+        <td id="fc${r.id}">${fuHtml(r)}</td>
+        <td>${memHtml(r)}</td>
+        <td style="color:#5f6368">${r.tv}</td><td style="color:#5f6368">${r.sd}</td><td style="color:#5f6368">${r.ow}</td>
       </tr>`;
     });
   }
-
-  tbody.innerHTML=html;
+  document.getElementById('tb').innerHTML = html;
 }
-
 buildTable();
 
-// ── State ──
-let currentScene = 0;
-let playing = true;
-let sceneTimer = null;
-let stepTimer = null;
-
+// ── Scene engine ──
 const SCENES = [
   {
-    label: '📋  Your lead pipeline — color-coded urgency at a glance',
-    duration: 3200,
-    setup: ()=>{
-      buildTable();
-      hideAll();
-      moveCursor(80,60);
+    name:'Pipeline overview',
+    label:'📋  Your lead pipeline — color-coded urgency at a glance',
+    dur: 3000,
+    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); mv(100,80); },
+    steps:[]
+  },
+  {
+    name:'"Late follow-ups" filter',
+    label:'🔴  "Late follow-ups" filter — focus only on what needs action now',
+    dur: 4200,
+    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); },
+    steps:[
+      {t:700,  fn(){ const e=document.getElementById('chk'); const p=sc(e); mv(p.x,p.y); hl(e); }},
+      {t:1500, fn(){ click(); document.getElementById('chk').classList.add('on'); setTimeout(()=>buildTable(true),150); }},
+      {t:2400, fn(){ mv(500,280); clrHl(); showCap('3 leads shown — all overdue'); }},
+    ]
+  },
+  {
+    name:'Rescheduling a date',
+    label:'📅  Rescheduling a follow-up — date picker with quick shortcuts',
+    dur: 5800,
+    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); },
+    steps:[
+      {t:600,  fn(){ const e=document.getElementById('fb1'); if(!e)return; const p=sc(e); mv(p.x,p.y); hl(e); }},
+      {t:1400, fn(){ click(); const e=document.getElementById('fb1'); if(!e)return; const p=sc(e); const dp=document.getElementById('dpPnl'); dp.style.left=(p.x-p.w/2)+'px'; dp.style.top=(p.y+p.h/2+6)+'px'; showFP('dpPnl'); clrHl(); }},
+      {t:2300, fn(){ const e=document.getElementById('dp1w'); const p=sc(e); mv(p.x,p.y); e.classList.add('hl'); }},
+      {t:3100, fn(){ click(); document.getElementById('dpi').value='20 Dec 2025'; showCap('+1 week selected'); }},
+      {t:4100, fn(){ const e=document.querySelector('.dpsv'); const p=sc(e); mv(p.x,p.y); document.getElementById('dp1w').classList.remove('hl'); }},
+      {t:4800, fn(){ click(); hideFP('dpPnl'); const fc=document.getElementById('fc1'); if(fc) fc.innerHTML=fuHtml(NL[0],'20 Dec','dg'); showCap('Date saved — badge turns green ✓'); }},
+    ]
+  },
+  {
+    name:'Email received — auto-push',
+    label:'📨  Customer replies — follow-up date auto-pushed, zero action needed',
+    dur: 5800,
+    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); },
+    steps:[
+      {t:700,  fn(){ showCap('Customer just replied to Isabella\'s thread…'); document.getElementById('etToast').classList.add('vis'); }},
+      {t:2200, fn(){ const e=document.getElementById('fb1'); if(!e)return; const p=sc(e); mv(p.x,p.y); showCap('CRM detects the inbound email automatically…'); }},
+      {t:3400, fn(){
+        document.getElementById('etToast').classList.remove('vis');
+        const fc=document.getElementById('fc1'); if(fc) fc.innerHTML=fuHtml(NL[0],'In 7d','dg');
+        const ed=document.querySelector('#row1 .ed'); if(ed) ed.textContent='13 Dec, now';
+        setTimeout(()=>{ const e=document.getElementById('fb1'); if(e) hl(e); },100);
+        showCap('Next follow-up pushed +7 days — no action needed ✓');
+      }},
+      {t:5000, fn(){ clrHl(); }},
+    ]
+  },
+  {
+    name:'Advisor memo',
+    label:'📝  Advisor memo — preview with clickable links, click to edit',
+    dur: 6000,
+    setup(){
+      buildTable(); hideAll(); document.getElementById('chk').classList.remove('on');
+      document.getElementById('mpPrev').style.display='block';
+      document.getElementById('mpTa').style.display='none';
+      document.getElementById('mpFoot').style.display='none';
     },
-    steps:[]
-  },
-  {
-    label: '🔴  "Late follow-ups" filter — focus on what needs action now',
-    duration: 4000,
-    setup: ()=>{ buildTable(); hideAll(); },
     steps:[
-      {t:600, fn:()=>{ const chkC=getEl('chkBox'); moveCursor(chkC.x, chkC.y); highlight('chkBox'); }},
-      {t:1400, fn:()=>{ click(); document.getElementById('chkBox').classList.add('checked'); setTimeout(()=>buildTable(true),120); }},
-      {t:2200, fn:()=>{ moveCursor(600,300); clearHighlight(); showCaption('Only 3 leads shown — all overdue'); }},
+      {t:700,  fn(){ const e=document.getElementById('mc1'); if(!e)return; const p=sc(e); mv(p.x,p.y); hl(e); }},
+      {t:1500, fn(){ click(); const e=document.getElementById('mc1'); if(!e)return; const p=sc(e); const mp=document.getElementById('mpPnl'); mp.style.left=(p.x)+'px'; mp.style.top=(p.y+p.h/2+6)+'px'; showFP('mpPnl'); clrHl(); showCap('Opens in preview — links are clickable'); }},
+      {t:3000, fn(){ const e=document.querySelector('.mpl'); if(!e)return; const p=sc(e); mv(p.x,p.y); showCap('Click a link → opens Zicasso / Drive / Kimkim'); }},
+      {t:4200, fn(){ const e=document.getElementById('mpPnl'); const p=sc(e); mv(p.x,p.y+20); showCap('Click anywhere else → switches to edit mode'); }},
+      {t:5000, fn(){ click(); document.getElementById('mpPrev').style.display='none'; document.getElementById('mpTa').style.display='block'; document.getElementById('mpFoot').style.display='flex'; }},
     ]
   },
   {
-    label: '📅  Rescheduling a follow-up — date picker with quick shortcuts',
-    duration: 5500,
-    setup: ()=>{ buildTable(false); hideAll(); },
+    name:'Email thread picker',
+    label:'📧  Multiple email threads — pick which one to open in Gmail',
+    dur: 5000,
+    setup(){
+      buildTable(); hideAll(); document.getElementById('chk').classList.remove('on');
+      document.getElementById('mpPrev').style.display='block';
+      document.getElementById('mpTa').style.display='none';
+      document.getElementById('mpFoot').style.display='none';
+    },
     steps:[
-      {t:500, fn:()=>{
-        const el=document.getElementById('fubadge1');
-        if(!el)return;
-        const r=el.getBoundingClientRect();
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        highlightEl(el);
-      }},
-      {t:1300, fn:()=>{ click(); showFloating('dpPanel', 340, getRowY(1)-20); }},
-      {t:2200, fn:()=>{
-        const el=document.getElementById('dp1w');
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=el.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        el.classList.add('hl');
-      }},
-      {t:3000, fn:()=>{ click(); document.getElementById('dpInput').value='2025-12-20'; showCaption('+1 week selected'); }},
-      {t:4000, fn:()=>{
-        const save=document.querySelector('.dp-save');
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=save.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-      }},
-      {t:4700, fn:()=>{ click(); hidePanel('dpPanel'); showCaption('Date saved — badge updates green'); updateFUBadge(1,'20 Dec','db-green'); clearHighlight(); }},
+      {t:700,  fn(){ const e=document.querySelector('#row1 .ec'); if(!e)return; const p=sc(e); mv(p.x,p.y); hl(e); showCap('Isabella has 2 threads — click to choose'); }},
+      {t:1600, fn(){ click(); const e=document.querySelector('#row1 .ec'); if(!e)return; const p=sc(e); const tp=document.getElementById('tpPnl'); tp.style.left=(p.x)+'px'; tp.style.top=(p.y+p.h/2+6)+'px'; showFP('tpPnl'); clrHl(); }},
+      {t:2600, fn(){ const e=document.getElementById('th1'); const p=sc(e); mv(p.x,p.y); e.classList.add('hl'); showCap('Select the thread to open in Gmail'); }},
+      {t:3600, fn(){ click(); hideFP('tpPnl'); showCap('Thread opens in Gmail ✓'); }},
     ]
   },
   {
-    label: '📝  Advisor memo — preview with clickable links, click to edit',
-    duration: 5800,
-    setup: ()=>{ buildTable(false); hideAll(); resetMemo(); },
+    name:'Close as Lost',
+    label:'❌  Close as Lost — reason, notes, optional reactivation',
+    dur: 6500,
+    setup(){
+      buildTable(); hideAll(); document.getElementById('chk').classList.remove('on');
+      const lx=document.getElementById('lx3'); if(lx) lx.style.visibility='visible';
+    },
     steps:[
-      {t:600, fn:()=>{
-        const el=document.getElementById('memocell1');
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=el.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        highlightEl(el);
-      }},
-      {t:1300, fn:()=>{ click(); showFloating('memoPanel', 390, getRowY(1)-20); showCaption('Opens in preview — links are clickable'); }},
-      {t:2800, fn:()=>{
-        const link=document.querySelector('.mp-link');
-        if(!link)return;
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=link.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        clearHighlight();
-        showCaption('Click a link → opens in Gmail/Zicasso');
-      }},
-      {t:4000, fn:()=>{
-        const preview=document.getElementById('memoPreviewPane');
-        const textarea=document.getElementById('memoTextarea');
-        const footer=document.getElementById('memoFooter');
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const panelEl=document.getElementById('memoPanel');
-        const r=panelEl.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+60, bcrToCSS(r.top-sr.top)+55);
-        showCaption('Click anywhere else → switches to edit mode');
-      }},
-      {t:4800, fn:()=>{
-        click();
-        document.getElementById('memoPreviewPane').style.display='none';
-        document.getElementById('memoTextarea').style.display='block';
-        document.getElementById('memoFooter').style.display='flex';
-      }},
+      {t:600,  fn(){ const e=document.getElementById('lx3'); if(!e)return; const p=sc(e); mv(p.x,p.y); showCap('Hover a row → × appears — click to close as lost'); }},
+      {t:1600, fn(){ click(); document.getElementById('lo').classList.add('vis'); }},
+      {t:2500, fn(){ const e=document.querySelector('.lfl select'); if(!e)return; const p=sc(e); mv(p.x,p.y); showCap('Select the lost reason'); }},
+      {t:3500, fn(){ const e=document.getElementById('lBtn'); const p=sc(e); mv(p.x,p.y); showCap('Confirm — lead removed from pipeline'); }},
+      {t:4400, fn(){ click(); document.getElementById('lo').classList.remove('vis'); setTimeout(()=>{ buildTable(false,true); const lx=document.getElementById('lx3'); if(lx) lx.style.visibility='visible'; },200); showCap('Lead marked as lost ✓'); }},
     ]
   },
   {
-    label: '📧  Multiple email threads — pick which one to open in Gmail',
-    duration: 4800,
-    setup: ()=>{ buildTable(false); hideAll(); resetMemo(); },
+    name:'Weekly notifications',
+    label:'📬  Every Monday — advisors get a late follow-up summary by email',
+    dur: 6200,
+    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); },
     steps:[
-      {t:600, fn:()=>{
-        const emailCell=document.querySelector('#row1 .email-cell');
-        if(!emailCell)return;
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=emailCell.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        highlightEl(emailCell);
-        showCaption('Isabella has 2 threads — click to choose');
-      }},
-      {t:1500, fn:()=>{ click(); showFloating('threadPanel', 240, 90); clearHighlight(); }},
-      {t:2500, fn:()=>{
-        const t1=document.getElementById('thread1');
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=t1.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        t1.classList.add('hl');
-        showCaption('Select the thread to open in Gmail');
-      }},
-      {t:3500, fn:()=>{ click(); hidePanel('threadPanel'); showCaption('Thread opens in Gmail'); }},
+      {t:700,  fn(){ document.getElementById('wo').classList.add('vis'); showCap('Weekly email lands in the advisor\'s inbox'); }},
+      {t:2400, fn(){ const e=document.getElementById('wCta'); const p=sc(e); mv(p.x,p.y); showCap('One click → CRM filtered to late follow-ups'); }},
+      {t:3500, fn(){ click(); }},
+      {t:4000, fn(){ document.getElementById('wo').classList.remove('vis'); buildTable(true); showCap('CRM filtered — ready to action all late leads'); }},
     ]
   },
   {
-    label: '❌  Close as Lost — reason, notes, optional reactivation',
-    duration: 6200,
-    setup: ()=>{ buildTable(false); hideAll(); resetMemo(); showLostX(3); },
-    steps:[
-      {t:500, fn:()=>{
-        const lx=document.getElementById('lx3');
-        if(!lx)return;
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=lx.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        showCaption('Hover shows the × — click to close as lost');
-      }},
-      {t:1400, fn:()=>{ click(); document.getElementById('lostOverlay').classList.add('visible'); }},
-      {t:2300, fn:()=>{
-        const sel=document.getElementById('lostReasonSel');
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=sel.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        showCaption('Select the lost reason');
-      }},
-      {t:3200, fn:()=>{
-        const btn=document.getElementById('lostConfirmBtn');
-        const sr=document.getElementById('stage').getBoundingClientRect();
-        const r=btn.getBoundingClientRect();
-        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
-        showCaption('Confirm — lead disappears from pipeline');
-      }},
-      {t:4200, fn:()=>{
-        click();
-        document.getElementById('lostConfirmBtn').classList.add('pressed');
-        setTimeout(()=>{
-          document.getElementById('lostOverlay').classList.remove('visible');
-          buildTable(false, true);
-          showLostX(3);
-        }, 350);
-        showCaption('Lead marked as lost ✓');
-      }},
-    ]
-  },
-  {
-    label: '✅  That\'s the full flow — fast, clean, no friction',
-    duration: 3500,
-    setup: ()=>{ buildTable(false, true); hideAll(); moveCursor(550, 200); },
+    name:'End of demo',
+    label:'✅  That\'s the full flow — structured, visible, zero friction',
+    dur: 3000,
+    setup(){ buildTable(false,true); hideAll(); mv(550,200); },
     steps:[]
   },
 ];
 
-// ── Helpers ──
-const ZOOM = 1.35; // zoom factor applied to .stage — divide getBCR values to get CSS coords
-function bcrToCSS(val){ return val / ZOOM; }
-function getEl(id){ const el=document.getElementById(id); const sr=document.getElementById('stage').getBoundingClientRect(); const r=el.getBoundingClientRect(); return {x:bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, y:bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2, el}; }
-function getRowY(id){ const el=document.getElementById('row'+id); if(!el)return 200; const sr=document.getElementById('stage').getBoundingClientRect(); const r=el.getBoundingClientRect(); return bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2; }
+// ── Playback ──
+let cur = 0, playing = true, mainTimer = null;
 
-function moveCursor(x,y){
-  const cur=document.getElementById('cursor');
-  cur.style.left=x+'px';
-  cur.style.top=y+'px';
+function mkDots(){
+  const d = document.getElementById('dots');
+  d.innerHTML = SCENES.map((_,i)=>`<div class="sdot" id="dot${i}"></div>`).join('');
 }
-function click(){
-  const ring=document.getElementById('cursorRing');
-  ring.classList.add('click');
-  setTimeout(()=>ring.classList.remove('click'),400);
-}
-function showFloating(id, x, y){
-  const el=document.getElementById(id);
-  el.style.left=x+'px';
-  el.style.top=y+'px';
-  el.classList.add('visible');
-}
-function hidePanel(id){ document.getElementById(id).classList.remove('visible'); }
-function hideAll(){
-  ['dpPanel','memoPanel','threadPanel'].forEach(id=>hidePanel(id));
-  document.getElementById('lostOverlay').classList.remove('visible');
-  clearHighlight();
-  hideCaption();
-}
-function showCaption(txt){
-  const el=document.getElementById('captionBox');
-  el.textContent=txt;
-  el.classList.add('visible');
-}
-function hideCaption(){ document.getElementById('captionBox').classList.remove('visible'); }
-function highlight(id){
-  const el=document.getElementById(id);
-  const sr=document.getElementById('stage').getBoundingClientRect();
-  const r=el.getBoundingClientRect();
-  const ring=document.getElementById('hlRing');
-  ring.style.left=(bcrToCSS(r.left-sr.left)-4)+'px';
-  ring.style.top=(bcrToCSS(r.top-sr.top)-4)+'px';
-  ring.style.width=(bcrToCSS(r.width)+8)+'px';
-  ring.style.height=(bcrToCSS(r.height)+8)+'px';
-  ring.classList.add('visible');
-}
-function highlightEl(el, sr){
-  const r=el.getBoundingClientRect();
-  const ring=document.getElementById('hlRing');
-  ring.style.left=(bcrToCSS(r.left-sr.left)-4)+'px';
-  ring.style.top=(bcrToCSS(r.top-sr.top)-4)+'px';
-  ring.style.width=(bcrToCSS(r.width)+8)+'px';
-  ring.style.height=(bcrToCSS(r.height)+8)+'px';
-  ring.classList.add('visible');
-}
-function clearHighlight(){ document.getElementById('hlRing').classList.remove('visible'); }
-function showLostX(id){ const el=document.getElementById('lx'+id); if(el)el.style.visibility='visible'; }
-function updateFUBadge(id, label, cls){
-  const cell=document.getElementById('fucell'+id);
-  if(cell) cell.innerHTML=`<div class="fu-cell"><span class="fu-badge ${cls}" id="fubadge${id}"><span class="fu-dot"></span>${label}</span><span class="lost-x" id="lx${id}">×</span></div>`;
-}
-function resetMemo(){
-  document.getElementById('memoPreviewPane').style.display='block';
-  document.getElementById('memoTextarea').style.display='none';
-  document.getElementById('memoFooter').style.display='none';
-}
+mkDots();
 
-// ── Scene engine ──
-function buildDots(){
-  const c=document.getElementById('sceneDots');
-  c.innerHTML=SCENES.map((_,i)=>`<div class="sdot" id="sdot${i}"></div>`).join('');
-}
-buildDots();
-
-function updateUI(){
-  const s=SCENES[currentScene];
+function updUI(){
   SCENES.forEach((_,i)=>{
-    const d=document.getElementById('sdot'+i);
-    d.className='sdot'+(i===currentScene?' on':i<currentScene?' done':'');
+    const d=document.getElementById('dot'+i);
+    d.className='sdot'+(i===cur?' on':i<cur?' done':'');
   });
-  document.getElementById('sceneNum').textContent=String(currentScene+1).padStart(2,'0')+' / '+String(SCENES.length).padStart(2,'0');
-  document.getElementById('progressFill').style.width=((currentScene+1)/SCENES.length*100)+'%';
-  const cap=document.getElementById('sceneCaption');
-  cap.textContent=s.label;
-  cap.classList.add('visible');
+  document.getElementById('snum').textContent=String(cur+1).padStart(2,'0')+' / '+String(SCENES.length).padStart(2,'0');
+  document.getElementById('pf').style.width=((cur+1)/SCENES.length*100)+'%';
+  const cap=document.getElementById('sc');
+  cap.textContent=SCENES[cur].label;
+  cap.classList.add('vis');
 }
 
-const SCENE_NAMES = [
-  'Pipeline overview',
-  '"Late follow-ups" filter',
-  'Rescheduling a date',
-  'Advisor memo',
-  'Email thread picker',
-  'Close as Lost',
-  'End of demo'
-];
-
-function showTransition(idx, then){
-  const el = document.getElementById('sceneTransition');
-  document.getElementById('stNum').textContent = 'Scene '+(idx+1)+' of '+SCENES.length;
-  document.getElementById('stTitle').textContent = SCENE_NAMES[idx]||'';
-  el.classList.add('visible');
-  setTimeout(()=>{
-    el.classList.remove('visible');
-    setTimeout(then, 380);
-  }, 1100);
+function showTransition(idx, cb){
+  const el=document.getElementById('str');
+  document.getElementById('strN').textContent='Scene '+(idx+1)+' of '+SCENES.length;
+  document.getElementById('strT').textContent=SCENES[idx].name;
+  el.classList.add('vis');
+  setTimeout(()=>{ el.classList.remove('vis'); setTimeout(cb,360); }, 1100);
 }
 
-function runScene(idx, skipTransition){
-  currentScene=idx;
-  updateUI();
-  const s=SCENES[idx];
+function runScene(idx, skipTrans){
+  cur = idx;
+  updUI();
+  clearTimeout(mainTimer);
+  const s = SCENES[idx];
 
-  clearTimeout(stepTimer);
-  clearTimeout(sceneTimer);
-
-  if(skipTransition){
+  const start = () => {
     s.setup();
-    s.steps.forEach(step=>{ setTimeout(step.fn, step.t); });
+    s.steps.forEach(step => setTimeout(step.fn, step.t));
     if(playing){
-      sceneTimer=setTimeout(()=>{
-        if(currentScene<SCENES.length-1) runScene(currentScene+1);
+      mainTimer = setTimeout(()=>{
+        if(cur < SCENES.length-1) runScene(cur+1, false);
         else { playing=false; document.getElementById('playBtn').textContent='↺ Replay'; }
-      }, s.duration);
+      }, s.dur);
     }
-  } else {
-    showTransition(idx, ()=>{
-      s.setup();
-      s.steps.forEach(step=>{ setTimeout(step.fn, step.t); });
-      if(playing){
-        sceneTimer=setTimeout(()=>{
-          if(currentScene<SCENES.length-1) runScene(currentScene+1);
-          else { playing=false; document.getElementById('playBtn').textContent='↺ Replay'; }
-        }, s.duration);
-      }
-    });
-  }
+  };
+
+  if(skipTrans) start();
+  else showTransition(idx, start);
 }
 
 function togglePlay(){
-  const btn=document.getElementById('playBtn');
-  if(document.getElementById('playBtn').textContent==='↺ Replay'){
-    playing=true;
-    runScene(0, false);
-    btn.textContent='⏸ Pause';
-    return;
+  const btn = document.getElementById('playBtn');
+  if(btn.textContent === '↺ Replay'){
+    playing=true; btn.textContent='⏸ Pause'; runScene(0, false); return;
   }
-  playing=!playing;
+  playing = !playing;
+  btn.textContent = playing ? '⏸ Pause' : '▶ Play';
   if(playing){
-    btn.textContent='⏸ Pause';
-    const remaining=SCENES[currentScene].duration;
-    sceneTimer=setTimeout(()=>{
-      if(currentScene<SCENES.length-1) runScene(currentScene+1);
-    }, remaining/2);
+    mainTimer = setTimeout(()=>{ if(cur<SCENES.length-1) runScene(cur+1,false); }, SCENES[cur].dur/2);
   } else {
-    btn.textContent='▶ Play';
-    clearTimeout(sceneTimer);
+    clearTimeout(mainTimer);
   }
 }
-function prevScene(){ clearTimeout(sceneTimer); if(currentScene>0) runScene(currentScene-1, true); }
-function nextScene(){ clearTimeout(sceneTimer); if(currentScene<SCENES.length-1) runScene(currentScene+1, true); }
+function prevS(){ clearTimeout(mainTimer); if(cur>0) runScene(cur-1, true); }
+function nextS(){ clearTimeout(mainTimer); if(cur<SCENES.length-1) runScene(cur+1, true); }
 
-// Start
-setTimeout(()=>runScene(0, false), 400);
+setTimeout(()=>runScene(0, false), 500);
 </script>
 
 
