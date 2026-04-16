@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!-- saved from url=(0060)file:///Users/ihabelalami/Downloads/crm_animated_demo_2.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Travel Collection CRM — Feature Demo</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
@@ -11,22 +11,22 @@
 body{font-family:'DM Sans',system-ui,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:32px 16px 48px}
 
 /* ── Header ── */
-.demo-header{width:100%;max-width:1100px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.demo-header{width:100%;max-width:1400px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .demo-title{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#5f6680}
 .demo-logo{font-size:13px;font-weight:600;color:#1a73e8;letter-spacing:.04em}
 
 /* ── Scene label ── */
-.scene-bar{width:100%;max-width:1100px;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.scene-bar{width:100%;max-width:1400px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
 .scene-dots{display:flex;gap:6px}
 .sdot{width:8px;height:8px;border-radius:50%;background:#2a2d3a;transition:background .3s}
 .sdot.on{background:#1a73e8}
 .sdot.done{background:#2e5fa3}
-.scene-caption{flex:1;font-size:13px;color:#9ba3c0;font-weight:400;opacity:0;transform:translateY(4px);transition:opacity .35s,transform .35s}
+.scene-caption{width:100%;max-width:1400px;font-size:22px;color:#e8eaf0;font-weight:600;letter-spacing:-.01em;opacity:0;transform:translateY(6px);transition:opacity .4s,transform .4s;text-align:center;margin-bottom:6px;min-height:32px}
 .scene-caption.visible{opacity:1;transform:translateY(0)}
 .scene-num{font-family:'DM Mono',monospace;font-size:11px;color:#3a3f52;letter-spacing:.06em}
 
 /* ── Stage ── */
-.stage{position:relative;width:100%;max-width:1100px;border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05)}
+.stage{position:relative;width:100%;max-width:1400px;zoom:1.35;border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05)}
 
 /* ── CRM chrome ── */
 .crm{background:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:13px;color:#202124}
@@ -132,6 +132,14 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
 .btn-lost-l{padding:7px 16px;border-radius:5px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:500}
 .btn-lost-l.pressed{background:#a82020}
 
+
+/* ── Scene transition card ── */
+.scene-transition{position:absolute;inset:0;z-index:180;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0f1117;opacity:0;pointer-events:none;transition:opacity .35s}
+.scene-transition.visible{opacity:1;pointer-events:auto}
+.st-num{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#1a73e8;font-weight:500}
+.st-title{font-size:28px;font-weight:600;color:#e8eaf0;letter-spacing:-.02em;text-align:center;padding:0 40px}
+.st-bar{width:48px;height:3px;background:#1a73e8;border-radius:3px;margin-top:4px}
+
 /* ── Fake cursor ── */
 .cursor{position:absolute;z-index:200;pointer-events:none;transition:left .55s cubic-bezier(.4,0,.2,1),top .55s cubic-bezier(.4,0,.2,1);will-change:left,top}
 .cursor svg{filter:drop-shadow(1px 2px 3px rgba(0,0,0,.35))}
@@ -139,7 +147,7 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
 .cursor-ring.click{transform:scale(1)}
 
 /* ── Caption overlay ── */
-.caption-box{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(15,17,23,.88);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px 18px;font-size:13px;color:#e8eaf0;white-space:nowrap;backdrop-filter:blur(8px);z-index:150;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.caption-box{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);background:rgba(10,12,20,.92);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 28px;font-size:16px;font-weight:500;color:#ffffff;white-space:nowrap;backdrop-filter:blur(12px);z-index:150;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 6px 28px rgba(0,0,0,.5);letter-spacing:.01em}
 .caption-box.visible{opacity:1}
 .caption-icon{margin-right:6px;font-size:14px}
 
@@ -148,7 +156,7 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
 .hl-ring.visible{opacity:1}
 
 /* ── Progress & controls ── */
-.controls{width:100%;max-width:1100px;margin-top:20px;display:flex;align-items:center;justify-content:center;gap:16px}
+.controls{width:100%;max-width:1400px;margin-top:20px;display:flex;align-items:center;justify-content:center;gap:16px}
 .ctrl-btn{padding:8px 20px;border-radius:20px;border:1px solid #2a2d3a;background:#1a1d26;color:#9ba3c0;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
 .ctrl-btn:hover{background:#23283a;color:#e8eaf0;border-color:#3a3f52}
 .ctrl-btn.primary{background:#1a73e8;border-color:#1a73e8;color:#fff}
@@ -165,11 +173,11 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
 </div>
 
 <div class="scene-bar">
-  <div class="scene-dots" id="sceneDots"></div>
-  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-  <div class="scene-num" id="sceneNum">01 / 07</div>
+  <div class="scene-dots" id="sceneDots"><div class="sdot done" id="sdot0"></div><div class="sdot done" id="sdot1"></div><div class="sdot done" id="sdot2"></div><div class="sdot done" id="sdot3"></div><div class="sdot done" id="sdot4"></div><div class="sdot done" id="sdot5"></div><div class="sdot on" id="sdot6"></div></div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width: 100%;"></div></div>
+  <div class="scene-num" id="sceneNum">07 / 07</div>
 </div>
-<div class="scene-caption" id="sceneCaption"></div>
+<div class="scene-caption visible" id="sceneCaption">✅  That's the full flow — fast, clean, no friction</div>
 
 <div class="stage" id="stage">
   <!-- CRM UI -->
@@ -185,12 +193,12 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
       <select class="grp-sel"><option>Lead Stage</option></select>
       <div class="spacer"></div>
       <div class="chk-wrap">
-        <div class="chk-box" id="chkBox"></div>
+        <div class="chk-box checked" id="chkBox"></div>
         <span>Late follow-ups</span>
       </div>
       <button class="tb-btn">New</button>
       <button class="tb-btn">Refresh</button>
-      <input class="search-box" placeholder="Search in this list…"/>
+      <input class="search-box" placeholder="Search in this list…">
     </div>
     <div class="pipeline">
       <div class="pip-stage" style="background:#e8a000"><span style="font-weight:600;margin-right:3px">160</span>New Lead<span class="pip-wr">$101.4K W.R</span><span class="pip-late">3 late</span></div>
@@ -214,19 +222,99 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
             <th style="min-width:95px">Sales Owner</th>
           </tr>
         </thead>
-        <tbody id="tableBody"></tbody>
+        <tbody id="tableBody"><tr class="grp-hdr"><td colspan="9" style="background:#e8a000;padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ New Lead (160 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">3 late</span></td></tr><tr id="row1" class="row-hl-red">
+        <td class="nc">1</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl ">Isabella and Jarod</span></td>
+        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="email-date">08 Dec, 01:00</span><span style="font-size:9px;color:#9e9e9e;margin-left:2px">(2)</span></span></td>
+        <td id="fucell1"><div class="fu-cell"><span class="fu-badge db-red" id="fubadge1"><span class="fu-dot"></span>1d ago</span><span class="lost-x" id="lx1">×</span></div></td>
+        <td><span class="memo-cell " id="memocell1">Honeymoon trip — boutique riads…</span></td>
+        <td style="color:#5f6368">20</td>
+        <td style="color:#5f6368">29/04/2026</td>
+        <td style="color:#5f6368">Karen Gee</td>
+      </tr><tr id="row2" class="row-hl-red">
+        <td class="nc">2</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl ">Carmen Matiella ...</span></td>
+        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="email-date">04 Dec, 01:00</span></span></td>
+        <td id="fucell2"><div class="fu-cell"><span class="fu-badge db-red" id="fubadge2"><span class="fu-dot"></span>2d ago</span><span class="lost-x" id="lx2">×</span></div></td>
+        <td><span class="memo-cell " id="memocell2">Waiting on client dates.</span></td>
+        <td style="color:#5f6368">2</td>
+        <td style="color:#5f6368">31/07/2025</td>
+        <td style="color:#5f6368">Reem KARMOUT...</td>
+      </tr><tr id="row3" class="row-lost">
+        <td class="nc">3</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl lost">Sabrina's lead</span><span class="lost-tag">Lost</span></td>
+        <td><span style="font-size:11px;color:#bdbdbd">—</span></td>
+        <td id="fucell3"><span style="font-size:11px;color:#bdbdbd">—</span></td>
+        <td><span class="memo-cell empty" id="memocell3">Add memo…</span></td>
+        <td style="color:#5f6368"></td>
+        <td style="color:#5f6368">12/08/2025</td>
+        <td style="color:#5f6368">Reem KARMOUT...</td>
+      </tr><tr id="row4" class="">
+        <td class="nc">4</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl ">Christie Wingo's c...</span></td>
+        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="email-date">02 Dec, 01:00</span></span></td>
+        <td id="fucell4"><div class="fu-cell"><span class="fu-badge db-amber" id="fubadge4"><span class="fu-dot"></span>Tomorrow</span><span class="lost-x" id="lx4">×</span></div></td>
+        <td><span class="memo-cell " id="memocell4">Engaged early — went quiet…</span></td>
+        <td style="color:#5f6368">3</td>
+        <td style="color:#5f6368">23/09/2026</td>
+        <td style="color:#5f6368">Reem KARMOUT...</td>
+      </tr><tr id="row5" class="">
+        <td class="nc">5</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl ">Adrien de Saint Ja...</span></td>
+        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#2e7d32" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#2e7d32" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#2e7d32" stroke-width="1" fill="none"></rect></svg><span class="email-date">11 Dec, 01:00</span></span></td>
+        <td id="fucell5"><div class="fu-cell"><span class="fu-none">+ Set date</span><span class="lost-x" id="lx5">×</span></div></td>
+        <td><span class="memo-cell " id="memocell5">Group of 35. Company retreat.</span></td>
+        <td style="color:#5f6368">35</td>
+        <td style="color:#5f6368">07/06/2026</td>
+        <td style="color:#5f6368">Fadila AIT TALBI</td>
+      </tr><tr id="row6" class="">
+        <td class="nc">6</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl ">Steven Goodrich</span></td>
+        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#7b1fa2" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#7b1fa2" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#7b1fa2" stroke-width="1" fill="none"></rect></svg><span class="email-date">05 Dec, 01:00</span></span></td>
+        <td id="fucell6"><div class="fu-cell"><span class="fu-badge db-green" id="fubadge6"><span class="fu-dot"></span>16 Dec</span><span class="lost-x" id="lx6">×</span></div></td>
+        <td><span class="memo-cell " id="memocell6">Away for work until Jan.</span></td>
+        <td style="color:#5f6368">2</td>
+        <td style="color:#5f6368">27/07/2026</td>
+        <td style="color:#5f6368">Karen Gee</td>
+      </tr><tr class="grp-hdr"><td colspan="9" style="background:#1a73e8;padding:6px 8px;font-size:12px;font-weight:500;color:#fff">▾ First Contact (241 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">1 late</span></td></tr><tr id="row7">
+        <td class="nc">7</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl">Katherine's Group...</span></td>
+        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="email-date">10 Dec, 01:00</span></span></td>
+        <td id="fucell7"><div class="fu-cell"><span class="fu-badge db-green" id="fubadge7"><span class="fu-dot"></span>17 Dec</span><span class="lost-x" id="lx7">×</span></div></td>
+        <td><span class="memo-cell " id="memocell7">Affinity group. Responsive.</span></td>
+        <td style="color:#5f6368">10</td>
+        <td style="color:#5f6368">22/07/2026</td>
+        <td style="color:#5f6368">Kavya Singh</td>
+      </tr><tr id="row8">
+        <td class="nc">8</td>
+        <td><div class="expand-btn">▾</div></td>
+        <td><span class="tl">Ximena Aguilar</span></td>
+        <td><span class="email-cell"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#e37400" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#e37400" stroke-width="1.2" fill="none"></path><rect x="0" y="0" width="18" height="14" rx="2" stroke="#e37400" stroke-width="1" fill="none"></rect></svg><span class="email-date">07 Dec, 01:00</span></span></td>
+        <td id="fucell8"><div class="fu-cell"><span class="fu-badge db-red" id="fubadge8"><span class="fu-dot"></span>3d ago</span><span class="lost-x" id="lx8">×</span></div></td>
+        <td><span class="memo-cell empty" id="memocell8">Add memo…</span></td>
+        <td style="color:#5f6368">12</td>
+        <td style="color:#5f6368">24/04/2026</td>
+        <td style="color:#5f6368">Loubna BOUANANI</td>
+      </tr></tbody>
       </table>
     </div>
   </div>
 
   <!-- Floating: Date picker -->
-  <div class="float-panel dp-panel" id="dpPanel" style="top:228px;left:370px">
+  <div class="float-panel dp-panel" id="dpPanel" style="top: 169.317px; left: 340px;">
     <div class="dp-lbl">Set next follow-up</div>
-    <input class="dp-inp" type="text" id="dpInput" value="2025-12-14" readonly/>
+    <input class="dp-inp" type="text" id="dpInput" value="2025-12-14" readonly="">
     <div class="dp-shorts">
       <span class="dp-s" id="dp1d">+1d</span>
       <span class="dp-s" id="dp2d">+2d</span>
-      <span class="dp-s" id="dp1w">+1w</span>
+      <span class="dp-s hl" id="dp1w">+1w</span>
       <span class="dp-s" id="dp2w">+2w</span>
       <span class="dp-s" id="dp30d">+30d</span>
     </div>
@@ -237,34 +325,34 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
   </div>
 
   <!-- Floating: Memo panel -->
-  <div class="float-panel memo-panel" id="memoPanel" style="top:230px;left:480px">
+  <div class="float-panel memo-panel" id="memoPanel" style="top: 169.317px; left: 390px;">
     <div class="mp-hdr">
       <span class="mp-hdr-title" id="memoPanelTitle">Isabella and Jarod</span>
       <span class="mp-close-btn">✕</span>
     </div>
     <div class="mp-body" id="memoBody">
-      <div id="memoPreviewPane">
+      <div id="memoPreviewPane" style="display: block;">
         <div class="mp-preview-text">Honeymoon trip — boutique riads + desert.<br><span class="mp-link">zicasso.com/trips/isabella-2026</span><br>Awaiting feedback on v1.</div>
         <div class="mp-hint">✎ Click to edit</div>
       </div>
-      <textarea class="mp-textarea" id="memoTextarea" style="display:none">Honeymoon trip — boutique riads + desert.
+      <textarea class="mp-textarea" id="memoTextarea" style="display: none;">Honeymoon trip — boutique riads + desert.
 https://zicasso.com/trips/isabella-2026
 Awaiting feedback on v1.</textarea>
     </div>
-    <div class="mp-footer" id="memoFooter" style="display:none">
+    <div class="mp-footer" id="memoFooter" style="display: none;">
       <button class="mp-btn-cancel">Cancel</button>
       <button class="mp-btn-save">Save</button>
     </div>
   </div>
 
   <!-- Floating: Thread picker -->
-  <div class="float-panel thread-panel" id="threadPanel" style="top:90px;left:300px">
+  <div class="float-panel thread-panel" id="threadPanel" style="top: 90px; left: 240px;">
     <div class="thread-hdr">
       <div><h3>Open email thread</h3><div class="thread-sub">Isabella and Jarod · 2 threads</div></div>
       <span class="thread-close">✕</span>
     </div>
     <div class="thread-list">
-      <div class="thread-item" id="thread1">
+      <div class="thread-item hl" id="thread1">
         <div class="th-av" style="background:#1a73e8">KG</div>
         <div class="th-meta">
           <div class="th-subj">Morocco honeymoon enquiry</div>
@@ -290,27 +378,34 @@ Awaiting feedback on v1.</textarea>
     <div class="lost-box">
       <div class="lost-hdr"><h3>Mark as Lost</h3><p id="lostLeadName">"Sabrina's lead" will be marked as lost.</p></div>
       <div class="lost-fields">
-        <div class="lf"><label>Lost reason</label><select id="lostReasonSel"><option value="">Select…</option><option selected>No response</option></select></div>
+        <div class="lf"><label>Lost reason</label><select id="lostReasonSel"><option value="">Select…</option><option selected="">No response</option></select></div>
         <div class="lf"><label>Lost notes</label><textarea id="lostNotesTa">No response after multiple follow-ups.</textarea></div>
         <div class="lf"><label>Reactivation needed</label><select><option>No</option></select></div>
       </div>
       <div class="lost-foot">
         <button class="btn-cancel-l">Cancel</button>
-        <button class="btn-lost-l" id="lostConfirmBtn">Mark as Lost</button>
+        <button class="btn-lost-l pressed" id="lostConfirmBtn">Mark as Lost</button>
       </div>
     </div>
   </div>
 
+  <!-- Scene transition -->
+  <div class="scene-transition" id="sceneTransition">
+    <div class="st-num" id="stNum">Scene 7 of 7</div>
+    <div class="st-title" id="stTitle">End of demo</div>
+    <div class="st-bar"></div>
+  </div>
+
   <!-- Highlight ring -->
-  <div class="hl-ring" id="hlRing"></div>
+  <div class="hl-ring" id="hlRing" style="left: 987.076px; top: 47.2847px; width: 21.9931px; height: 21.9931px;"></div>
 
   <!-- Caption -->
-  <div class="caption-box" id="captionBox"></div>
+  <div class="caption-box" id="captionBox">Lead marked as lost ✓</div>
 
   <!-- Fake cursor -->
-  <div class="cursor" id="cursor" style="left:80px;top:60px">
+  <div class="cursor" id="cursor" style="left: 550px; top: 200px;">
     <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
-      <path d="M2 2L2 18L6.5 13.5L9.5 20L11.5 19L8.5 12.5L14 12.5L2 2Z" fill="white" stroke="#333" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M2 2L2 18L6.5 13.5L9.5 20L11.5 19L8.5 12.5L14 12.5L2 2Z" fill="white" stroke="#333" stroke-width="1.2" stroke-linejoin="round"></path>
     </svg>
     <div class="cursor-ring" id="cursorRing"></div>
   </div>
@@ -318,7 +413,7 @@ Awaiting feedback on v1.</textarea>
 
 <div class="controls">
   <button class="ctrl-btn" id="prevBtn" onclick="prevScene()">← Prev</button>
-  <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
+  <button class="ctrl-btn primary" id="playBtn" onclick="togglePlay()">↺ Replay</button>
   <button class="ctrl-btn" id="nextBtn" onclick="nextScene()">Next →</button>
 </div>
 
@@ -416,7 +511,7 @@ const SCENES = [
     duration: 4000,
     setup: ()=>{ buildTable(); hideAll(); },
     steps:[
-      {t:600, fn:()=>{ moveCursor(getEl('chkBox').x+7, getEl('chkBox').y+7); highlight('chkBox'); }},
+      {t:600, fn:()=>{ const chkC=getEl('chkBox'); moveCursor(chkC.x, chkC.y); highlight('chkBox'); }},
       {t:1400, fn:()=>{ click(); document.getElementById('chkBox').classList.add('checked'); setTimeout(()=>buildTable(true),120); }},
       {t:2200, fn:()=>{ moveCursor(600,300); clearHighlight(); showCaption('Only 3 leads shown — all overdue'); }},
     ]
@@ -431,15 +526,15 @@ const SCENES = [
         if(!el)return;
         const r=el.getBoundingClientRect();
         const sr=document.getElementById('stage').getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
-        highlightEl(el, sr);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
+        highlightEl(el);
       }},
-      {t:1300, fn:()=>{ click(); showFloating('dpPanel', 370, getRowY(1)); }},
+      {t:1300, fn:()=>{ click(); showFloating('dpPanel', 340, getRowY(1)-20); }},
       {t:2200, fn:()=>{
         const el=document.getElementById('dp1w');
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=el.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
         el.classList.add('hl');
       }},
       {t:3000, fn:()=>{ click(); document.getElementById('dpInput').value='2025-12-20'; showCaption('+1 week selected'); }},
@@ -447,7 +542,7 @@ const SCENES = [
         const save=document.querySelector('.dp-save');
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=save.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
       }},
       {t:4700, fn:()=>{ click(); hidePanel('dpPanel'); showCaption('Date saved — badge updates green'); updateFUBadge(1,'20 Dec','db-green'); clearHighlight(); }},
     ]
@@ -461,16 +556,16 @@ const SCENES = [
         const el=document.getElementById('memocell1');
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=el.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
-        highlightEl(el, sr);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
+        highlightEl(el);
       }},
-      {t:1300, fn:()=>{ click(); showFloating('memoPanel', 460, getRowY(1)-20); showCaption('Opens in preview — links are clickable'); }},
+      {t:1300, fn:()=>{ click(); showFloating('memoPanel', 390, getRowY(1)-20); showCaption('Opens in preview — links are clickable'); }},
       {t:2800, fn:()=>{
         const link=document.querySelector('.mp-link');
         if(!link)return;
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=link.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
         clearHighlight();
         showCaption('Click a link → opens in Gmail/Zicasso');
       }},
@@ -481,7 +576,7 @@ const SCENES = [
         const sr=document.getElementById('stage').getBoundingClientRect();
         const panelEl=document.getElementById('memoPanel');
         const r=panelEl.getBoundingClientRect();
-        moveCursor(r.left-sr.left+80, r.top-sr.top+70);
+        moveCursor(bcrToCSS(r.left-sr.left)+60, bcrToCSS(r.top-sr.top)+55);
         showCaption('Click anywhere else → switches to edit mode');
       }},
       {t:4800, fn:()=>{
@@ -502,8 +597,8 @@ const SCENES = [
         if(!emailCell)return;
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=emailCell.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
-        highlightEl(emailCell, sr);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
+        highlightEl(emailCell);
         showCaption('Isabella has 2 threads — click to choose');
       }},
       {t:1500, fn:()=>{ click(); showFloating('threadPanel', 240, 90); clearHighlight(); }},
@@ -511,7 +606,7 @@ const SCENES = [
         const t1=document.getElementById('thread1');
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=t1.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
         t1.classList.add('hl');
         showCaption('Select the thread to open in Gmail');
       }},
@@ -528,7 +623,7 @@ const SCENES = [
         if(!lx)return;
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=lx.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
         showCaption('Hover shows the × — click to close as lost');
       }},
       {t:1400, fn:()=>{ click(); document.getElementById('lostOverlay').classList.add('visible'); }},
@@ -536,14 +631,14 @@ const SCENES = [
         const sel=document.getElementById('lostReasonSel');
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=sel.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
         showCaption('Select the lost reason');
       }},
       {t:3200, fn:()=>{
         const btn=document.getElementById('lostConfirmBtn');
         const sr=document.getElementById('stage').getBoundingClientRect();
         const r=btn.getBoundingClientRect();
-        moveCursor(r.left-sr.left+r.width/2, r.top-sr.top+r.height/2);
+        moveCursor(bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2);
         showCaption('Confirm — lead disappears from pipeline');
       }},
       {t:4200, fn:()=>{
@@ -567,8 +662,10 @@ const SCENES = [
 ];
 
 // ── Helpers ──
-function getEl(id){ const el=document.getElementById(id); const sr=document.getElementById('stage').getBoundingClientRect(); const r=el.getBoundingClientRect(); return {x:r.left-sr.left+r.width/2, y:r.top-sr.top+r.height/2, el}; }
-function getRowY(id){ const el=document.getElementById('row'+id); if(!el)return 200; const sr=document.getElementById('stage').getBoundingClientRect(); const r=el.getBoundingClientRect(); return r.top-sr.top+r.height/2; }
+const ZOOM = 1.35; // zoom factor applied to .stage — divide getBCR values to get CSS coords
+function bcrToCSS(val){ return val / ZOOM; }
+function getEl(id){ const el=document.getElementById(id); const sr=document.getElementById('stage').getBoundingClientRect(); const r=el.getBoundingClientRect(); return {x:bcrToCSS(r.left-sr.left)+bcrToCSS(r.width)/2, y:bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2, el}; }
+function getRowY(id){ const el=document.getElementById('row'+id); if(!el)return 200; const sr=document.getElementById('stage').getBoundingClientRect(); const r=el.getBoundingClientRect(); return bcrToCSS(r.top-sr.top)+bcrToCSS(r.height)/2; }
 
 function moveCursor(x,y){
   const cur=document.getElementById('cursor');
@@ -604,19 +701,19 @@ function highlight(id){
   const sr=document.getElementById('stage').getBoundingClientRect();
   const r=el.getBoundingClientRect();
   const ring=document.getElementById('hlRing');
-  ring.style.left=(r.left-sr.left-4)+'px';
-  ring.style.top=(r.top-sr.top-4)+'px';
-  ring.style.width=(r.width+8)+'px';
-  ring.style.height=(r.height+8)+'px';
+  ring.style.left=(bcrToCSS(r.left-sr.left)-4)+'px';
+  ring.style.top=(bcrToCSS(r.top-sr.top)-4)+'px';
+  ring.style.width=(bcrToCSS(r.width)+8)+'px';
+  ring.style.height=(bcrToCSS(r.height)+8)+'px';
   ring.classList.add('visible');
 }
 function highlightEl(el, sr){
   const r=el.getBoundingClientRect();
   const ring=document.getElementById('hlRing');
-  ring.style.left=(r.left-sr.left-4)+'px';
-  ring.style.top=(r.top-sr.top-4)+'px';
-  ring.style.width=(r.width+8)+'px';
-  ring.style.height=(r.height+8)+'px';
+  ring.style.left=(bcrToCSS(r.left-sr.left)-4)+'px';
+  ring.style.top=(bcrToCSS(r.top-sr.top)-4)+'px';
+  ring.style.width=(bcrToCSS(r.width)+8)+'px';
+  ring.style.height=(bcrToCSS(r.height)+8)+'px';
   ring.classList.add('visible');
 }
 function clearHighlight(){ document.getElementById('hlRing').classList.remove('visible'); }
@@ -651,24 +748,55 @@ function updateUI(){
   cap.classList.add('visible');
 }
 
-function runScene(idx){
+const SCENE_NAMES = [
+  'Pipeline overview',
+  '"Late follow-ups" filter',
+  'Rescheduling a date',
+  'Advisor memo',
+  'Email thread picker',
+  'Close as Lost',
+  'End of demo'
+];
+
+function showTransition(idx, then){
+  const el = document.getElementById('sceneTransition');
+  document.getElementById('stNum').textContent = 'Scene '+(idx+1)+' of '+SCENES.length;
+  document.getElementById('stTitle').textContent = SCENE_NAMES[idx]||'';
+  el.classList.add('visible');
+  setTimeout(()=>{
+    el.classList.remove('visible');
+    setTimeout(then, 380);
+  }, 1100);
+}
+
+function runScene(idx, skipTransition){
   currentScene=idx;
   updateUI();
   const s=SCENES[idx];
-  s.setup();
 
-  // Clear old step timers
   clearTimeout(stepTimer);
+  clearTimeout(sceneTimer);
 
-  s.steps.forEach(step=>{
-    setTimeout(step.fn, step.t);
-  });
-
-  if(playing){
-    sceneTimer=setTimeout(()=>{
-      if(currentScene<SCENES.length-1) runScene(currentScene+1);
-      else { playing=false; document.getElementById('playBtn').textContent='↺ Replay'; }
-    }, s.duration);
+  if(skipTransition){
+    s.setup();
+    s.steps.forEach(step=>{ setTimeout(step.fn, step.t); });
+    if(playing){
+      sceneTimer=setTimeout(()=>{
+        if(currentScene<SCENES.length-1) runScene(currentScene+1);
+        else { playing=false; document.getElementById('playBtn').textContent='↺ Replay'; }
+      }, s.duration);
+    }
+  } else {
+    showTransition(idx, ()=>{
+      s.setup();
+      s.steps.forEach(step=>{ setTimeout(step.fn, step.t); });
+      if(playing){
+        sceneTimer=setTimeout(()=>{
+          if(currentScene<SCENES.length-1) runScene(currentScene+1);
+          else { playing=false; document.getElementById('playBtn').textContent='↺ Replay'; }
+        }, s.duration);
+      }
+    });
   }
 }
 
@@ -676,7 +804,7 @@ function togglePlay(){
   const btn=document.getElementById('playBtn');
   if(document.getElementById('playBtn').textContent==='↺ Replay'){
     playing=true;
-    runScene(0);
+    runScene(0, false);
     btn.textContent='⏸ Pause';
     return;
   }
@@ -692,11 +820,12 @@ function togglePlay(){
     clearTimeout(sceneTimer);
   }
 }
-function prevScene(){ clearTimeout(sceneTimer); if(currentScene>0) runScene(currentScene-1); }
-function nextScene(){ clearTimeout(sceneTimer); if(currentScene<SCENES.length-1) runScene(currentScene+1); }
+function prevScene(){ clearTimeout(sceneTimer); if(currentScene>0) runScene(currentScene-1, true); }
+function nextScene(){ clearTimeout(sceneTimer); if(currentScene<SCENES.length-1) runScene(currentScene+1, true); }
 
 // Start
-setTimeout(()=>runScene(0), 400);
+setTimeout(()=>runScene(0, false), 400);
 </script>
-</body>
-</html>
+
+
+</body></html>
