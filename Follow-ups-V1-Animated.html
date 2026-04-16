@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0060)file:///Users/ihabelalami/Downloads/crm_animated_demo_7.html -->
+<!-- saved from url=(0061)file:///Users/ihabelalami/Downloads/crm_animated_demo_13.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,194 +7,239 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',system-ui,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 16px 48px}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px}
 
-.demo-header{width:100%;max-width:1100px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.demo-header{width:100%;max-width:1480px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .demo-logo{font-size:13px;font-weight:600;color:#1a73e8;letter-spacing:.04em}
-.demo-title{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#5f6680}
+.demo-title{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#5f6680}
 
-.scene-caption{width:100%;max-width:1100px;font-size:21px;font-weight:600;letter-spacing:-.01em;color:#e8eaf0;text-align:center;min-height:34px;margin-bottom:10px;opacity:0;transform:translateY(5px);transition:opacity .4s,transform .4s}
+.scene-caption{width:100%;max-width:1480px;font-size:20px;font-weight:600;color:#e8eaf0;text-align:center;min-height:30px;margin-bottom:8px;opacity:0;transform:translateY(5px);transition:opacity .4s,transform .4s}
 .scene-caption.vis{opacity:1;transform:translateY(0)}
 
-.scene-bar{width:100%;max-width:1100px;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.scene-bar{width:100%;max-width:1480px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .sdot{width:8px;height:8px;border-radius:50%;background:#2a2d3a;transition:background .3s;flex-shrink:0}
-.sdot.on{background:#1a73e8}
-.sdot.done{background:#2e5fa3}
+.sdot.on{background:#1a73e8}.sdot.done{background:#2e5fa3}
 .prog-track{flex:1;height:3px;background:#2a2d3a;border-radius:3px;overflow:hidden}
 .prog-fill{height:100%;background:#1a73e8;border-radius:3px;transition:width .4s}
 .scene-num{font-family:'DM Mono',monospace;font-size:11px;color:#3a3f52;letter-spacing:.06em;white-space:nowrap}
 
-/* Stage */
-.stage{position:relative;width:100%;max-width:1100px;border-radius:12px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05);zoom:1.35}
+/* ── Stage ── */
+.stage{position:relative;width:100%;max-width:1480px;border-radius:12px;overflow:visible;box-shadow:0 24px 64px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.05)}
 
-/* CRM */
-.crm{font-family:'DM Sans',system-ui,sans-serif;font-size:13px;color:#202124;background:#fff}
-.topbar{display:flex;align-items:center;border-bottom:1px solid #e0e0e0;padding:0 4px;background:#fff}
-.tb-tab{padding:10px 14px;font-size:13px;color:#5f6368;border-bottom:2px solid transparent;white-space:nowrap}
+/* ── Element highlight — applied directly to DOM elements, zero coordinate math ── */
+.demo-hl{outline:3px solid #1a73e8!important;outline-offset:3px;border-radius:4px;box-shadow:0 0 0 6px rgba(26,115,232,.18)!important;transition:outline .2s,box-shadow .2s;position:relative;z-index:10}
+@keyframes pulse-hl{0%,100%{box-shadow:0 0 0 6px rgba(26,115,232,.18)}50%{box-shadow:0 0 0 10px rgba(26,115,232,.06)}}
+.demo-hl{animation:pulse-hl 1.4s ease infinite}
+
+/* ── CRM ── */
+.crm{font-family:'DM Sans',system-ui,sans-serif;font-size:14px;color:#202124;background:#fff;border-radius:12px;overflow:hidden}
+.topbar{display:flex;align-items:center;border-bottom:1px solid #e0e0e0;padding:0 6px;background:#fff}
+.tb-tab{padding:12px 18px;font-size:14px;color:#5f6368;border-bottom:2px solid transparent;white-space:nowrap}
 .tb-tab.active{color:#1a73e8;border-bottom-color:#1a73e8;font-weight:500}
-.toolbar{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid #e0e0e0;background:#fff}
+.toolbar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid #e0e0e0;background:#fff}
 .spacer{flex:1}
-.tb-btn{padding:5px 12px;border:1px solid #dadce0;border-radius:4px;font-size:12px;background:#fff;color:#3c4043}
-.grp-sel,.sub-sel{font-size:12px;padding:4px 8px;border:1px solid #dadce0;border-radius:4px;background:#fff}
-.tb-lbl{font-size:11px;color:#5f6368}
-.chk-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#3c4043}
-.chk-box{width:14px;height:14px;border:2px solid #aaa;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.tb-btn{padding:6px 14px;border:1px solid #dadce0;border-radius:4px;font-size:13px;background:#fff;color:#3c4043}
+.grp-sel{font-size:13px;padding:5px 10px;border:1px solid #dadce0;border-radius:4px;background:#fff}
+.tb-lbl{font-size:12px;color:#5f6368}
+.chk-wrap{display:flex;align-items:center;gap:7px;font-size:13px;color:#3c4043}
+.chk-box{width:16px;height:16px;border:2px solid #aaa;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .chk-box.on{background:#c62828;border-color:#c62828}
-.chk-box.on::after{content:'✓';font-size:9px;color:#fff;font-weight:700}
-.search-box{padding:5px 10px;border:1px solid #dadce0;border-radius:4px;font-size:12px;width:140px;background:#f1f3f4}
-.pipeline{display:flex;padding:6px 10px;border-bottom:1px solid #e0e0e0;gap:0;background:#fff}
-.pip{display:flex;align-items:center;padding:5px 12px 5px 14px;font-size:11px;font-weight:500;color:#fff;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%,10px 50%);white-space:nowrap;min-width:110px}
-.pip:first-child{clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);padding-left:8px}
-.pip-wr{font-size:10px;background:rgba(255,255,255,.25);padding:1px 5px;border-radius:8px;margin-left:4px}
-.pip-late{font-size:10px;padding:1px 5px;border-radius:8px;margin-left:3px;background:rgba(220,53,53,.4)}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{font-size:11px;font-weight:500;color:#5f6368;text-align:left;padding:6px 8px;border-bottom:1px solid #e0e0e0;white-space:nowrap;background:#fff}
+.chk-box.on::after{content:'✓';font-size:10px;color:#fff;font-weight:700}
+.search-box{padding:6px 10px;border:1px solid #dadce0;border-radius:4px;font-size:13px;width:160px;background:#f1f3f4}
+.pipeline{display:flex;padding:7px 12px;border-bottom:1px solid #e0e0e0;gap:0;background:#fff}
+.pip{display:flex;align-items:center;padding:6px 14px 6px 16px;font-size:12px;font-weight:500;color:#fff;clip-path:polygon(0 0,calc(100% - 11px) 0,100% 50%,calc(100% - 11px) 100%,0 100%,11px 50%);white-space:nowrap;min-width:120px}
+.pip:first-child{clip-path:polygon(0 0,calc(100% - 11px) 0,100% 50%,calc(100% - 11px) 100%,0 100%);padding-left:10px}
+.pip-wr{font-size:11px;background:rgba(255,255,255,.25);padding:1px 6px;border-radius:8px;margin-left:4px}
+.pip-late{font-size:11px;padding:1px 6px;border-radius:8px;margin-left:3px;background:rgba(220,53,53,.4)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:12px;font-weight:500;color:#5f6368;text-align:left;padding:7px 10px;border-bottom:1px solid #e0e0e0;white-space:nowrap;background:#fff}
 th.rc{color:#c62828;font-weight:600}
-td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-align:middle}
-.ghdr td{padding:6px 8px;font-size:12px;font-weight:500;color:#fff}
-.nc{color:#9e9e9e;font-size:11px;text-align:right}
-.tl{color:#1a73e8;font-size:12px}
+td{padding:7px 10px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-align:middle}
+.ghdr td{padding:7px 10px;font-size:13px;font-weight:500;color:#fff}
+.nc{color:#9e9e9e;font-size:12px;text-align:right}
+.tl{color:#1a73e8;font-size:13px}
 .tl.lost{color:#9e9e9e;text-decoration:line-through}
-.ltag{padding:1px 6px;border-radius:10px;font-size:10px;font-weight:500;background:#f3f3f3;color:#9e9e9e;border:1px solid #e0e0e0;margin-left:5px}
-.ec{display:inline-flex;align-items:center;gap:5px}
-.ed{font-size:11px;color:#5f6368}
-.fuc{display:inline-flex;align-items:center;gap:5px}
-.fub{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid;white-space:nowrap}
-.fd{width:6px;height:6px;border-radius:50%}
+.ltag{padding:2px 7px;border-radius:10px;font-size:11px;font-weight:500;background:#f3f3f3;color:#9e9e9e;border:1px solid #e0e0e0;margin-left:5px}
+.ec{display:inline-flex;align-items:center;gap:6px}
+.ed{font-size:12px;color:#5f6368}
+.fuc{display:inline-flex;align-items:center;gap:6px}
+.fub{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;border:1px solid;white-space:nowrap}
+.fd{width:7px;height:7px;border-radius:50%}
 .dr{background:#fce8e6;color:#c62828;border-color:#f5c6c6}.dr .fd{background:#c62828}
 .da{background:#fef7e0;color:#e37400;border-color:#fde68a}.da .fd{background:#e37400}
 .dg{background:#e6f4ea;color:#137333;border-color:#ceead6}.dg .fd{background:#137333}
-.fn{font-size:11px;color:#bdbdbd;padding:2px 4px;border-radius:3px}
-.lx{font-size:14px;color:#c62828;padding:0 3px;visibility:hidden}
-.mc{font-size:11px;color:#5f6368;padding:2px 5px;border-radius:4px;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
+.fn2{font-size:12px;color:#bdbdbd;padding:3px 5px}
+.lx{font-size:15px;color:#c62828;padding:0 4px;visibility:hidden}
+.mc{font-size:12px;color:#5f6368;padding:3px 6px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block}
 .mc.mt{color:#bdbdbd;font-style:italic}
-.xb{width:20px;height:20px;border-radius:3px;border:1px solid #e0e0e0;background:#fff;display:inline-flex;align-items:center;justify-content:center;color:#9e9e9e;font-size:11px}
-.rhl td{background:#eef4ff!important}
-.rrl td{background:#fff0f0!important}
+.xb{width:22px;height:22px;border-radius:3px;border:1px solid #e0e0e0;background:#fff;display:inline-flex;align-items:center;justify-content:center;color:#9e9e9e;font-size:12px}
+.rrl td{background:#fff0f0}
 .rlost td{background:#f8f8f8;opacity:.6}
 
-/* Floating panels */
-.fp{position:absolute;z-index:60;opacity:0;pointer-events:none;transition:opacity .28s,transform .28s;transform:translateY(4px)}
-.fp.vis{opacity:1;pointer-events:auto;transform:translateY(0)}
-
-/* Date picker */
-.dp{background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:14px;width:220px}
-.dpl{font-size:11px;color:#5f6368;margin-bottom:6px;font-weight:500}
-.dpi{width:100%;padding:5px 8px;border:1px solid #1a73e8;border-radius:5px;font-size:12px;margin-bottom:8px;background:#fff;color:#202124;box-shadow:0 0 0 2px rgba(26,115,232,.1);outline:none}
-.dps{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
-.dpb{padding:3px 9px;border-radius:12px;font-size:11px;border:1px solid #dadce0;background:#fff;color:#3c4043;transition:all .15s}
+/* ── Date picker (floating) ── */
+.dp{position:absolute;z-index:65;background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:16px;width:240px;display:none}
+.dp.vis{display:block}
+.dpl{font-size:12px;color:#5f6368;margin-bottom:7px;font-weight:500}
+.dpi{width:100%;padding:6px 9px;border:1px solid #1a73e8;border-radius:5px;font-size:13px;margin-bottom:9px;background:#fff;color:#202124;box-shadow:0 0 0 2px rgba(26,115,232,.1);outline:none}
+.dp-shorts{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px}
+.dpb{padding:4px 10px;border-radius:12px;font-size:12px;border:1px solid #dadce0;background:#fff;color:#3c4043}
 .dpb.hl{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8}
-.dpf{display:flex;justify-content:flex-end;gap:5px}
-.dpsv{padding:5px 12px;border-radius:5px;border:none;background:#1a73e8;color:#fff;font-size:12px}
-.dpca{padding:5px 10px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:12px;color:#5f6368}
+.dpf{display:flex;justify-content:flex-end;gap:6px}
+.dpsv{padding:6px 14px;border-radius:5px;border:none;background:#1a73e8;color:#fff;font-size:13px}
+.dpca{padding:6px 12px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:13px;color:#5f6368}
 
-/* Memo panel */
-.mp{background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);width:300px;overflow:hidden}
-.mph{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid #f0f0f0;background:#fafafa}
-.mpht{font-size:11px;font-weight:500;color:#5f6368}
-.mpx{color:#9e9e9e;font-size:15px}
-.mpb{padding:12px}
-.mppv{font-size:12px;color:#202124;line-height:1.7;white-space:pre-wrap;word-break:break-word;cursor:text;min-height:44px}
+/* ── Memo panel (floating) ── */
+.mpp{position:absolute;z-index:65;background:#fff;border:1px solid #dadce0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);width:320px;overflow:hidden;display:none}
+.mpp.vis{display:block}
+.mph{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #f0f0f0;background:#fafafa}
+.mpht{font-size:12px;font-weight:500;color:#5f6368}
+.mpb2{padding:14px}
+.mppv{font-size:13px;color:#202124;line-height:1.7;white-space:pre-wrap;word-break:break-word;cursor:text;min-height:50px}
 .mpl{color:#1a73e8;text-decoration:underline}
-.mph2{font-size:10px;color:#bdbdbd;margin-top:8px}
-.mpta{width:100%;min-height:80px;font-size:12px;font-family:inherit;padding:6px 8px;border:1px solid #1a73e8;border-radius:5px;outline:none;resize:none;color:#202124;line-height:1.7;box-shadow:0 0 0 2px rgba(26,115,232,.1)}
-.mpf{display:flex;justify-content:flex-end;gap:6px;padding:8px 12px;border-top:1px solid #f0f0f0;background:#fafafa}
-.mpsv{padding:4px 12px;border-radius:4px;border:none;background:#1a73e8;color:#fff;font-size:12px}
-.mpca{padding:4px 10px;border-radius:4px;border:1px solid #dadce0;background:#fff;font-size:12px;color:#5f6368}
+.mphnt{font-size:11px;color:#bdbdbd;margin-top:8px}
+.mpta{width:100%;min-height:86px;font-size:13px;font-family:inherit;padding:7px 9px;border:1px solid #1a73e8;border-radius:5px;outline:none;resize:none;color:#202124;line-height:1.7;box-shadow:0 0 0 2px rgba(26,115,232,.1)}
+.mpft{display:flex;justify-content:flex-end;gap:7px;padding:9px 14px;border-top:1px solid #f0f0f0;background:#fafafa}
+.mpsv{padding:5px 14px;border-radius:4px;border:none;background:#1a73e8;color:#fff;font-size:13px}
+.mpca2{padding:5px 12px;border-radius:4px;border:1px solid #dadce0;background:#fff;font-size:13px;color:#5f6368}
 
-/* Thread panel */
-.tp{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.22);width:380px;overflow:hidden;border:1px solid #e0e0e0}
-.tph{display:flex;align-items:center;justify-content:space-between;padding:13px 16px 11px;border-bottom:1px solid #e0e0e0}
-.tph h3{font-size:14px;font-weight:500;color:#202124}
-.tps{font-size:11px;color:#5f6368;margin-top:2px}
-.tpx{color:#5f6368;font-size:18px}
-.tpl{padding:14px;display:flex;flex-direction:column;gap:8px}
-.tpi{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;border:1px solid #e0e0e0;border-radius:6px;transition:all .15s}
+/* ── Thread picker (floating) ── */
+.tpp{position:absolute;z-index:65;background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.22);width:420px;overflow:hidden;border:1px solid #e0e0e0;display:none}
+.tpp.vis{display:block}
+.tph{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 12px;border-bottom:1px solid #e0e0e0}
+.tph h3{font-size:15px;font-weight:500;color:#202124}
+.tps{font-size:12px;color:#5f6368;margin-top:2px}
+.tpl{padding:16px;display:flex;flex-direction:column;gap:9px}
+.tpi{display:flex;align-items:flex-start;gap:11px;padding:10px 14px;border:1px solid #e0e0e0;border-radius:6px}
 .tpi.hl{border-color:#1a73e8;background:#e8f0fe}
-.tav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:#fff;flex-shrink:0}
+.tav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
 .tmeta{flex:1;min-width:0}
-.tsubj{font-size:12px;font-weight:500;color:#202124;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.tsnip{font-size:11px;color:#5f6368;margin-top:1px}
-.tdate{font-size:10px;color:#9e9e9e;white-space:nowrap;margin-left:8px}
-.tcnt{font-size:10px;color:#1a73e8;background:#e8f0fe;padding:1px 5px;border-radius:8px;margin-top:2px;display:inline-block}
+.tsubj{font-size:13px;font-weight:500;color:#202124}
+.tsnip{font-size:12px;color:#5f6368;margin-top:1px}
+.tdate{font-size:11px;color:#9e9e9e;white-space:nowrap;margin-left:8px}
+.tcnt{font-size:11px;color:#1a73e8;background:#e8f0fe;padding:2px 6px;border-radius:8px;margin-top:3px;display:inline-block}
 
-/* Email toast (incoming) */
-.et{position:absolute;top:52px;right:16px;background:#fff;border:1px solid #e0e0e0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:11px 14px;display:flex;align-items:flex-start;gap:10px;width:270px;z-index:80;opacity:0;transform:translateX(40px);transition:opacity .35s,transform .35s;pointer-events:none}
-.et.vis{opacity:1;transform:translateX(0)}
-.eti{width:32px;height:32px;border-radius:8px;background:#1a73e8;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;position:relative}
-.etdot{position:absolute;top:-4px;right:-4px;width:10px;height:10px;background:#c62828;border-radius:50%;border:2px solid #fff}
+/* ── Email incoming toast ── */
+.et{position:absolute;top:60px;right:20px;background:#fff;border:1px solid #e0e0e0;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:12px 16px;display:none;align-items:flex-start;gap:11px;width:290px;z-index:80}
+.et.vis{display:flex}
+.eti{width:34px;height:34px;border-radius:8px;background:#1a73e8;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;position:relative}
+.etdot{position:absolute;top:-4px;right:-4px;width:11px;height:11px;background:#c62828;border-radius:50%;border:2px solid #fff}
 .etb{flex:1;min-width:0}
-.etf{font-size:12px;font-weight:600;color:#202124}
-.etsu{font-size:11px;color:#5f6368;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ett{font-size:10px;color:#9e9e9e;margin-top:3px}
+.etf{font-size:13px;font-weight:600;color:#202124}
+.etsu{font-size:12px;color:#5f6368;margin-top:1px}
+.ett{font-size:11px;color:#9e9e9e;margin-top:3px}
 
-/* Weekly email overlay */
-.wo{position:absolute;inset:0;z-index:75;background:rgba(10,12,20,.72);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .35s;display:flex;align-items:center;justify-content:center}
-.wo.vis{opacity:1;pointer-events:auto}
-.wc{background:#fff;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.28);width:440px;overflow:hidden;font-family:'DM Sans',system-ui,sans-serif;transform:translateY(12px);transition:transform .35s}
-.wo.vis .wc{transform:translateY(0)}
+/* ── Full-stage overlays ── */
+.ov{position:absolute;inset:0;z-index:70;opacity:0;pointer-events:none;transition:opacity .32s;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(10,12,20,.72);backdrop-filter:blur(4px)}
+.ov.vis{opacity:1;pointer-events:auto}
+.ov-card{transform:translateY(10px);transition:transform .35s}
+.ov.vis .ov-card{transform:translateY(0)}
+
+/* ── Gmail background overlay ── */
+.gmail-ov{align-items:stretch;justify-content:stretch;background:none;backdrop-filter:none;border-radius:12px;overflow:hidden}
+.gmail-ov.vis{opacity:1}
+.gmail-bg{position:absolute;inset:0;background:#fff;display:flex}
+/* Gmail sidebar */
+.gm-side{width:220px;background:#fff;border-right:1px solid #e8eaed;padding:8px 0;flex-shrink:0;overflow:hidden}
+.gm-compose{margin:8px 12px 12px;background:#c2e7ff;color:#001d35;border:none;border-radius:16px;padding:14px 20px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:8px;width:calc(100% - 24px)}
+.gm-nav{padding:6px 14px 6px 16px;font-size:13px;color:#202124;border-radius:0 20px 20px 0;margin-right:12px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.gm-nav.active{background:#d3e3fd;font-weight:500}
+.gm-nav-ico{font-size:15px;width:20px;text-align:center;opacity:.7}
+.gm-nav-ct{margin-left:auto;font-size:12px;color:#444}
+.gm-label-hdr{padding:8px 16px 4px;font-size:11px;font-weight:600;color:#444;text-transform:uppercase;letter-spacing:.06em}
+.gm-label{padding:5px 14px 5px 16px;font-size:12px;color:#202124;display:flex;align-items:center;gap:8px;cursor:pointer}
+.gm-label-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.gm-label-ct{margin-left:auto;font-size:11px;color:#444}
+/* Gmail main */
+.gm-main{flex:1;display:flex;flex-direction:column;background:#fff;min-width:0}
+.gm-toolbar{padding:10px 16px;background:#f6f8fc;border-bottom:1px solid #e8eaed;display:flex;align-items:center;gap:8px}
+.gm-search{flex:1;background:#fff;border-radius:24px;padding:9px 16px;font-size:14px;color:#5f6368;display:flex;align-items:center;gap:10px;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.gm-list-hdr{display:flex;align-items:center;gap:8px;padding:8px 16px;border-bottom:1px solid #e8eaed;font-size:13px;color:#5f6368}
+.gm-row{display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid #f0f0f0;font-size:13px;cursor:pointer;min-width:0}
+.gm-row:hover{background:#f6f8fc;box-shadow:inset 1px 0 0 #dadce0,inset -1px 0 0 #dadce0}
+.gm-row.unread{font-weight:600;background:#fff}
+.gm-from{width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:0;color:#202124}
+.gm-tags{display:flex;gap:4px;flex-shrink:0}
+.gm-tag{font-size:11px;padding:1px 6px;border-radius:3px;font-weight:600}
+.gm-subj{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#5f6368;font-weight:400;min-width:0}
+.gm-date{font-size:12px;color:#5f6368;white-space:nowrap;margin-left:8px}
+/* Compose window (bottom-right of gmail layout) */
+.gm-compose-win{position:absolute;bottom:0;right:40px;width:460px;background:#fff;border-radius:8px 8px 0 0;box-shadow:0 -4px 24px rgba(0,0,0,.22);overflow:hidden;border:1px solid #e0e0e0;border-bottom:none;z-index:75}
+.gc-bar{background:#404040;color:#fff;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:500}
+.gc-x{display:flex;gap:10px;opacity:.7;font-size:16px}
+.gc-field{display:flex;align-items:center;gap:9px;padding:6px 14px;border-bottom:1px solid #e0e0e0;font-size:13px}
+.gc-lbl{color:#5f6368;width:34px;flex-shrink:0}
+.gc-val{color:#202124;flex:1}
+.gc-body{min-height:90px;padding:11px 14px;font-size:14px;color:#202124;line-height:1.6}
+.gc-foot{display:flex;align-items:center;gap:10px;padding:9px 14px;border-top:1px solid #f0f0f0}
+.gc-send{background:#1a73e8;color:#fff;border:none;border-radius:4px;padding:8px 22px;font-size:14px;font-weight:500;cursor:pointer}
+
+/* ── Follow-up prompt ── */
+.fup-card{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.28);width:420px;overflow:hidden}
+.fuph{background:#1a73e8;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px}
+.fuph-ico{font-size:22px}
+.fuph-t{font-size:15px;font-weight:600}
+.fuph-s{font-size:12px;opacity:.85;margin-top:2px}
+.fupb{padding:18px}
+.fupq{font-size:14px;color:#202124;font-weight:500;margin-bottom:14px}
+.fup-opts{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.fup-opt{padding:7px 16px;border-radius:20px;border:1px solid #dadce0;font-size:13px;color:#3c4043;background:#fff}
+.fup-opt.hl{background:#e8f0fe;border-color:#1a73e8;color:#1a73e8;font-weight:500}
+.fupf{display:flex;justify-content:flex-end;gap:9px;padding:0 18px 16px}
+.fup-skip{padding:7px 16px;border-radius:4px;border:1px solid #dadce0;background:#fff;font-size:13px;color:#5f6368}
+.fup-save{padding:7px 18px;border-radius:4px;border:none;background:#1a73e8;color:#fff;font-size:13px;font-weight:500}
+
+/* ── Lost modal ── */
+.lb{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.25);width:370px;overflow:hidden}
+.lbh{padding:18px 22px 16px;border-bottom:1px solid #f0f0f0}
+.lbh h3{font-size:15px;font-weight:500;margin:0 0 4px;color:#202124}
+.lbh p{font-size:13px;color:#5f6368;line-height:1.5}
+.lbf{padding:16px 22px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #f0f0f0}
+.lfl{display:flex;flex-direction:column;gap:4px}
+.lfl label{font-size:11px;font-weight:500;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em}
+.lfl select,.lfl textarea{font-size:13px;padding:6px 9px;border:1px solid #dadce0;border-radius:5px;background:#fff;color:#202124;font-family:inherit}
+.lfl textarea{resize:none;min-height:38px}
+.lbfoot{display:flex;justify-content:flex-end;gap:9px;padding:14px 22px}
+.lcnl{padding:8px 16px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:14px;color:#3c4043}
+.llost{padding:8px 18px;border-radius:5px;border:none;background:#c62828;color:#fff;font-size:14px;font-weight:500}
+
+/* ── Weekly email ── */
+.wc{background:#fff;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.28);width:480px;overflow:hidden}
 .wch{background:#f1f3f4;padding:9px 14px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #e0e0e0}
-.wcd{width:10px;height:10px;border-radius:50%}
-.wcsb{font-size:11px;color:#5f6368;flex:1;background:#fff;border-radius:4px;padding:3px 8px}
-.wcb{padding:18px 22px}
-.wcfr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.wcav{width:36px;height:36px;border-radius:50%;background:#1a73e8;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#fff;flex-shrink:0}
-.wcfn{font-size:13px;font-weight:600;color:#202124}
-.wcfa{font-size:11px;color:#5f6368}
-.wcto{font-size:11px;color:#5f6368;margin-bottom:8px}
-.wcdiv{border:none;border-top:1px solid #f0f0f0;margin:8px 0}
-.wcb h4{font-size:15px;font-weight:600;color:#202124;margin-bottom:6px}
-.wcb p{font-size:12px;color:#5f6368;line-height:1.7;margin-bottom:10px}
-.wctable{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px}
-.wctable th{text-align:left;padding:4px 8px;font-size:10px;font-weight:600;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #f0f0f0}
-.wctable td{padding:5px 8px;border-bottom:1px solid #f8f9fa;color:#5f6368}
+.wcd{width:11px;height:11px;border-radius:50%}
+.wcsb{font-size:12px;color:#5f6368;flex:1;background:#fff;border-radius:4px;padding:4px 9px}
+.wcb{padding:20px 24px}
+.wcfr{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.wcav{width:38px;height:38px;border-radius:50%;background:#1a73e8;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;flex-shrink:0}
+.wcfname{font-size:14px;font-weight:600;color:#202124}
+.wcfaddr{font-size:12px;color:#5f6368}
+.wcto{font-size:12px;color:#5f6368;margin-bottom:9px}
+.wcdiv{border:none;border-top:1px solid #f0f0f0;margin:9px 0}
+.wcb h4{font-size:16px;font-weight:600;color:#202124;margin-bottom:7px}
+.wcb p{font-size:13px;color:#5f6368;line-height:1.7;margin-bottom:11px}
+.wctable{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px}
+.wctable th{text-align:left;padding:4px 9px;font-size:11px;font-weight:600;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #f0f0f0}
+.wctable td{padding:6px 9px;border-bottom:1px solid #f8f9fa;color:#5f6368}
 .wctable td:first-child{color:#202124;font-weight:500}
-.wbadge{display:inline-block;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:500;background:#fce8e6;color:#c62828}
-.wcta{display:inline-block;background:#1a73e8;color:#fff;font-size:12px;font-weight:500;padding:8px 18px;border-radius:6px;text-decoration:none;cursor:pointer}
-.wcfn2{font-size:10px;color:#bdbdbd;margin-top:10px}
+.wbadge{display:inline-block;padding:2px 7px;border-radius:8px;font-size:11px;font-weight:500;background:#fce8e6;color:#c62828}
+.wcta{display:inline-block;background:#1a73e8;color:#fff;font-size:13px;font-weight:500;padding:9px 20px;border-radius:6px;cursor:pointer}
+.wcfn2{font-size:11px;color:#bdbdbd;margin-top:11px}
 
-/* Lost overlay */
-.lo{position:absolute;inset:0;z-index:70;background:rgba(0,0,0,.38);opacity:0;pointer-events:none;transition:opacity .3s;display:flex;align-items:center;justify-content:center}
-.lo.vis{opacity:1;pointer-events:auto}
-.lb{background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.25);width:340px;overflow:hidden}
-.lbh{padding:16px 20px 14px;border-bottom:1px solid #f0f0f0}
-.lbh h3{font-size:14px;font-weight:500;margin:0 0 3px;color:#202124}
-.lbh p{font-size:12px;color:#5f6368;line-height:1.5}
-.lbf{padding:14px 20px;display:flex;flex-direction:column;gap:9px;border-bottom:1px solid #f0f0f0}
-.lfl{display:flex;flex-direction:column;gap:3px}
-.lfl label{font-size:10px;font-weight:500;color:#9e9e9e;text-transform:uppercase;letter-spacing:.04em}
-.lfl select,.lfl textarea{font-size:12px;padding:5px 8px;border:1px solid #dadce0;border-radius:5px;background:#fff;color:#202124;font-family:inherit}
-.lfl textarea{resize:none;min-height:36px}
-.lbfoot{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px}
-.lcnl{padding:7px 14px;border-radius:5px;border:1px solid #dadce0;background:#fff;font-size:13px;color:#3c4043}
-.llost{padding:7px 16px;border-radius:5px;border:none;background:#c62828;color:#fff;font-size:13px;font-weight:500}
-
-/* Highlight ring */
-.hlr{position:absolute;border-radius:8px;border:2px solid #1a73e8;box-shadow:0 0 0 3px rgba(26,115,232,.2);z-index:55;pointer-events:none;opacity:0;transition:opacity .25s}
-.hlr.vis{opacity:1}
-
-/* In-stage caption */
-.cap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(8,10,18,.93);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:13px 26px;font-size:15px;font-weight:500;color:#fff;white-space:nowrap;backdrop-filter:blur(12px);z-index:150;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 6px 28px rgba(0,0,0,.5)}
+/* ── In-stage caption ── */
+.cap{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(8,10,18,.93);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:13px 28px;font-size:16px;font-weight:500;color:#fff;white-space:nowrap;backdrop-filter:blur(12px);z-index:160;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 6px 28px rgba(0,0,0,.5)}
 .cap.vis{opacity:1}
 
-/* Scene transition */
-.str{position:absolute;inset:0;z-index:180;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0f1117;opacity:0;pointer-events:none;transition:opacity .32s}
+/* ── Scene transition ── */
+.str{position:absolute;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;background:#0f1117;opacity:0;pointer-events:none;transition:opacity .32s;border-radius:12px}
 .str.vis{opacity:1;pointer-events:auto}
 .strn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#1a73e8;font-weight:500}
-.strt{font-size:26px;font-weight:600;color:#e8eaf0;letter-spacing:-.02em;text-align:center;padding:0 40px}
+.strt{font-size:28px;font-weight:600;color:#e8eaf0;letter-spacing:-.02em;text-align:center;padding:0 40px}
 .strb{width:48px;height:3px;background:#1a73e8;border-radius:3px;margin-top:4px}
 
-/* Cursor */
-.cursor{position:absolute;z-index:200;pointer-events:none;transition:left .5s cubic-bezier(.4,0,.2,1),top .5s cubic-bezier(.4,0,.2,1)}
-.cring{position:absolute;width:26px;height:26px;border-radius:50%;border:2px solid rgba(26,115,232,.75);left:-10px;top:-10px;transform:scale(0);transition:transform .18s;pointer-events:none}
-.cring.on{transform:scale(1)}
-
-/* Controls */
-.controls{width:100%;max-width:1100px;margin-top:18px;display:flex;align-items:center;justify-content:center;gap:14px}
-.cbtn{padding:8px 20px;border-radius:20px;border:1px solid #2a2d3a;background:#1a1d26;color:#9ba3c0;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
-.cbtn:hover{background:#23283a;color:#e8eaf0;border-color:#3a3f52}
+/* ── Controls ── */
+.controls{width:100%;max-width:1480px;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:14px}
+.cbtn{padding:8px 20px;border-radius:20px;border:1px solid #2a2d3a;background:#1a1d26;color:#9ba3c0;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+.cbtn:hover{background:#23283a;color:#e8eaf0}
 .cbtn.pr{background:#1a73e8;border-color:#1a73e8;color:#fff}
-.cbtn.pr:hover{background:#1557b0}
 </style>
 </head>
 <body>
@@ -204,12 +249,12 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
   <div class="demo-title">Follow-up Feature · Simplified V1</div>
 </div>
 
-<div class="scene-caption vis" id="sc">✅  That's the full flow — structured, visible, zero friction</div>
+<div class="scene-caption vis" id="sc">📅  Rescheduling a follow-up — date picker with shortcuts</div>
 
 <div class="scene-bar">
-  <div id="dots"><div class="sdot done" id="dot0"></div><div class="sdot done" id="dot1"></div><div class="sdot done" id="dot2"></div><div class="sdot done" id="dot3"></div><div class="sdot done" id="dot4"></div><div class="sdot done" id="dot5"></div><div class="sdot done" id="dot6"></div><div class="sdot done" id="dot7"></div><div class="sdot on" id="dot8"></div></div>
-  <div class="prog-track"><div class="prog-fill" id="pf" style="width: 100%;"></div></div>
-  <div class="scene-num" id="snum">09 / 09</div>
+  <div id="dots" style="display:flex;gap:6px"><div class="sdot done" id="dot0"></div><div class="sdot done" id="dot1"></div><div class="sdot on" id="dot2"></div><div class="sdot" id="dot3"></div><div class="sdot" id="dot4"></div><div class="sdot" id="dot5"></div><div class="sdot" id="dot6"></div><div class="sdot" id="dot7"></div><div class="sdot" id="dot8"></div><div class="sdot" id="dot9"></div></div>
+  <div class="prog-track"><div class="prog-fill" id="pf" style="width: 30%;"></div></div>
+  <div class="scene-num" id="snum">03 / 10</div>
 </div>
 
 <div class="stage" id="stage">
@@ -224,13 +269,13 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
       <span class="tb-lbl">Group By</span>
       <select class="grp-sel"><option>Lead Stage</option></select>
       <div class="spacer"></div>
-      <div class="chk-wrap">
-        <div class="chk-box" id="chk"></div>
+      <div class="chk-wrap" id="lateChkWrap">
+        <div class="chk-box on" id="chk"></div>
         <span>Late follow-ups</span>
       </div>
       <button class="tb-btn">New</button>
       <button class="tb-btn">Refresh</button>
-      <input class="search-box" placeholder="Search in this list…">
+      <input class="search-box" placeholder="Search…">
     </div>
     <div class="pipeline">
       <div class="pip" style="background:#e8a000"><b>160</b>&nbsp;New Lead<span class="pip-wr">$101.4K</span><span class="pip-late">3 late</span></div>
@@ -241,72 +286,16 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
     </div>
     <table>
       <thead><tr>
-        <th style="width:26px">#</th><th style="width:20px"></th>
-        <th style="min-width:148px">Trip Name</th>
-        <th style="min-width:108px">Last Email</th>
-        <th class="rc" style="min-width:138px">Next Follow-up</th>
-        <th style="min-width:175px">Advisor Memo</th>
-        <th style="min-width:55px">Travelers</th>
-        <th style="min-width:85px">Trip Start</th>
-        <th style="min-width:90px">Sales Owner</th>
+        <th style="width:30px">#</th><th style="width:24px"></th>
+        <th style="min-width:160px">Trip Name</th>
+        <th style="min-width:130px">Last Email</th>
+        <th class="rc" style="min-width:155px">Next Follow-up</th>
+        <th style="min-width:210px">Advisor Memo</th>
+        <th style="min-width:65px">Travelers</th>
+        <th style="min-width:100px">Trip Start</th>
+        <th style="min-width:110px">Sales Owner</th>
       </tr></thead>
-      <tbody id="tb"><tr class="ghdr"><td colspan="9" style="background:#e8a000;padding:6px 8px">▾ New Lead (160 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">3 late</span></td></tr><tr id="row1" class="rrl">
-        <td class="nc">1</td><td><div class="xb">▾</div></td>
-        <td><span class="tl ">Isabella and Jarod</span></td>
-        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">08 Dec, 01:00</span><span style="font-size:9px;color:#9e9e9e;margin-left:2px">(2)</span></span></td>
-        <td id="fc1"><div class="fuc"><span class="fub dr" id="fb1"><span class="fd"></span>1d ago</span><span class="lx" id="lx1">×</span></div></td>
-        <td><span class="mc" id="mc1">Honeymoon trip — boutique riads…</span></td>
-        <td style="color:#5f6368">20</td><td style="color:#5f6368">29/04/2026</td><td style="color:#5f6368">Karen Gee</td>
-      </tr><tr id="row2" class="rrl">
-        <td class="nc">2</td><td><div class="xb">▾</div></td>
-        <td><span class="tl ">Carmen Matiella ...</span></td>
-        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">04 Dec, 01:00</span></span></td>
-        <td id="fc2"><div class="fuc"><span class="fub dr" id="fb2"><span class="fd"></span>2d ago</span><span class="lx" id="lx2">×</span></div></td>
-        <td><span class="mc" id="mc2">Waiting on client dates.</span></td>
-        <td style="color:#5f6368">2</td><td style="color:#5f6368">31/07/2025</td><td style="color:#5f6368">Reem K.</td>
-      </tr><tr id="row3" class="rlost">
-        <td class="nc">3</td><td><div class="xb">▾</div></td>
-        <td><span class="tl lost">Sabrina's lead</span><span class="ltag">Lost</span></td>
-        <td><span style="font-size:11px;color:#bdbdbd">—</span></td>
-        <td id="fc3"><span style="font-size:11px;color:#bdbdbd">—</span></td>
-        <td><span class="mc mt" id="mc3">Add memo…</span></td>
-        <td style="color:#5f6368"></td><td style="color:#5f6368">12/08/2025</td><td style="color:#5f6368">Reem K.</td>
-      </tr><tr id="row4" class="">
-        <td class="nc">4</td><td><div class="xb">▾</div></td>
-        <td><span class="tl ">Christie Wingo's c...</span></td>
-        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">02 Dec, 01:00</span></span></td>
-        <td id="fc4"><div class="fuc"><span class="fub da" id="fb4"><span class="fd"></span>Tomorrow</span><span class="lx" id="lx4">×</span></div></td>
-        <td><span class="mc" id="mc4">Engaged early — went quiet…</span></td>
-        <td style="color:#5f6368">3</td><td style="color:#5f6368">23/09/2026</td><td style="color:#5f6368">Reem K.</td>
-      </tr><tr id="row5" class="">
-        <td class="nc">5</td><td><div class="xb">▾</div></td>
-        <td><span class="tl ">Adrien de Saint Ja…</span></td>
-        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#2e7d32" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#2e7d32" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#2e7d32" stroke-width="1" fill="none"></rect></svg><span class="ed">11 Dec, 01:00</span></span></td>
-        <td id="fc5"><div class="fuc"><span class="fn">+ Set date</span><span class="lx" id="lx5">×</span></div></td>
-        <td><span class="mc" id="mc5">Group of 35. Company retreat.</span></td>
-        <td style="color:#5f6368">35</td><td style="color:#5f6368">07/06/2026</td><td style="color:#5f6368">Fadila A.</td>
-      </tr><tr id="row6" class="">
-        <td class="nc">6</td><td><div class="xb">▾</div></td>
-        <td><span class="tl ">Steven Goodrich</span></td>
-        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#7b1fa2" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#7b1fa2" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#7b1fa2" stroke-width="1" fill="none"></rect></svg><span class="ed">05 Dec, 01:00</span></span></td>
-        <td id="fc6"><div class="fuc"><span class="fub dg" id="fb6"><span class="fd"></span>16 Dec</span><span class="lx" id="lx6">×</span></div></td>
-        <td><span class="mc" id="mc6">Away for work until Jan.</span></td>
-        <td style="color:#5f6368">2</td><td style="color:#5f6368">27/07/2026</td><td style="color:#5f6368">Karen Gee</td>
-      </tr><tr class="ghdr"><td colspan="9" style="background:#1a73e8;padding:6px 8px">▾ First Contact (241 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">1 late</span></td></tr><tr id="row7">
-        <td class="nc">7</td><td><div class="xb">▾</div></td>
-        <td><span class="tl">Katherine's Group…</span></td>
-        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">10 Dec, 01:00</span></span></td>
-        <td id="fc7"><div class="fuc"><span class="fub dg" id="fb7"><span class="fd"></span>17 Dec</span><span class="lx" id="lx7">×</span></div></td>
-        <td><span class="mc" id="mc7">Affinity group. Responsive.</span></td>
-        <td style="color:#5f6368">10</td><td style="color:#5f6368">22/07/2026</td><td style="color:#5f6368">Kavya Singh</td>
-      </tr><tr id="row8">
-        <td class="nc">8</td><td><div class="xb">▾</div></td>
-        <td><span class="tl">Ximena Aguilar</span></td>
-        <td><span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#e37400" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#e37400" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#e37400" stroke-width="1" fill="none"></rect></svg><span class="ed">07 Dec, 01:00</span></span></td>
-        <td id="fc8"><div class="fuc"><span class="fub dr" id="fb8"><span class="fd"></span>3d ago</span><span class="lx" id="lx8">×</span></div></td>
-        <td><span class="mc mt" id="mc8">Add memo…</span></td>
-        <td style="color:#5f6368">12</td><td style="color:#5f6368">24/04/2026</td><td style="color:#5f6368">Loubna B.</td>
-      </tr></tbody>
+      <tbody id="tb"><tr class="ghdr"><td colspan="9" style="background:#e8a000;padding:7px 10px">▾ New Lead (160 items) <span style="font-size:11px;background:rgba(220,53,53,.4);padding:2px 7px;border-radius:8px;margin-left:7px">3 late</span></td></tr><tr id="row1" class="rrl"><td class="nc">1</td><td><div class="xb">▾</div></td><td><span class="tl ">Isabella and Jarod</span></td><td><span class="ec" id="em1"><svg width="20" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">08 Dec, 01:00</span><span style="font-size:10px;color:#9e9e9e;margin-left:3px">(2)</span></span></td><td id="fc1"><div class="fuc"><span class="fub dr" id="fb1"><span class="fd"></span>1d ago</span><span class="lx" id="lx1">×</span></div></td><td><span class="mc" id="mc1">Honeymoon trip — boutique riads…</span></td><td style="color:#5f6368">20</td><td style="color:#5f6368">29/04/2026</td><td style="color:#5f6368">Karen Gee</td></tr><tr id="row2" class="rrl"><td class="nc">2</td><td><div class="xb">▾</div></td><td><span class="tl ">Carmen Matiella ...</span></td><td><span class="ec" id="em2"><svg width="20" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="#1a73e8" opacity=".12"></rect><path d="M0 2l9 6 9-6" stroke="#1a73e8" stroke-width="1.2" fill="none"></path><rect width="18" height="14" rx="2" stroke="#1a73e8" stroke-width="1" fill="none"></rect></svg><span class="ed">04 Dec, 01:00</span></span></td><td id="fc2"><div class="fuc"><span class="fub dr" id="fb2"><span class="fd"></span>2d ago</span><span class="lx" id="lx2">×</span></div></td><td><span class="mc" id="mc2">Waiting on client dates.</span></td><td style="color:#5f6368">2</td><td style="color:#5f6368">31/07/2025</td><td style="color:#5f6368">Reem K.</td></tr><tr id="row3" class="rrl"><td class="nc">3</td><td><div class="xb">▾</div></td><td><span class="tl ">Sabrina's lead</span></td><td><span style="font-size:12px;color:#bdbdbd">—</span></td><td id="fc3"><div class="fuc"><span class="fub dr" id="fb3"><span class="fd"></span>12d ago</span><span class="lx" id="lx3">×</span></div></td><td><span class="mc mt" id="mc3">Add memo…</span></td><td style="color:#5f6368"></td><td style="color:#5f6368">12/08/2025</td><td style="color:#5f6368">Reem K.</td></tr></tbody>
     </table>
   </div>
 
@@ -320,46 +309,11 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
     </div>
   </div>
 
-  <!-- Weekly email overlay -->
-  <div class="wo" id="wo">
-    <div class="wc">
-      <div class="wch">
-        <div class="wcd" style="background:#ff5f57"></div>
-        <div class="wcd" style="background:#febc2e"></div>
-        <div class="wcd" style="background:#28c840"></div>
-        <div class="wcsb">📬 Weekly Follow-up Summary · Travel Collection CRM</div>
-      </div>
-      <div class="wcb">
-        <div class="wcfr">
-          <div class="wcav">TC</div>
-          <div>
-            <div class="wcfn">Travel Collection CRM</div>
-            <div class="wcfa">noreply@travelcollection.com</div>
-          </div>
-        </div>
-        <div class="wcto">To: karen.gee@travelcollection.com</div>
-        <hr class="wcdiv">
-        <h4>👋 Hi Karen — you have 3 late follow-ups this week</h4>
-        <p>These leads haven't been followed up. Click below to action them in the CRM.</p>
-        <table class="wctable">
-          <thead><tr><th>Lead</th><th>Stage</th><th>Overdue</th></tr></thead>
-          <tbody>
-            <tr><td>Carmen Matiella ...</td><td>New Lead</td><td><span class="wbadge">2d ago</span></td></tr>
-            <tr><td>Sabrina's lead</td><td>New Lead</td><td><span class="wbadge">12d ago</span></td></tr>
-            <tr><td>Ximena Aguilar</td><td>First Contact</td><td><span class="wbadge">3d ago</span></td></tr>
-          </tbody>
-        </table>
-        <div class="wcta" id="wCta">View late follow-ups in CRM →</div>
-        <div class="wcfn2">Sent every Monday · Unsubscribe</div>
-      </div>
-    </div>
-  </div>
-
   <!-- Date picker -->
-  <div class="fp dp" id="dpPnl" style="top: 207.458px; left: 412.222px;">
+  <div class="dp" id="dpPnl">
     <div class="dpl">Set next follow-up</div>
     <input class="dpi" id="dpi" value="14 Dec 2025" readonly="">
-    <div class="dps">
+    <div class="dp-shorts">
       <span class="dpb" id="dp1d">+1d</span>
       <span class="dpb" id="dp2d">+2d</span>
       <span class="dpb" id="dp1w">+1w</span>
@@ -373,31 +327,34 @@ td{padding:5px 8px;border-bottom:1px solid #f1f3f4;white-space:nowrap;vertical-a
   </div>
 
   <!-- Memo panel -->
-  <div class="fp mp" id="mpPnl" style="top: 202.863px; left: 668.16px;">
-    <div class="mph"><span class="mpht" id="mpTitle">Isabella and Jarod</span><span class="mpx">✕</span></div>
-    <div class="mpb">
-      <div id="mpPrev" style="display: block;">
+  <div class="mpp" id="mpPnl">
+    <div class="mph">
+      <span class="mpht">Isabella and Jarod</span>
+      <span style="color:#9e9e9e;font-size:16px">✕</span>
+    </div>
+    <div class="mpb2">
+      <div id="mpPrev">
         <div class="mppv">Honeymoon trip — boutique riads + desert.<br><span class="mpl">zicasso.com/trips/isabella-2026</span><br>Awaiting feedback on v1.</div>
-        <div class="mph2">✎ Click to edit</div>
+        <div class="mphnt">✎ Click to edit</div>
       </div>
-      <textarea class="mpta" id="mpTa" style="display: none;">Honeymoon trip — boutique riads + desert.
+      <textarea class="mpta" id="mpTa" style="display:none">Honeymoon trip — boutique riads + desert.
 https://zicasso.com/trips/isabella-2026
 Awaiting feedback on v1.</textarea>
     </div>
-    <div class="mpf" id="mpFoot" style="display: none;">
-      <button class="mpca">Cancel</button>
+    <div class="mpft" id="mpFoot" style="display:none">
+      <button class="mpca2">Cancel</button>
       <button class="mpsv">Save</button>
     </div>
   </div>
 
   <!-- Thread picker -->
-  <div class="fp tp" id="tpPnl" style="top: 201.081px; left: 309.456px;">
+  <div class="tpp" id="tpPnl">
     <div class="tph">
       <div><h3>Open email thread</h3><div class="tps">Isabella and Jarod · 2 threads</div></div>
-      <span class="tpx">✕</span>
+      <span style="color:#5f6368;font-size:18px">✕</span>
     </div>
     <div class="tpl">
-      <div class="tpi hl" id="th1">
+      <div class="tpi" id="th1">
         <div class="tav" style="background:#1a73e8">KG</div>
         <div class="tmeta">
           <div class="tsubj">Morocco honeymoon enquiry</div>
@@ -418,10 +375,113 @@ Awaiting feedback on v1.</textarea>
     </div>
   </div>
 
+  <!-- Gmail overlay (scene 7) -->
+  <div class="ov gmail-ov" id="gmailOv">
+    <div class="gmail-bg">
+      <!-- Sidebar -->
+      <div class="gm-side">
+        <button class="gm-compose">✏️ Compose</button>
+        <div class="gm-nav active"><span class="gm-nav-ico">📥</span>Inbox<span class="gm-nav-ct">50</span></div>
+        <div class="gm-nav"><span class="gm-nav-ico">⭐</span>Starred</div>
+        <div class="gm-nav"><span class="gm-nav-ico">🕐</span>Snoozed</div>
+        <div class="gm-nav"><span class="gm-nav-ico">📤</span>Sent</div>
+        <div class="gm-nav"><span class="gm-nav-ico">↩</span>Recently Viewed</div>
+        <div class="gm-nav"><span class="gm-nav-ico">👁</span>All Tracked</div>
+        <div class="gm-nav"><span class="gm-nav-ico">📝</span>Drafts<span class="gm-nav-ct">756</span></div>
+        <div class="gm-label-hdr">Labels</div>
+        <div class="gm-label"><span class="gm-label-dot" style="background:#555"></span>Demo</div>
+        <div class="gm-label"><span class="gm-label-dot" style="background:#333"></span>DMARC<span class="gm-label-ct">6</span></div>
+        <div class="gm-label"><span class="gm-label-dot" style="background:#f9ab00"></span>FYI<span class="gm-label-ct">16</span></div>
+        <div class="gm-label"><span class="gm-label-dot" style="background:#333"></span>Needs Reply<span class="gm-label-ct">10</span></div>
+        <div class="gm-label"><span class="gm-label-dot" style="background:#34a853"></span>Promotion<span class="gm-label-ct">5</span></div>
+        <div class="gm-label"><span class="gm-label-dot" style="background:#f9ab00"></span>To Do<span class="gm-label-ct">11</span></div>
+        <div class="gm-label"><span class="gm-label-dot" style="background:#4285f4"></span>Waiting<span class="gm-label-ct">5</span></div>
+        <div class="gm-label"><span class="gm-label-dot" style="background:#e94235"></span>weTravel</div>
+      </div>
+      <!-- Main -->
+      <div class="gm-main">
+        <div class="gm-toolbar">
+          <div class="gm-search">🔍 <span>Search mail</span></div>
+        </div>
+        <div class="gm-list-hdr">
+          <span>☐</span><span>⟳</span><span>⋮</span>
+        </div>
+        <div class="gm-row unread">
+          <span class="gm-from">Isabella Jarod</span>
+          <span class="gm-subj">Re: Morocco honeymoon — Thanks for the itinerary update!</span>
+          <span class="gm-date">now</span>
+        </div>
+        <div class="gm-row">
+          <span class="gm-from">Zicasso</span>
+          <span class="gm-subj">New inquiry: Steven Goodrich — Imperial cities July 2026</span>
+          <span class="gm-date">10:32</span>
+        </div>
+        <div class="gm-row">
+          <span class="gm-from">Christie Wingo</span>
+          <span class="gm-subj">Re: Morocco private tour Sept 2026</span>
+          <span class="gm-date">09:14</span>
+        </div>
+        <div class="gm-row">
+          <span class="gm-from">Adrien de Saint Jacob</span>
+          <span class="gm-subj">Group retreat Morocco 2026 — options?</span>
+          <span class="gm-date">Yesterday</span>
+        </div>
+        <div class="gm-row">
+          <span class="gm-from">Kavya Singh</span>
+          <span class="gm-subj">Katherine's group — proposal approved ✓</span>
+          <span class="gm-date">Yesterday</span>
+        </div>
+        <div class="gm-row">
+          <span class="gm-from">noreply@zicasso</span>
+          <span class="gm-subj">New lead assigned: Steven Goodrich</span>
+          <span class="gm-date">Dec 11</span>
+        </div>
+      </div>
+      <!-- Compose window floating on gmail -->
+      <div class="gm-compose-win" id="gmailCompose">
+        <div class="gc-bar">
+          <span>New Message</span>
+          <div class="gc-x"><span>—</span><span>⤢</span><span>✕</span></div>
+        </div>
+        <div class="gc-field"><span class="gc-lbl">To</span><span class="gc-val">isabella.jarod@gmail.com</span></div>
+        <div class="gc-field"><span class="gc-lbl">Sub</span><span class="gc-val">Re: Morocco honeymoon enquiry</span></div>
+        <div class="gc-body">Hi Isabella,<br><br>Thanks for your feedback! I've updated the riad selection and attached itinerary v2 for your review.<br><br>Best, Karen</div>
+        <div class="gc-foot">
+          <button class="gc-send" id="gcSend">Send</button>
+        </div>
+      </div>
+      <!-- Follow-up prompt floats on top of Gmail background -->
+      <div id="fupOv" style="display:none;position:absolute;inset:0;background:rgba(10,12,20,.45);backdrop-filter:blur(2px);z-index:80;align-items:center;justify-content:center;border-radius:10px">
+        <div class="fup-card" style="transform:none">
+          <div class="fuph">
+            <div class="fuph-ico">📅</div>
+            <div>
+              <div class="fuph-t">When do you want to follow up?</div>
+              <div class="fuph-s">Email sent to Isabella and Jarod</div>
+            </div>
+          </div>
+          <div class="fupb">
+            <div class="fupq">Set your next follow-up date</div>
+            <div class="fup-opts">
+              <span class="fup-opt" id="fop1">In 2 days</span>
+              <span class="fup-opt" id="fop2">In 1 week</span>
+              <span class="fup-opt" id="fop3">In 2 weeks</span>
+              <span class="fup-opt" id="fop4">No follow-up</span>
+            </div>
+          </div>
+          <div class="fupf">
+            <button class="fup-skip">Skip</button>
+            <button class="fup-save" id="fupSave">Save to CRM</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Lost modal -->
-  <div class="lo" id="lo">
-    <div class="lb">
-      <div class="lbh"><h3>Mark as Lost</h3><p id="lname">"Sabrina's lead" will be marked as lost.</p></div>
+  <div class="ov" id="lo">
+    <div class="lb ov-card">
+      <div class="lbh"><h3>Mark as Lost</h3><p>"Sabrina's lead" will be marked as lost.</p></div>
       <div class="lbf">
         <div class="lfl"><label>Lost reason</label><select><option>No response</option></select></div>
         <div class="lfl"><label>Lost notes</label><textarea>No response after multiple follow-ups.</textarea></div>
@@ -434,324 +494,349 @@ Awaiting feedback on v1.</textarea>
     </div>
   </div>
 
-  <!-- Highlight ring -->
-  <div class="hlr" id="hlr" style="left: 249.31px; top: 176.266px; width: 120.292px; height: 22.8148px;"></div>
+  <!-- Weekly email overlay -->
+  <div class="ov" id="wo">
+    <div class="wc ov-card">
+      <div class="wch">
+        <div class="wcd" style="background:#ff5f57"></div>
+        <div class="wcd" style="background:#febc2e"></div>
+        <div class="wcd" style="background:#28c840"></div>
+        <div class="wcsb">📬 Weekly Follow-up Summary · Travel Collection CRM</div>
+      </div>
+      <div class="wcb">
+        <div class="wcfr">
+          <div class="wcav">TC</div>
+          <div><div class="wcfname">Travel Collection CRM</div><div class="wcfaddr">noreply@travelcollection.com</div></div>
+        </div>
+        <div class="wcto">To: karen.gee@travelcollection.com</div>
+        <hr class="wcdiv">
+        <h4>👋 Hi Karen — you have 3 late follow-ups this week</h4>
+        <p>These leads haven't been followed up. Click below to action them in the CRM.</p>
+        <table class="wctable">
+          <thead><tr><th>Lead</th><th>Stage</th><th>Overdue</th></tr></thead>
+          <tbody>
+            <tr><td>Carmen Matiella ...</td><td>New Lead</td><td><span class="wbadge">2d ago</span></td></tr>
+            <tr><td>Sabrina's lead</td><td>New Lead</td><td><span class="wbadge">12d ago</span></td></tr>
+            <tr><td>Ximena Aguilar</td><td>First Contact</td><td><span class="wbadge">3d ago</span></td></tr>
+          </tbody>
+        </table>
+        <div class="wcta" id="wCta">View late follow-ups in CRM →</div>
+        <div class="wcfn2">Sent every Monday · Unsubscribe</div>
+      </div>
+    </div>
+  </div>
 
   <!-- In-stage caption -->
-  <div class="cap" id="cap">CRM filtered — ready to action all late leads</div>
+  <div class="cap vis" id="cap">3 overdue leads shown — ready to action</div>
 
   <!-- Scene transition -->
   <div class="str" id="str">
-    <div class="strn" id="strN">Scene 9 of 9</div>
-    <div class="strt" id="strT">End of demo</div>
+    <div class="strn" id="strN">Scene 3 of 10</div>
+    <div class="strt" id="strT">Rescheduling a date</div>
     <div class="strb"></div>
-  </div>
-
-  <!-- Cursor -->
-  <div class="cursor" id="cur" style="left: 550px; top: 200px;">
-    <svg width="20" height="24" viewBox="0 0 20 24" fill="none">
-      <path d="M2 2L2 18L6.5 13.5L9.5 20L11.5 19L8.5 12.5L14 12.5L2 2Z" fill="white" stroke="#333" stroke-width="1.2" stroke-linejoin="round"></path>
-    </svg>
-    <div class="cring" id="cr"></div>
   </div>
 </div>
 
 <div class="controls">
   <button class="cbtn" onclick="prevS()">← Prev</button>
-  <button class="cbtn pr" id="playBtn" onclick="togglePlay()">↺ Replay</button>
+  <button class="cbtn pr" id="playBtn" onclick="togglePlay()">⏸ Pause</button>
   <button class="cbtn" onclick="nextS()">Next →</button>
 </div>
 
 <script>
-const Z = 1.35; // zoom factor — all getBCR values divided by Z for stage coords
-const stage = document.getElementById('stage');
-
-// ── Position helpers ──
-function sc(el){
-  const sr = stage.getBoundingClientRect();
-  const r  = el.getBoundingClientRect();
-  return {
-    x: (r.left - sr.left) / Z + r.width  / Z / 2,
-    y: (r.top  - sr.top)  / Z + r.height / Z / 2,
-    w: r.width  / Z,
-    h: r.height / Z
-  };
-}
-function mv(x, y){ const c=document.getElementById('cur'); c.style.left=x+'px'; c.style.top=y+'px'; }
-function click(){ const r=document.getElementById('cr'); r.classList.add('on'); setTimeout(()=>r.classList.remove('on'),380); }
-function hl(el){ const p=sc(el),r=document.getElementById('hlr'); r.style.left=(p.x-p.w/2-4)+'px'; r.style.top=(p.y-p.h/2-4)+'px'; r.style.width=(p.w+8)+'px'; r.style.height=(p.h+8)+'px'; r.classList.add('vis'); }
-function clrHl(){ document.getElementById('hlr').classList.remove('vis'); }
+// ── Helpers — NO coordinate math, highlight by class only ──
+function addHl(id){ const e=document.getElementById(id); if(e) e.classList.add('demo-hl'); }
+function addHlQ(q){ const e=document.querySelector(q); if(e) e.classList.add('demo-hl'); }
+function clrHl(){ document.querySelectorAll('.demo-hl').forEach(e=>e.classList.remove('demo-hl')); }
+function showOv(id){ document.getElementById(id).classList.add('vis'); }
+function hideOv(id){ document.getElementById(id).classList.remove('vis'); }
 function showCap(t){ const c=document.getElementById('cap'); c.textContent=t; c.classList.add('vis'); }
 function hideCap(){ document.getElementById('cap').classList.remove('vis'); }
-function showFP(id){ document.getElementById(id).classList.add('vis'); }
-function hideFP(id){ document.getElementById(id).classList.remove('vis'); }
+
+// Position floating panels relative to their anchor element
+function posPanel(panelId, anchorId, offsetY=8){
+  const panel = document.getElementById(panelId);
+  const anchor = document.getElementById(anchorId);
+  if(!panel||!anchor) return;
+  const sr = document.getElementById('stage').getBoundingClientRect();
+  const ar = anchor.getBoundingClientRect();
+  let left = ar.left - sr.left;
+  let top  = ar.bottom - sr.top + offsetY;
+  const pw = panel.offsetWidth || 240;
+  if(left + pw > sr.width - 8) left = sr.width - pw - 8;
+  if(left < 4) left = 4;
+  panel.style.left = left + 'px';
+  panel.style.top  = top  + 'px';
+}
+
 function hideAll(){
-  ['dpPnl','mpPnl','tpPnl'].forEach(id=>hideFP(id));
-  document.getElementById('lo').classList.remove('vis');
-  document.getElementById('wo').classList.remove('vis');
-  document.getElementById('etToast').classList.remove('vis');
+  const compose=document.getElementById('gmailCompose'); if(compose) compose.style.display='';
+  const fupInner=document.getElementById('fupOv'); if(fupInner) fupInner.style.display='none';
+  ['fop1','fop2','fop3','fop4'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('hl');});
+  ['etToast','dpPnl','mpPnl','tpPnl','lo','wo','gmailOv'].forEach(id=>{
+    const e=document.getElementById(id);
+    if(e){ e.classList.remove('vis'); if(e.style.display==='flex'||e.style.display==='block') e.style.display=''; }
+    // For non-ov panels that use display:none/block
+    const el=document.getElementById(id);
+    if(el&&el.classList.contains('dp')||el&&el.classList.contains('mpp')||el&&el.classList.contains('tpp'))
+      el.classList.remove('vis');
+  });
   clrHl(); hideCap();
+  document.getElementById('chk').classList.remove('on');
 }
 
-// ── Table data ──
-const NL = [
-  {id:1,n:'Isabella and Jarod',  e:'08 Dec, 01:00',ec:'#1a73e8',et:2, fu:'1d ago', fc:'dr', mem:'Honeymoon trip — boutique riads…', tv:20, sd:'29/04/2026', ow:'Karen Gee'},
-  {id:2,n:'Carmen Matiella ...',  e:'04 Dec, 01:00',ec:'#1a73e8',et:1, fu:'2d ago', fc:'dr', mem:'Waiting on client dates.',        tv:2,  sd:'31/07/2025', ow:'Reem K.'},
-  {id:3,n:"Sabrina's lead",       e:null,           ec:null,    et:0, fu:'12d ago',fc:'dr', mem:'',                                 tv:'', sd:'12/08/2025', ow:'Reem K.'},
-  {id:4,n:"Christie Wingo's c...",e:'02 Dec, 01:00',ec:'#1a73e8',et:1, fu:'Tomorrow',fc:'da',mem:'Engaged early — went quiet…',    tv:3,  sd:'23/09/2026', ow:'Reem K.'},
-  {id:5,n:'Adrien de Saint Ja…', e:'11 Dec, 01:00',ec:'#2e7d32',et:1, fu:null,     fc:'',  mem:'Group of 35. Company retreat.',   tv:35, sd:'07/06/2026', ow:'Fadila A.'},
-  {id:6,n:'Steven Goodrich',      e:'05 Dec, 01:00',ec:'#7b1fa2',et:1, fu:'16 Dec', fc:'dg', mem:'Away for work until Jan.',        tv:2,  sd:'27/07/2026', ow:'Karen Gee'},
+// ── Table ──
+const NL=[
+  {id:1,n:'Isabella and Jarod',  e:'08 Dec, 01:00',ec:'#1a73e8',et:2,fu:'1d ago', fc:'dr',mem:'Honeymoon trip — boutique riads…',tv:20,sd:'29/04/2026',ow:'Karen Gee'},
+  {id:2,n:'Carmen Matiella ...',  e:'04 Dec, 01:00',ec:'#1a73e8',et:1,fu:'2d ago', fc:'dr',mem:'Waiting on client dates.',     tv:2, sd:'31/07/2025',ow:'Reem K.'},
+  {id:3,n:"Sabrina's lead",       e:null,           ec:null,    et:0,fu:'12d ago',fc:'dr',mem:'',                              tv:'',sd:'12/08/2025',ow:'Reem K.'},
+  {id:4,n:"Christie Wingo's c...",e:'02 Dec, 01:00',ec:'#1a73e8',et:1,fu:'Tomorrow',fc:'da',mem:'Engaged early — went quiet…', tv:3, sd:'23/09/2026',ow:'Reem K.'},
+  {id:5,n:'Adrien de Saint Ja…', e:'11 Dec, 01:00',ec:'#2e7d32',et:1,fu:null,    fc:'',  mem:'Group of 35. Company retreat.',tv:35,sd:'07/06/2026',ow:'Fadila A.'},
+  {id:6,n:'Steven Goodrich',      e:'05 Dec, 01:00',ec:'#7b1fa2',et:1,fu:'16 Dec',fc:'dg',mem:'Away for work until Jan.',     tv:2, sd:'27/07/2026',ow:'Karen Gee'},
 ];
-const FC = [
-  {id:7,n:"Katherine's Group…",  e:'10 Dec, 01:00',ec:'#1a73e8',et:1, fu:'17 Dec', fc:'dg', mem:'Affinity group. Responsive.',    tv:10, sd:'22/07/2026', ow:'Kavya Singh'},
-  {id:8,n:'Ximena Aguilar',       e:'07 Dec, 01:00',ec:'#e37400',et:1, fu:'3d ago', fc:'dr', mem:'',                                tv:12, sd:'24/04/2026', ow:'Loubna B.'},
+const FC=[
+  {id:7,n:"Katherine's Group…",  e:'10 Dec, 01:00',ec:'#1a73e8',et:1,fu:'17 Dec',fc:'dg',mem:'Affinity group. Responsive.',  tv:10,sd:'22/07/2026',ow:'Kavya Singh'},
+  {id:8,n:'Ximena Aguilar',       e:'07 Dec, 01:00',ec:'#e37400',et:1,fu:'3d ago',fc:'dr',mem:'',                              tv:12,sd:'24/04/2026',ow:'Loubna B.'},
 ];
 
-function eHtml(r){
-  if(!r.ec) return '<span style="font-size:11px;color:#bdbdbd">—</span>';
-  return `<span class="ec"><svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="${r.ec}" opacity=".12"/><path d="M0 2l9 6 9-6" stroke="${r.ec}" stroke-width="1.2" fill="none"/><rect width="18" height="14" rx="2" stroke="${r.ec}" stroke-width="1" fill="none"/></svg><span class="ed">${r.e}</span>${r.et>1?`<span style="font-size:9px;color:#9e9e9e;margin-left:2px">(${r.et})</span>`:''}</span>`;
-}
-function fuHtml(r, overrideFu, overrideFc){
-  const fu = overrideFu !== undefined ? overrideFu : r.fu;
-  const fc = overrideFc !== undefined ? overrideFc : r.fc;
-  const x = `<span class="lx" id="lx${r.id}">×</span>`;
-  if(!fu) return `<div class="fuc"><span class="fn">+ Set date</span>${x}</div>`;
-  return `<div class="fuc"><span class="fub ${fc}" id="fb${r.id}"><span class="fd"></span>${fu}</span>${x}</div>`;
-}
-function memHtml(r){
-  if(!r.mem) return `<span class="mc mt" id="mc${r.id}">Add memo…</span>`;
-  return `<span class="mc" id="mc${r.id}">${r.mem}</span>`;
-}
+function eHtml(r){ if(!r.ec)return'<span style="font-size:12px;color:#bdbdbd">—</span>'; return`<span class="ec" id="em${r.id}"><svg width="20" height="14" viewBox="0 0 18 14" fill="none"><rect width="18" height="14" rx="2" fill="${r.ec}" opacity=".12"/><path d="M0 2l9 6 9-6" stroke="${r.ec}" stroke-width="1.2" fill="none"/><rect width="18" height="14" rx="2" stroke="${r.ec}" stroke-width="1" fill="none"/></svg><span class="ed">${r.e}</span>${r.et>1?`<span style="font-size:10px;color:#9e9e9e;margin-left:3px">(${r.et})</span>`:''}</span>`; }
+function fuHtml(r,ofu,ofc){ const fu=ofu!==undefined?ofu:r.fu,fc=ofc!==undefined?ofc:r.fc; const x=`<span class="lx" id="lx${r.id}">×</span>`; if(!fu)return`<div class="fuc"><span class="fn2">+ Set date</span>${x}</div>`; return`<div class="fuc"><span class="fub ${fc}" id="fb${r.id}"><span class="fd"></span>${fu}</span>${x}</div>`; }
+function memHtml(r){ if(!r.mem)return`<span class="mc mt" id="mc${r.id}">Add memo…</span>`; return`<span class="mc" id="mc${r.id}">${r.mem}</span>`; }
 
-function buildTable(filterLate=false, sabrinaLost=false, r1Override=null){
-  let nlRows = filterLate ? NL.filter(r=>r.fc==='dr') : NL;
-  let fcRows = filterLate ? FC.filter(r=>r.fc==='dr') : FC;
-  let html=''; let n=1;
-
+function buildTable(filterLate=false,sabrinaLost=false,r1o=null){
+  let nlRows=filterLate?NL.filter(r=>r.fc==='dr'):NL;
+  let fcRows=filterLate?FC.filter(r=>r.fc==='dr'):FC;
+  let html='',n=1;
   if(nlRows.length){
-    html+=`<tr class="ghdr"><td colspan="9" style="background:#e8a000;padding:6px 8px">▾ New Lead (160 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">3 late</span></td></tr>`;
+    html+=`<tr class="ghdr"><td colspan="9" style="background:#e8a000;padding:7px 10px">▾ New Lead (160 items) <span style="font-size:11px;background:rgba(220,53,53,.4);padding:2px 7px;border-radius:8px;margin-left:7px">3 late</span></td></tr>`;
     nlRows.forEach(r=>{
-      const lost = sabrinaLost && r.id===3;
-      const fuO = r1Override && r.id===1 ? r1Override.fu : undefined;
-      const fcO = r1Override && r.id===1 ? r1Override.fc : undefined;
-      html+=`<tr id="row${r.id}" class="${lost?'rlost':r.fc==='dr'?'rrl':''}">
-        <td class="nc">${n++}</td><td><div class="xb">▾</div></td>
-        <td><span class="tl ${lost?'lost':''}">${r.n}</span>${lost?'<span class="ltag">Lost</span>':''}</td>
-        <td>${eHtml(r)}</td>
-        <td id="fc${r.id}">${lost?'<span style="font-size:11px;color:#bdbdbd">—</span>':fuHtml(r,fuO,fcO)}</td>
-        <td>${memHtml(r)}</td>
-        <td style="color:#5f6368">${r.tv}</td><td style="color:#5f6368">${r.sd}</td><td style="color:#5f6368">${r.ow}</td>
-      </tr>`;
+      const lost=sabrinaLost&&r.id===3;
+      html+=`<tr id="row${r.id}" class="${lost?'rlost':r.fc==='dr'?'rrl':''}"><td class="nc">${n++}</td><td><div class="xb">▾</div></td><td><span class="tl ${lost?'lost':''}">${r.n}</span>${lost?'<span class="ltag">Lost</span>':''}</td><td>${eHtml(r)}</td><td id="fc${r.id}">${lost?'<span style="font-size:12px;color:#bdbdbd">—</span>':fuHtml(r,r1o&&r.id===1?r1o.fu:undefined,r1o&&r.id===1?r1o.fc:undefined)}</td><td>${memHtml(r)}</td><td style="color:#5f6368">${r.tv}</td><td style="color:#5f6368">${r.sd}</td><td style="color:#5f6368">${r.ow}</td></tr>`;
     });
   }
-  if(!filterLate && fcRows.length){
-    html+=`<tr class="ghdr"><td colspan="9" style="background:#1a73e8;padding:6px 8px">▾ First Contact (241 items) <span style="font-size:10px;background:rgba(220,53,53,.4);padding:1px 6px;border-radius:8px;margin-left:6px">1 late</span></td></tr>`;
+  if(!filterLate&&fcRows.length){
+    html+=`<tr class="ghdr"><td colspan="9" style="background:#1a73e8;padding:7px 10px">▾ First Contact (241 items) <span style="font-size:11px;background:rgba(220,53,53,.4);padding:2px 7px;border-radius:8px;margin-left:7px">1 late</span></td></tr>`;
     fcRows.forEach(r=>{
-      html+=`<tr id="row${r.id}">
-        <td class="nc">${n++}</td><td><div class="xb">▾</div></td>
-        <td><span class="tl">${r.n}</span></td>
-        <td>${eHtml(r)}</td>
-        <td id="fc${r.id}">${fuHtml(r)}</td>
-        <td>${memHtml(r)}</td>
-        <td style="color:#5f6368">${r.tv}</td><td style="color:#5f6368">${r.sd}</td><td style="color:#5f6368">${r.ow}</td>
-      </tr>`;
+      html+=`<tr id="row${r.id}"><td class="nc">${n++}</td><td><div class="xb">▾</div></td><td><span class="tl">${r.n}</span></td><td>${eHtml(r)}</td><td id="fc${r.id}">${fuHtml(r)}</td><td>${memHtml(r)}</td><td style="color:#5f6368">${r.tv}</td><td style="color:#5f6368">${r.sd}</td><td style="color:#5f6368">${r.ow}</td></tr>`;
     });
   }
-  document.getElementById('tb').innerHTML = html;
+  document.getElementById('tb').innerHTML=html;
 }
 buildTable();
 
-// ── Scene engine ──
-const SCENES = [
+// ── Scenes ──
+const SCENES=[
   {
     name:'Pipeline overview',
     label:'📋  Your lead pipeline — color-coded urgency at a glance',
-    dur: 3000,
-    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); mv(100,80); },
+    dur:6000,
+    setup(){buildTable();hideAll();},
     steps:[]
   },
   {
     name:'"Late follow-ups" filter',
-    label:'🔴  "Late follow-ups" filter — focus only on what needs action now',
-    dur: 4200,
-    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); },
+    label:'🔴  Filter to late follow-ups — focus on what needs action now',
+    dur:8400,
+    setup(){buildTable();hideAll();},
     steps:[
-      {t:700,  fn(){ const e=document.getElementById('chk'); const p=sc(e); mv(p.x,p.y); hl(e); }},
-      {t:1500, fn(){ click(); document.getElementById('chk').classList.add('on'); setTimeout(()=>buildTable(true),150); }},
-      {t:2400, fn(){ mv(500,280); clrHl(); showCap('3 leads shown — all overdue'); }},
+      {t:1400,  fn(){addHl('lateChkWrap'); showCap('Click to filter — show only overdue leads');}},
+      {t:3200, fn(){clrHl(); document.getElementById('chk').classList.add('on'); setTimeout(()=>buildTable(true),150);}},
+      {t:5000, fn(){showCap('3 overdue leads shown — ready to action');}},
     ]
   },
   {
     name:'Rescheduling a date',
-    label:'📅  Rescheduling a follow-up — date picker with quick shortcuts',
-    dur: 5800,
-    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); },
+    label:'📅  Rescheduling a follow-up — date picker with shortcuts',
+    dur:11600,
+    setup(){buildTable();hideAll();},
     steps:[
-      {t:600,  fn(){ const e=document.getElementById('fb1'); if(!e)return; const p=sc(e); mv(p.x,p.y); hl(e); }},
-      {t:1400, fn(){ click(); const e=document.getElementById('fb1'); if(!e)return; const p=sc(e); const dp=document.getElementById('dpPnl'); dp.style.left=(p.x-p.w/2)+'px'; dp.style.top=(p.y+p.h/2+6)+'px'; showFP('dpPnl'); clrHl(); }},
-      {t:2300, fn(){ const e=document.getElementById('dp1w'); const p=sc(e); mv(p.x,p.y); e.classList.add('hl'); }},
-      {t:3100, fn(){ click(); document.getElementById('dpi').value='20 Dec 2025'; showCap('+1 week selected'); }},
-      {t:4100, fn(){ const e=document.querySelector('.dpsv'); const p=sc(e); mv(p.x,p.y); document.getElementById('dp1w').classList.remove('hl'); }},
-      {t:4800, fn(){ click(); hideFP('dpPnl'); const fc=document.getElementById('fc1'); if(fc) fc.innerHTML=fuHtml(NL[0],'20 Dec','dg'); showCap('Date saved — badge turns green ✓'); }},
+      {t:1200,  fn(){addHl('fb1'); showCap('Click the date badge to reschedule');}},
+      {t:3000, fn(){clrHl(); posPanel('dpPnl','fb1',6); document.getElementById('dpPnl').classList.add('vis');}},
+      {t:4800, fn(){addHl('dp1w'); showCap('Quick shortcut — +1 week');}},
+      {t:6400, fn(){document.getElementById('dpi').value='20 Dec 2025'; document.getElementById('dp1w').classList.add('hl');}},
+      {t:8000, fn(){clrHl(); addHlQ('.dpsv'); showCap('Click Save');}},
+      {t:9600, fn(){
+        clrHl(); document.getElementById('dpPnl').classList.remove('vis');
+        const fc=document.getElementById('fc1'); if(fc) fc.innerHTML=fuHtml(NL[0],'20 Dec','dg');
+        showCap('Date saved — badge turns green ✓');
+      }},
     ]
   },
   {
     name:'Email received — auto-push',
-    label:'📨  Customer replies — follow-up date auto-pushed, zero action needed',
-    dur: 5800,
-    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); },
+    label:'📨  Customer replies — next follow-up auto-pushed, no action needed',
+    dur:11600,
+    setup(){buildTable();hideAll();},
     steps:[
-      {t:700,  fn(){ showCap('Customer just replied to Isabella\'s thread…'); document.getElementById('etToast').classList.add('vis'); }},
-      {t:2200, fn(){ const e=document.getElementById('fb1'); if(!e)return; const p=sc(e); mv(p.x,p.y); showCap('CRM detects the inbound email automatically…'); }},
-      {t:3400, fn(){
-        document.getElementById('etToast').classList.remove('vis');
+      {t:1400,  fn(){document.getElementById('etToast').style.display='flex'; showCap('Customer just replied to Isabella\'s thread…');}},
+      {t:4400, fn(){addHl('fb1'); showCap('CRM detects the inbound email automatically…');}},
+      {t:6800, fn(){
+        clrHl(); document.getElementById('etToast').style.display='';
         const fc=document.getElementById('fc1'); if(fc) fc.innerHTML=fuHtml(NL[0],'In 7d','dg');
         const ed=document.querySelector('#row1 .ed'); if(ed) ed.textContent='13 Dec, now';
-        setTimeout(()=>{ const e=document.getElementById('fb1'); if(e) hl(e); },100);
+        setTimeout(()=>addHl('fb1'),100);
         showCap('Next follow-up pushed +7 days — no action needed ✓');
       }},
-      {t:5000, fn(){ clrHl(); }},
+      {t:10400, fn(){clrHl();}},
     ]
   },
   {
     name:'Advisor memo',
     label:'📝  Advisor memo — preview with clickable links, click to edit',
-    dur: 6000,
+    dur:12000,
     setup(){
-      buildTable(); hideAll(); document.getElementById('chk').classList.remove('on');
+      buildTable();hideAll();
       document.getElementById('mpPrev').style.display='block';
       document.getElementById('mpTa').style.display='none';
       document.getElementById('mpFoot').style.display='none';
     },
     steps:[
-      {t:700,  fn(){ const e=document.getElementById('mc1'); if(!e)return; const p=sc(e); mv(p.x,p.y); hl(e); }},
-      {t:1500, fn(){ click(); const e=document.getElementById('mc1'); if(!e)return; const p=sc(e); const mp=document.getElementById('mpPnl'); mp.style.left=(p.x)+'px'; mp.style.top=(p.y+p.h/2+6)+'px'; showFP('mpPnl'); clrHl(); showCap('Opens in preview — links are clickable'); }},
-      {t:3000, fn(){ const e=document.querySelector('.mpl'); if(!e)return; const p=sc(e); mv(p.x,p.y); showCap('Click a link → opens Zicasso / Drive / Kimkim'); }},
-      {t:4200, fn(){ const e=document.getElementById('mpPnl'); const p=sc(e); mv(p.x,p.y+20); showCap('Click anywhere else → switches to edit mode'); }},
-      {t:5000, fn(){ click(); document.getElementById('mpPrev').style.display='none'; document.getElementById('mpTa').style.display='block'; document.getElementById('mpFoot').style.display='flex'; }},
+      {t:1400,  fn(){addHl('mc1'); showCap('Click the memo cell');}},
+      {t:3000, fn(){clrHl(); posPanel('mpPnl','mc1',6); document.getElementById('mpPnl').classList.add('vis'); showCap('Opens in preview — links are clickable');}},
+      {t:6000, fn(){addHlQ('.mpl'); showCap('Click a link → opens Zicasso / Drive / Kimkim');}},
+      {t:8400, fn(){clrHl(); addHlQ('.mppv'); showCap('Click anywhere else → switches to edit mode');}},
+      {t:10000, fn(){
+        clrHl();
+        document.getElementById('mpPrev').style.display='none';
+        document.getElementById('mpTa').style.display='block';
+        document.getElementById('mpFoot').style.display='flex';
+      }},
     ]
   },
   {
     name:'Email thread picker',
-    label:'📧  Multiple email threads — pick which one to open in Gmail',
-    dur: 5000,
+    label:'📧  Multiple threads — pick which one to open in Gmail',
+    dur:10000,
+    setup(){buildTable();hideAll();},
+    steps:[
+      {t:1400,  fn(){addHl('em1'); showCap('Isabella has 2 threads — click to choose');}},
+      {t:3400, fn(){clrHl(); posPanel('tpPnl','em1',6); document.getElementById('tpPnl').classList.add('vis');}},
+      {t:5400, fn(){document.getElementById('th1').classList.add('hl'); showCap('Select the thread to open in Gmail');}},
+      {t:7400, fn(){document.getElementById('th1').classList.remove('hl'); document.getElementById('tpPnl').classList.remove('vis'); showCap('Thread opens in Gmail ✓');}},
+    ]
+  },
+  {
+    name:'Gmail reply → follow-up prompt',
+    label:'✉️  Reply in Gmail — extension prompts for next follow-up, CRM updates',
+    dur:15000,
     setup(){
-      buildTable(); hideAll(); document.getElementById('chk').classList.remove('on');
-      document.getElementById('mpPrev').style.display='block';
-      document.getElementById('mpTa').style.display='none';
-      document.getElementById('mpFoot').style.display='none';
+      buildTable();hideAll();
+      ['fop1','fop2','fop3','fop4'].forEach(id=>document.getElementById(id).classList.remove('hl'));
     },
     steps:[
-      {t:700,  fn(){ const e=document.querySelector('#row1 .ec'); if(!e)return; const p=sc(e); mv(p.x,p.y); hl(e); showCap('Isabella has 2 threads — click to choose'); }},
-      {t:1600, fn(){ click(); const e=document.querySelector('#row1 .ec'); if(!e)return; const p=sc(e); const tp=document.getElementById('tpPnl'); tp.style.left=(p.x)+'px'; tp.style.top=(p.y+p.h/2+6)+'px'; showFP('tpPnl'); clrHl(); }},
-      {t:2600, fn(){ const e=document.getElementById('th1'); const p=sc(e); mv(p.x,p.y); e.classList.add('hl'); showCap('Select the thread to open in Gmail'); }},
-      {t:3600, fn(){ click(); hideFP('tpPnl'); showCap('Thread opens in Gmail ✓'); }},
+      {t:1200,  fn(){showOv('gmailOv'); showCap('Advisor opens Gmail and writes a reply…');}},
+      {t:4000, fn(){addHl('gcSend'); showCap('Hits Send');}},
+      {t:6000, fn(){
+        clrHl();
+        // Hide compose window, keep Gmail background visible, show prompt on top
+        const compose=document.getElementById('gmailCompose'); if(compose) compose.style.display='none';
+        const fup=document.getElementById('fupOv'); if(fup){fup.style.display='flex';}
+        showCap('Chrome extension detects the send — prompts for follow-up');
+      }},
+      {t:8800, fn(){document.getElementById('fop2').classList.add('hl'); showCap('"In 1 week" selected');}},
+      {t:10600, fn(){addHl('fupSave');}},
+      {t:12200, fn(){
+        clrHl();
+        const fup=document.getElementById('fupOv'); if(fup) fup.style.display='none';
+        hideOv('gmailOv');
+        const fc=document.getElementById('fc1'); if(fc) fc.innerHTML=fuHtml(NL[0],'In 7d','dg');
+        setTimeout(()=>addHl('fb1'),100);
+        showCap('CRM updated — +7 days, no tab switch needed ✓');
+      }},
+      {t:14400, fn(){clrHl();}},
     ]
   },
   {
     name:'Close as Lost',
     label:'❌  Close as Lost — reason, notes, optional reactivation',
-    dur: 6500,
+    dur:13000,
     setup(){
-      buildTable(); hideAll(); document.getElementById('chk').classList.remove('on');
+      buildTable();hideAll();
       const lx=document.getElementById('lx3'); if(lx) lx.style.visibility='visible';
     },
     steps:[
-      {t:600,  fn(){ const e=document.getElementById('lx3'); if(!e)return; const p=sc(e); mv(p.x,p.y); showCap('Hover a row → × appears — click to close as lost'); }},
-      {t:1600, fn(){ click(); document.getElementById('lo').classList.add('vis'); }},
-      {t:2500, fn(){ const e=document.querySelector('.lfl select'); if(!e)return; const p=sc(e); mv(p.x,p.y); showCap('Select the lost reason'); }},
-      {t:3500, fn(){ const e=document.getElementById('lBtn'); const p=sc(e); mv(p.x,p.y); showCap('Confirm — lead removed from pipeline'); }},
-      {t:4400, fn(){ click(); document.getElementById('lo').classList.remove('vis'); setTimeout(()=>{ buildTable(false,true); const lx=document.getElementById('lx3'); if(lx) lx.style.visibility='visible'; },200); showCap('Lead marked as lost ✓'); }},
+      {t:1400,  fn(){addHl('lx3'); showCap('Hover a row → × appears — click to close as lost');}},
+      {t:3400, fn(){clrHl(); showOv('lo');}},
+      {t:5200, fn(){addHlQ('#lo .lfl select'); showCap('Select the lost reason');}},
+      {t:7200, fn(){clrHl(); addHl('lBtn'); showCap('Confirm — lead removed from pipeline');}},
+      {t:9000, fn(){
+        clrHl(); hideOv('lo');
+        setTimeout(()=>{buildTable(false,true); const lx=document.getElementById('lx3'); if(lx) lx.style.visibility='visible';},200);
+        showCap('Lead marked as lost ✓');
+      }},
     ]
   },
   {
     name:'Weekly notifications',
     label:'📬  Every Monday — advisors get a late follow-up summary by email',
-    dur: 6200,
-    setup(){ buildTable(); hideAll(); document.getElementById('chk').classList.remove('on'); },
+    dur:12400,
+    setup(){buildTable();hideAll();},
     steps:[
-      {t:700,  fn(){ document.getElementById('wo').classList.add('vis'); showCap('Weekly email lands in the advisor\'s inbox'); }},
-      {t:2400, fn(){ const e=document.getElementById('wCta'); const p=sc(e); mv(p.x,p.y); showCap('One click → CRM filtered to late follow-ups'); }},
-      {t:3500, fn(){ click(); }},
-      {t:4000, fn(){ document.getElementById('wo').classList.remove('vis'); buildTable(true); showCap('CRM filtered — ready to action all late leads'); }},
+      {t:1400,  fn(){showOv('wo'); showCap('Weekly email lands in advisor\'s inbox');}},
+      {t:5000, fn(){addHl('wCta'); showCap('One click → CRM filtered to late follow-ups');}},
+      {t:7000, fn(){clrHl();}},
+      {t:8000, fn(){hideOv('wo'); buildTable(true); showCap('CRM filtered — ready to action all late leads');}},
     ]
   },
   {
     name:'End of demo',
-    label:'✅  That\'s the full flow — structured, visible, zero friction',
-    dur: 3000,
-    setup(){ buildTable(false,true); hideAll(); mv(550,200); },
+    label:'✅  Structured follow-ups, visible pipeline, zero friction',
+    dur:7000,
+    setup(){buildTable(false,true);hideAll();},
     steps:[]
   },
 ];
 
-// ── Playback ──
-let cur = 0, playing = true, mainTimer = null;
+// ── Engine ──
+let cur=0,playing=true,mainTimer=null;
 
 function mkDots(){
-  const d = document.getElementById('dots');
-  d.innerHTML = SCENES.map((_,i)=>`<div class="sdot" id="dot${i}"></div>`).join('');
+  const d=document.getElementById('dots');
+  d.innerHTML=SCENES.map((_,i)=>`<div class="sdot" id="dot${i}"></div>`).join('');
 }
 mkDots();
 
 function updUI(){
-  SCENES.forEach((_,i)=>{
-    const d=document.getElementById('dot'+i);
-    d.className='sdot'+(i===cur?' on':i<cur?' done':'');
-  });
+  SCENES.forEach((_,i)=>{const d=document.getElementById('dot'+i); d.className='sdot'+(i===cur?' on':i<cur?' done':'');});
   document.getElementById('snum').textContent=String(cur+1).padStart(2,'0')+' / '+String(SCENES.length).padStart(2,'0');
   document.getElementById('pf').style.width=((cur+1)/SCENES.length*100)+'%';
-  const cap=document.getElementById('sc');
-  cap.textContent=SCENES[cur].label;
-  cap.classList.add('vis');
+  const cap=document.getElementById('sc'); cap.textContent=SCENES[cur].label; cap.classList.add('vis');
 }
 
-function showTransition(idx, cb){
+function showTrans(idx,cb){
   const el=document.getElementById('str');
   document.getElementById('strN').textContent='Scene '+(idx+1)+' of '+SCENES.length;
   document.getElementById('strT').textContent=SCENES[idx].name;
   el.classList.add('vis');
-  setTimeout(()=>{ el.classList.remove('vis'); setTimeout(cb,360); }, 1100);
+  setTimeout(()=>{el.classList.remove('vis'); setTimeout(cb,720);},2200);
 }
 
-function runScene(idx, skipTrans){
-  cur = idx;
-  updUI();
-  clearTimeout(mainTimer);
-  const s = SCENES[idx];
-
-  const start = () => {
+function runScene(idx,skip){
+  cur=idx; updUI(); clearTimeout(mainTimer);
+  const s=SCENES[idx];
+  const go=()=>{
     s.setup();
-    s.steps.forEach(step => setTimeout(step.fn, step.t));
-    if(playing){
-      mainTimer = setTimeout(()=>{
-        if(cur < SCENES.length-1) runScene(cur+1, false);
-        else { playing=false; document.getElementById('playBtn').textContent='↺ Replay'; }
-      }, s.dur);
-    }
+    s.steps.forEach(step=>setTimeout(step.fn,step.t));
+    if(playing) mainTimer=setTimeout(()=>{
+      if(cur<SCENES.length-1) runScene(cur+1,false);
+      else{playing=false; document.getElementById('playBtn').textContent='↺ Replay';}
+    },s.dur);
   };
-
-  if(skipTrans) start();
-  else showTransition(idx, start);
+  skip?go():showTrans(idx,go);
 }
 
 function togglePlay(){
-  const btn = document.getElementById('playBtn');
-  if(btn.textContent === '↺ Replay'){
-    playing=true; btn.textContent='⏸ Pause'; runScene(0, false); return;
-  }
-  playing = !playing;
-  btn.textContent = playing ? '⏸ Pause' : '▶ Play';
-  if(playing){
-    mainTimer = setTimeout(()=>{ if(cur<SCENES.length-1) runScene(cur+1,false); }, SCENES[cur].dur/2);
-  } else {
-    clearTimeout(mainTimer);
-  }
+  const btn=document.getElementById('playBtn');
+  if(btn.textContent==='↺ Replay'){playing=true;btn.textContent='⏸ Pause';runScene(0,false);return;}
+  playing=!playing;
+  btn.textContent=playing?'⏸ Pause':'▶ Play';
+  if(playing) mainTimer=setTimeout(()=>{if(cur<SCENES.length-1)runScene(cur+1,false);},SCENES[cur].dur/2);
+  else clearTimeout(mainTimer);
 }
-function prevS(){ clearTimeout(mainTimer); if(cur>0) runScene(cur-1, true); }
-function nextS(){ clearTimeout(mainTimer); if(cur<SCENES.length-1) runScene(cur+1, true); }
+function prevS(){clearTimeout(mainTimer);if(cur>0)runScene(cur-1,true);}
+function nextS(){clearTimeout(mainTimer);if(cur<SCENES.length-1)runScene(cur+1,true);}
 
-setTimeout(()=>runScene(0, false), 500);
+setTimeout(()=>runScene(0,false),500);
 </script>
 
 
