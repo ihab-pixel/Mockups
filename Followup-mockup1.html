@@ -150,6 +150,19 @@ tr.ov:hover td{background:#fef0f0}
 .mb2 textarea:focus{border-color:#1a73e8}
 .mf2{display:flex;justify-content:flex-end;gap:8px;padding:8px 16px 12px;border-top:1px solid #e0e0e0}
 .toast{position:fixed;bottom:16px;right:16px;background:#323232;color:#fff;padding:10px 16px;border-radius:6px;font-size:13px;z-index:999;display:none}
+
+/* ── Combo trip pills ── */
+.combo-wrap{position:relative;display:inline-block;vertical-align:middle;margin-left:5px}
+.combo-parent{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;background:#e8f0fe;color:#1a56cc;border:1px solid #c5d8fd;cursor:default}
+.combo-child{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;background:#e6f4ea;color:#137333;border:1px solid #ceead6;cursor:default}
+.combo-tip{position:absolute;bottom:calc(100% + 7px);left:50%;transform:translateX(-50%);background:#1e2130;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px 14px;font-size:12px;color:#e8eaf0;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .18s;z-index:400;box-shadow:0 6px 20px rgba(0,0,0,.4);min-width:190px}
+.combo-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1e2130}
+.combo-wrap:hover .combo-tip{opacity:1}
+.ct-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#9ba3c0;margin-bottom:5px}
+.ct-lbl+.ct-lbl,.ct-lbl~.ct-lbl{margin-top:9px}
+.ct-row{display:flex;align-items:center;gap:7px;padding:2px 0}
+.ct-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.ct-name{font-size:12px;color:#e8eaf0}
 </style>
 </head>
 <body>
@@ -232,7 +245,7 @@ function needsAction(l){const dl=getDeadline(l);return dl.cls==='dl-red'||dl.cls
 
 const groups=[
   {id:'nl',label:'New Lead',cls:'g1',count:250,leads:[
-    {id:1,name:'Carter family',email:'carter@fora.com',li:ago(5),src:'b2b',step:1,tv:4,sd:'15/05/2026',ag:'Fora',ow:'Karen Gee',we:true,note:'Very engaged early on. Needs custom honeymoon add-on.',tp:false,stage:'nl',ts:'Inquiry',
+    {id:1,combo:'parent',parentSub:{name:'Morocco',color:'#e8a000'},childSubs:[{name:'UK',color:'#1a73e8'},{name:'Spain',color:'#7b1fa2'}],name:'Carter family',email:'carter@fora.com',li:ago(5),src:'b2b',step:1,tv:4,sd:'15/05/2026',ag:'Fora',ow:'Karen Gee',we:true,note:'Very engaged early on. Needs custom honeymoon add-on.',tp:false,stage:'nl',ts:'Inquiry',
       threads:[
         {id:'t1',subject:'Morocco honeymoon enquiry',contact:'Hannah Carter',contactEmail:'hcarter@gmail.com',msgs:[
           {from:'advisor',name:'Karen Gee',date:ago(12),body:'Hi Hannah, thank you for reaching out about your honeymoon trip to Morocco! I\'d love to help you plan something unforgettable. Could you share your preferred travel dates and budget?'},
@@ -256,7 +269,7 @@ const groups=[
         ]}
       ]
     },
-    {id:5,name:"Christie Wingo's client",email:'christie@dt.com',li:ago(40),src:'b2b',step:4,tv:3,sd:'23/09/2026',ag:'Direct Travel',ow:'Reem KARMOUTAH',we:false,note:'No reply after multiple attempts.',tp:false,stage:'ps',ts:'Inquiry',threads:[]},
+    {id:5,combo:'child',parentSub:{name:'Morocco',color:'#e8a000'},childSubs:[{name:'UK',color:'#1a73e8'},{name:'Spain',color:'#7b1fa2'}],name:"Christie Wingo's client",email:'christie@dt.com',li:ago(40),src:'b2b',step:4,tv:3,sd:'23/09/2026',ag:'Direct Travel',ow:'Reem KARMOUTAH',we:false,note:'No reply after multiple attempts.',tp:false,stage:'ps',ts:'Inquiry',threads:[]},
   ]},
   {id:'fc',label:'First Contact',cls:'g2',count:200,leads:[
     {id:6,name:'Robert Rosen',email:'robert@zicasso.com',li:ago(20),src:'zic',step:6,tv:4,sd:'24/04/2026',ag:'Zicasso',ow:'Hiroshi Tsuji',we:true,note:'Went silent after pricing.',tp:false,stage:'fc',ts:'Inquiry',
@@ -268,7 +281,7 @@ const groups=[
         ]}
       ]
     },
-    {id:7,name:'Spencer Whalen party',email:'spencer@example.com',li:ago(1),src:'dir',step:1,tv:8,sd:'30/04/2026',ag:'',ow:'Amal Amezargou',we:false,note:'',tp:false,stage:'fc',ts:'Inquiry',
+    {id:7,combo:'child',parentSub:{name:'Morocco',color:'#e8a000'},childSubs:[{name:'UK',color:'#1a73e8'},{name:'Spain',color:'#7b1fa2'}],name:'Spencer Whalen party',email:'spencer@example.com',li:ago(1),src:'dir',step:1,tv:8,sd:'30/04/2026',ag:'',ow:'Amal Amezargou',we:false,note:'',tp:false,stage:'fc',ts:'Inquiry',
       threads:[
         {id:'t5',subject:'Adventure tour Morocco April',contact:'Spencer Whalen',contactEmail:'spencer@example.com',msgs:[
           {from:'client',name:'Spencer Whalen',date:ago(3),body:'Hi there! We\'re a group of 8 friends looking for an adventure-focused Morocco trip in late April. Desert camping, hiking, the works.'},
@@ -309,7 +322,17 @@ function panelHtml(l){
 function condFieldsHtml(id,ts){if(ts==='Confirmed')return `<div class="cond-fields"><h5>Required when confirming</h5><div class="fr"><span class="fl req">Sale price</span><input class="fi req-field" id="xSalePrice" type="number" placeholder="0.00" style="width:130px"/></div><div class="fr"><span class="fl req">Sale date</span><input class="fi req-field" id="xSaleDate" type="date"/></div><div class="fr"><span class="fl">Estimated price</span><input class="fi" id="xEstPrice" type="number" placeholder="0.00" style="width:130px"/></div></div>`;if(ts==='Lost'||ts==='Cancelled')return `<div class="cond-fields"><h5>Required when closing</h5><div class="fr"><span class="fl req">Loss reason</span><select class="fs2 req-field" id="xLossReason" style="flex:1"><option value="">Select…</option>${LOSS_REASONS.map(r=>`<option>${r}</option>`).join('')}</select></div></div>`;if(ts==='Postponed')return `<div class="cond-fields"><h5>Required when postponing</h5><div class="fr"><span class="fl req">New start date</span><input class="fi req-field" id="xNewStart" type="date"/></div><div class="fr"><span class="fl req">New end date</span><input class="fi req-field" id="xNewEnd" type="date"/></div></div>`;return '';}
 
 function pickThread(lid,tid){selThread=tid;render();}
-function render(){const tb=document.getElementById('tbody');let h='';let n=1;groups.forEach(g=>{let leads=g.leads;if(showOv)leads=leads.filter(needsAction);if(!leads.length&&showOv)return;h+=`<tr class="grp-hdr"><td colspan="12" class="${g.cls}">▾ ${g.label} (${g.count} items) <span style="font-size:11px;opacity:.85;margin-left:8px">Compliance: <strong>${g.id==='nl'?'68%':'71%'}</strong></span></td></tr>`;leads.forEach(l=>{const ov=needsAction(l);const prev=l.note?l.note.slice(0,26)+(l.note.length>26?'…':''):'Add note…';const stg=sm(l.stage);h+=`<tr id="r${l.id}" class="${ov?'ov':''}"><td class="nc">${n++}</td><td><span style="color:#9e9e9e;font-size:12px">▾</span></td><td><span class="tl">${l.name}</span></td><td><span class="ic" onclick="op(${l.id},'interact',event)"><span class="id">${fmtD(l.li)}</span><span class="ia">${ds(l.li)}d ago</span><span class="il">+ log</span></span></td><td>${nsCellHtml(l)}</td><td style="overflow:visible"><span class="np ${!l.note?'e':''}" onclick="onm(${l.id})" ${l.note?`onmouseenter="sht(event,${l.id})" onmouseleave="ht()"`:''}>
+function comboHtml(l){
+  if(!l.combo) return '';
+  const isP = l.combo==='parent';
+  const cls = isP ? 'combo-parent' : 'combo-child';
+  const lbl = isP ? '⬡ Parent' : '⬡ Child';
+  const p = l.parentSub||{};
+  const pRow = `<div class="ct-row"><span class="ct-dot" style="background:${p.color}"></span><span class="ct-name">${p.name}</span></div>`;
+  const cRows = (l.childSubs||[]).map(c=>`<div class="ct-row"><span class="ct-dot" style="background:${c.color}"></span><span class="ct-name">${c.name}</span></div>`).join('');
+  return `<span class="combo-wrap"><span class="${cls}">${lbl}</span><div class="combo-tip"><div class="ct-lbl">Parent Subsidiary</div>${pRow}<div class="ct-lbl">Child Subsidiaries</div>${cRows}</div></span>`;
+}
+function render(){const tb=document.getElementById('tbody');let h='';let n=1;groups.forEach(g=>{let leads=g.leads;if(showOv)leads=leads.filter(needsAction);if(!leads.length&&showOv)return;h+=`<tr class="grp-hdr"><td colspan="12" class="${g.cls}">▾ ${g.label} (${g.count} items) <span style="font-size:11px;opacity:.85;margin-left:8px">Compliance: <strong>${g.id==='nl'?'68%':'71%'}</strong></span></td></tr>`;leads.forEach(l=>{const ov=needsAction(l);const prev=l.note?l.note.slice(0,26)+(l.note.length>26?'…':''):'Add note…';const stg=sm(l.stage);h+=`<tr id="r${l.id}" class="${ov?'ov':''}"><td class="nc">${n++}</td><td><span style="color:#9e9e9e;font-size:12px">▾</span></td><td><span class="tl">${l.name}</span>${comboHtml(l)}</td><td><span class="ic" onclick="op(${l.id},'interact',event)"><span class="id">${fmtD(l.li)}</span><span class="ia">${ds(l.li)}d ago</span><span class="il">+ log</span></span></td><td>${nsCellHtml(l)}</td><td style="overflow:visible"><span class="np ${!l.note?'e':''}" onclick="onm(${l.id})" ${l.note?`onmouseenter="sht(event,${l.id})" onmouseleave="ht()"`:''}>
           ${prev}</span></td><td><span class="ls-pill ${stg.cls}" onclick="op(${l.id},'status',event)"><span class="sdot" style="background:${stg.dot}"></span>${stg.l}<span class="arr">▾</span></span></td><td style="color:#5f6368">${l.tv||''}</td><td style="color:#5f6368">${l.sd||''}</td><td><span class="sb ${SC[l.src]}">${SRC[l.src]}</span></td><td style="color:#5f6368;max-width:95px;overflow:hidden;text-overflow:ellipsis">${l.ag||''}</td><td style="color:#5f6368">${l.ow||''}</td></tr><tr class="ar ${oRow===l.id?'open':''}" id="ar${l.id}"><td colspan="12" class="ac">${oRow===l.id?panelHtml(l):''}</td></tr>`;});});tb.innerHTML=h;}
 function op(id,mode,e){e.stopPropagation();if(oRow===id&&oMode===mode){cp();return;}pStage=null;pTs=null;selThread=null;oRow=id;oMode=mode;if(mode==='fu'){const l=gl(id);oTab=l.threads&&l.threads.length?'email':'logfu';}if(mode==='status'){const l=gl(id);pStage=l.stage;pTs=l.ts;}render();}
 function st2(id,k){oTab=k;selThread=null;render();}
